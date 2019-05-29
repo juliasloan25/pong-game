@@ -6,10 +6,10 @@ const double BALL_RADIUS = 10.0; //radius of pong ball
 const double PADDLE_HEIGHT = 100.0; //width of the pong paddle
 const double PADDLE_WIDTH = 30.0; // height of the pong paddle
 const double BALL_MASS = 100; // mass of the pong ball;
-const double ELASTICITY = 0.5; //elasticity of collisions
-const double PADDLE_VEL = 200.0; //velocity that the paddle can go
+const double ELASTICITY = 0.9; //elasticity of collisions
+const double PADDLE_VEL = 500.0; //velocity that the paddle can go
 const double MASS = 50.0; //mass of all objects
-const double BALL_VEL = 200.0; // initial velocity of ball
+const double BALL_VEL = 300.0; // initial velocity of ball
 const RGBColor PADDLE_COLOR = {
     .r = 0,
     .g = 0,
@@ -108,13 +108,16 @@ Body *make_body(BodyType *type, Vector center){
     Vector velocity = VEC_ZERO;
     size_t points;
     RGBColor color;
+    double mass;
     if (*(type) == BALL) {
-        points = 200; //large number of points to create circle
+        mass = 50;
+        points = 2000; //large number of points to create circle
         color = BALL_COLOR;
         velocity.x = BALL_VEL;
         velocity.y = BALL_VEL;
     }
     if(*(type) == PADDLE){
+        mass = INFINITY;
         points = 4; //to form rectangle
         color = PADDLE_COLOR;
     }
@@ -167,7 +170,7 @@ Body *make_body(BodyType *type, Vector center){
         list_add(shape, vec4);
     }
 
-    body = body_init_with_info(shape, MASS, color, (void*)type, (FreeFunc)free);
+    body = body_init_with_info(shape, mass, color, (void*)type, (FreeFunc)free);
     body_set_centroid(body,center);
     body_set_velocity(body,velocity);
 

@@ -20,6 +20,7 @@ typedef struct coll_param{
     CollisionHandler coll_func;
     void *aux;
     FreeFunc freef;
+    bool collided_bef;
 }CollParam;
 
 
@@ -152,6 +153,7 @@ void create_collision(
     new_coll->aux = aux;
     new_coll->coll_func = handler;
     new_coll->freef = freer;
+    new_coll->collided_bef = false;
 
     scene_add_bodies_force_creator(scene, (ForceCreator) collision, new_coll,
                                     (FreeFunc)free_coll_param, coll_bodies);
@@ -175,7 +177,13 @@ void collision(void *aux){
     Body *body2 = *((Body **)list_get(coll_bodies, 1));
     Vector axis = vec_subtract(body_get_centroid(body2), body_get_centroid(body1));
     axis = vec_multiply(1/vec_magnitude(axis), axis);
-    coll->coll_func(body1, body2, axis, coll->aux);
+    if(!(coll->collided_bef)){
+      coll->coll_func(body1, body2, axis, coll->aux);
+      coll->collided_bef = true;
+    }
+    else{
+      coll->collided_bef = false;
+    }
 }
 
 void newtonian_gravity(void *aux){
