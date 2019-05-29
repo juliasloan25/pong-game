@@ -71,11 +71,11 @@ int main(int argc, char **argv){
 
         //checks if paddle or ball has hit walls
         char ball_hit_side = move_if_offscreen(paddle_one, paddle_two, ball);
-        if(ball_hit_side = 'l'){ //add point to right player
+        if(ball_hit_side == 'l'){ //add point to right player
             right_score++;
             reset(scene);
         }
-        else if (ball_hit_side = 'r') { //add point to left player
+        else if (ball_hit_side == 'r') { //add point to left player
             left_score++;
             reset(scene);
         }
@@ -307,4 +307,5 @@ void reset(Scene *scene){
     body_set_centroid(paddle_one, paddle_one_center);
     body_set_centroid(paddle_two, paddle_two_center);
     body_set_centroid(ball, ball_center);
+    body_set_velocity(ball, (Vector){BALL_VEL, 0});
 }
