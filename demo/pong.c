@@ -96,13 +96,16 @@ Body *make_body(BodyType *type, Vector center){
     Vector velocity = VEC_ZERO;
     size_t points;
     RGBColor color;
+    double mass;
     if (*(type) == BALL) {
+        mass = 50;
         points = 200; //large number of points to create circle
         color = BALL_COLOR;
         velocity.x = BALL_VEL;
         velocity.y = BALL_VEL;
     }
     if(*(type) == PADDLE){
+        mass = INFINITY;
         points = 4; //to form rectangle
         color = PADDLE_COLOR;
     }
@@ -155,7 +158,7 @@ Body *make_body(BodyType *type, Vector center){
         list_add(shape, vec4);
     }
 
-    body = body_init_with_info(shape, MASS, color, (void*)type, (FreeFunc)free);
+    body = body_init_with_info(shape, mass, color, (void*)type, (FreeFunc)free);
     body_set_centroid(body,center);
     body_set_velocity(body,velocity);
 
