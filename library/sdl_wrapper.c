@@ -90,8 +90,8 @@ void sdl_init(Vector min, Vector max) {
 
 bool sdl_is_done(Scene *scene) {
     SDL_Event *event = malloc(sizeof(*event));
-    int x_pos;
-    int y_pos;
+    //int x_pos;
+    //int y_pos;
     assert(event);
     while (SDL_PollEvent(event)) {
         switch (event->type) {
