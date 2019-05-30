@@ -66,7 +66,6 @@ int main(int argc, char **argv){
       }
       */
 
-
     //initialize scores
     int left_score = 0; //score of player with left paddle
     int right_score = 0; //score of player with right paddle
@@ -85,8 +84,8 @@ int main(int argc, char **argv){
             reset(scene);
         }
         if(ai_timer > 0.01){
-          ai_timer = 0;
-          set_paddle_vel(paddle_two, ball, PADDLE_VEL);
+            ai_timer = 0;
+            set_paddle_vel(paddle_two, ball, PADDLE_VEL);
         }
 
         //render and update scene at every tick
