@@ -24,6 +24,7 @@
  */
 typedef enum {
     KEY_PRESSED,
+    MOUSE_MOVED,
     KEY_RELEASED
 } KeyEventType;
 
@@ -41,6 +42,7 @@ typedef enum {
 typedef void (*KeyHandler)(char key, KeyEventType type, double held_time,
                                                                 Scene *scene);
 
+//int return_mouse_y_position(Scene *scene);
 /**
  * Initializes the SDL window and renderer.
  * Must be called once before any of the other SDL functions.

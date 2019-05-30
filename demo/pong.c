@@ -38,7 +38,6 @@ int main(int argc, char **argv){
     //initialize scene and window
     Scene *scene = scene_init();
     window_init();
-
     //creates two paddles and initializes them on either side of the screen
     BodyType *paddle_one_type = malloc(sizeof(BodyType));
     *(paddle_one_type) = PADDLE;
@@ -61,6 +60,12 @@ int main(int argc, char **argv){
     create_physics_collision(scene, ELASTICITY, paddle_two, ball);
 
     sdl_on_key(on_key); //handles key inputs
+/*     if(MOUSE_MOVED){
+        Body * paddle_one  = scene_get_body(scene,0);
+        body_set_centroid(paddle_one, (Vector){paddle_one_center.x, return_mouse_y_position(scene)});
+      }
+      */
+
 
     //initialize scores
     int left_score = 0; //score of player with left paddle
@@ -92,18 +97,16 @@ int main(int argc, char **argv){
         if (right_score >= 10 || left_score >= 10 || scene_get_end(scene)){
             break;
         }
-
         //display the current scores on-screen
         //display_text(itoa(right_score), 30);
         //display_text(itoa(left_score), 30);
-    }
 
     //free all elements of scene
     scene_free(scene);
+  }
     //TTF_Quit();
     return 1;
 }
-
 void window_init(){
     Vector vec_min = VEC_ZERO;
     Vector vec_max = {

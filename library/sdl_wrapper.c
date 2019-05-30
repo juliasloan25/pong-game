@@ -41,7 +41,6 @@ uint32_t key_start_timestamp;
  * Initially 0.
  */
 clock_t last_clock = 0;
-
 /**
  * Converts an SDL key code to a char.
  * 7-bit ASCII characters are just returned
@@ -60,6 +59,15 @@ char get_keycode(SDL_Keycode key) {
             return key == (SDL_Keycode) (char) key ? key : '\0';
     }
 }
+
+/*
+int return_mouse_y_position(Scene *scene){
+  SDL_Event *event = malloc(sizeof(*event));
+  if(SDL_MOUSEMOTION){
+  return event->motion.x;
+}
+}
+*/
 
 void sdl_init(Vector min, Vector max) {
     // Check parameters
@@ -82,12 +90,19 @@ void sdl_init(Vector min, Vector max) {
 
 bool sdl_is_done(Scene *scene) {
     SDL_Event *event = malloc(sizeof(*event));
+    int x_pos;
+    int y_pos;
     assert(event);
     while (SDL_PollEvent(event)) {
         switch (event->type) {
             case SDL_QUIT:
                 free(event);
                 return true;
+            /* case SDL_MOUSEMOTION:
+              x_pos = (int) event->motion.x;
+              y_pos = (int) event->motion.y;
+                break;
+              */
             case SDL_KEYDOWN:
             case SDL_KEYUP:
                 // Skip the keypress if no handler is configured
@@ -111,6 +126,7 @@ bool sdl_is_done(Scene *scene) {
     free(event);
     return false;
 }
+
 
 void sdl_clear(void) {
     SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
@@ -183,6 +199,9 @@ void sdl_render_scene(Scene *scene) {
 void sdl_on_key(KeyHandler handler) {
     key_handler = handler;
 }
+
+
+
 
 double time_since_last_tick(void) {
     clock_t now = clock();
