@@ -9,7 +9,7 @@ const double BALL_MASS = 100; // mass of the pong ball;
 const double ELASTICITY = 0.9; //elasticity of collisions
 const double PADDLE_VEL = 500.0; //velocity that the paddle can go
 const double MASS = 50.0; //mass of all objects
-const double BALL_VEL = 300.0; // initial velocity of ball
+const double BALL_VEL = 800.0; // initial velocity of ball
 const RGBColor PADDLE_COLOR = {
     .r = 0,
     .g = 0,
@@ -80,6 +80,8 @@ int main(int argc, char **argv){
             reset(scene);
         }
 
+        set_paddle_vel(paddle_two, ball);
+
         //render and update scene at every tick
         scene_tick(scene, wait_time);
         sdl_render_scene(scene);
@@ -88,13 +90,13 @@ int main(int argc, char **argv){
         if (right_score >= 10 || left_score >= 10) break;
 
         //display the current scores on-screen
-        display_text(itoa(right_score), 30);
-        display_text(itoa(left_score), 30);
+        //display_text(itoa(right_score), 30);
+        //display_text(itoa(left_score), 30);
     }
 
     //free all elements of scene
     scene_free(scene);
-    TTF_Quit();
+    //TTF_Quit();
     return 1;
 }
 

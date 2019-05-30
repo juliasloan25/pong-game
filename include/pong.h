@@ -6,6 +6,7 @@
 #include "forces.h"
 #include "scene.h"
 #include "collision.h"
+#include "ai.h"
 #include <stdbool.h>
 #include <math.h>
 
