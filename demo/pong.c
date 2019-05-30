@@ -7,9 +7,9 @@ const double PADDLE_HEIGHT = 100.0; //width of the pong paddle
 const double PADDLE_WIDTH = 30.0; // height of the pong paddle
 const double BALL_MASS = 100; // mass of the pong ball;
 const double ELASTICITY = 1; //elasticity of collisions
-const double PADDLE_VEL = 500.0; //velocity that the paddle can go
+const double PADDLE_VEL = 600.0; //velocity that the paddle can go
 const double MASS = 50.0; //mass of all objects
-const double BALL_VEL = 800.0; // initial velocity of ball
+const double BALL_VEL = 700.0; // initial velocity of ball
 const RGBColor PADDLE_COLOR = {
     .r = 0,
     .g = 0,
@@ -89,7 +89,9 @@ int main(int argc, char **argv){
         sdl_render_scene(scene);
 
         // end game if either score reaches 10
-        if (right_score >= 10 || left_score >= 10) break;
+        if (right_score >= 10 || left_score >= 10 || scene_get_end(scene)){
+            break;
+        }
 
         //display the current scores on-screen
         //display_text(itoa(right_score), 30);
@@ -206,6 +208,10 @@ void on_key(char key, KeyEventType type, double held_time, Scene *scene) {
                 new_vel.y = -1.0 * new_vel.y;
                 body_set_velocity(paddle_one, new_vel);
                 break;
+
+            case ESCAPE:
+                //ends the scene
+                scene_set_end(scene);
         }
     }
     else{

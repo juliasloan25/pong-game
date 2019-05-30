@@ -13,6 +13,7 @@
 #define RIGHT_ARROW 3
 #define DOWN_ARROW 4
 #define SPACE 5
+#define ESCAPE 6
 
 /**
  * The possible types of key events.
