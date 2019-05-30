@@ -99,10 +99,9 @@ int main(int argc, char **argv){
         //display the current scores on-screen
         //display_text(itoa(right_score), 30);
         //display_text(itoa(left_score), 30);
-
+    }
     //free all elements of scene
     scene_free(scene);
-  }
     //TTF_Quit();
     return 1;
 }
