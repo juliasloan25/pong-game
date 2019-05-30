@@ -60,7 +60,7 @@ void body_free(Body *body){
 
 List *body_get_shape(Body *body){
 	List *current_shape = list_init(list_size(body->polygon), free,
-										(EqualFunc) vec_equal);
+										(EqualFunc) vec_equal_v);
 	Vector* curr_vec;
 	Vector* curr_vec_b;
 	for(int i = 0; i < list_size(body->polygon); i++){

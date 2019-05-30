@@ -6,10 +6,10 @@ const double BALL_RADIUS = 10.0; //radius of pong ball
 const double PADDLE_HEIGHT = 100.0; //width of the pong paddle
 const double PADDLE_WIDTH = 30.0; // height of the pong paddle
 const double BALL_MASS = 100; // mass of the pong ball;
-const double ELASTICITY = 0.5; //elasticity of collisions
-const double PADDLE_VEL = 200.0; //velocity that the paddle can go
+const double ELASTICITY = 1; //elasticity of collisions
+const double PADDLE_VEL = 500.0; //velocity that the paddle can go
 const double MASS = 50.0; //mass of all objects
-const double BALL_VEL = 200.0; // initial velocity of ball
+const double BALL_VEL = 800.0; // initial velocity of ball
 const RGBColor PADDLE_COLOR = {
     .r = 0,
     .g = 0,
@@ -62,23 +62,43 @@ int main(int argc, char **argv){
 
     sdl_on_key(on_key); //handles key inputs
 
+    //initialize scores
+    int left_score = 0; //score of player with left paddle
+    int right_score = 0; //score of player with right paddle
+    double ai_timer = 0;
     while(!sdl_is_done(scene)) {
         double wait_time = time_since_last_tick();
-
+        ai_timer += wait_time;
         //checks if paddle or ball has hit walls
-        bool ball_hit_side = move_if_offscreen(paddle_one, paddle_two, ball);
-        if(ball_hit_side){
+        char ball_hit_side = move_if_offscreen(paddle_one, paddle_two, ball);
+        if(ball_hit_side == 'l'){ //add point to right player
+            right_score++;
             reset(scene);
+        }
+        else if (ball_hit_side == 'r') { //add point to left player
+            left_score++;
+            reset(scene);
+        }
+        if(ai_timer > 0.01){
+          ai_timer = 0;
+          set_paddle_vel(paddle_two, ball, PADDLE_VEL);
         }
 
         //render and update scene at every tick
         scene_tick(scene, wait_time);
         sdl_render_scene(scene);
+
+        // end game if either score reaches 10
+        if (right_score >= 10 || left_score >= 10) break;
+
+        //display the current scores on-screen
+        //display_text(itoa(right_score), 30);
+        //display_text(itoa(left_score), 30);
     }
 
     //free all elements of scene
     scene_free(scene);
-
+    //TTF_Quit();
     return 1;
 }
 
@@ -99,7 +119,7 @@ Body *make_body(BodyType *type, Vector center){
     double mass;
     if (*(type) == BALL) {
         mass = 50;
-        points = 200; //large number of points to create circle
+        points = 2000; //large number of points to create circle
         color = BALL_COLOR;
         velocity.x = BALL_VEL;
         velocity.y = BALL_VEL;
@@ -109,7 +129,7 @@ Body *make_body(BodyType *type, Vector center){
         points = 4; //to form rectangle
         color = PADDLE_COLOR;
     }
-    List *shape = list_init(points, free, (EqualFunc)vec_equal);
+    List *shape = list_init(points, free, (EqualFunc)vec_equal_v);
 
     //construct the ball
     if (*(type)==BALL){
@@ -202,7 +222,7 @@ void on_key(char key, KeyEventType type, double held_time, Scene *scene) {
     }
 }
 
-bool move_if_offscreen(Body *paddle_one, Body *paddle_two, Body *ball){
+char move_if_offscreen(Body *paddle_one, Body *paddle_two, Body *ball){
     Vector paddle_one_center = body_get_centroid(paddle_one);
     Vector paddle_two_center = body_get_centroid(paddle_two);
     Vector ball_center = body_get_centroid(ball);
@@ -237,7 +257,7 @@ bool move_if_offscreen(Body *paddle_one, Body *paddle_two, Body *ball){
         body_set_centroid(paddle_two, new_center);
     }
 
-    if(ball_center.x < BALL_RADIUS){
+    if(ball_center.x < BALL_RADIUS){ //ball goes off left side (return 'l')
         Vector translate = {
             .x = BALL_RADIUS - ball_center.x,
             .y = 0.0
@@ -246,9 +266,9 @@ bool move_if_offscreen(Body *paddle_one, Body *paddle_two, Body *ball){
         Vector velocity = body_get_velocity(ball);
         velocity.x *= -1.0;
         body_set_velocity(ball, velocity);
-        return true;
+        return 'l';
     }
-    if(ball_center.x > WIDTH - BALL_RADIUS){
+    if(ball_center.x > WIDTH - BALL_RADIUS){ //ball goes off right side (return 'r')
         Vector translate = {
             .x = WIDTH - BALL_RADIUS - ball_center.x,
             .y = 0.0
@@ -257,9 +277,9 @@ bool move_if_offscreen(Body *paddle_one, Body *paddle_two, Body *ball){
         Vector velocity = body_get_velocity(ball);
         velocity.x *= -1.0;
         body_set_velocity(ball, velocity);
-        return true;
+        return 'r';
     }
-    if(ball_center.y > HEIGHT - BALL_RADIUS){
+    if(ball_center.y > HEIGHT - BALL_RADIUS){ //ball goes off top (bounce)
         Vector translate = {
             .x = 0.0,
             .y =  HEIGHT - BALL_RADIUS - ball_center.y
@@ -269,7 +289,7 @@ bool move_if_offscreen(Body *paddle_one, Body *paddle_two, Body *ball){
         velocity.y *= -1.0;
         body_set_velocity(ball, velocity);
     }
-    if(ball_center.y < BALL_RADIUS){
+    if(ball_center.y < BALL_RADIUS){ //ball goes off bottom (bounce)
         Vector translate = {
             .x = 0.0,
             .y =  BALL_RADIUS - ball_center.y
@@ -279,7 +299,7 @@ bool move_if_offscreen(Body *paddle_one, Body *paddle_two, Body *ball){
         velocity.y *= -1.0;
         body_set_velocity(ball, velocity);
     }
-    return false;
+    return 'n'; //'n' for "no collision"
 }
 
 void reset(Scene *scene){
@@ -291,4 +311,5 @@ void reset(Scene *scene){
     body_set_centroid(paddle_one, paddle_one_center);
     body_set_centroid(paddle_two, paddle_two_center);
     body_set_centroid(ball, ball_center);
+    body_set_velocity(ball, (Vector){BALL_VEL, 0});
 }

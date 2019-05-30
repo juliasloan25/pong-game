@@ -6,6 +6,7 @@
 #include "forces.h"
 #include "scene.h"
 #include "collision.h"
+#include "ai.h"
 #include <stdbool.h>
 #include <math.h>
 
@@ -49,7 +50,7 @@ void on_key(char key, KeyEventType type, double held_time, Scene *scene);
 *
 * @return bool Whether game needs to be reset because  ball hit the side
 */
-bool move_if_offscreen(Body *paddle_one, Body *paddle_two, Body *ball);
+char move_if_offscreen(Body *paddle_one, Body *paddle_two, Body *ball);
 
 /*
 * @brief Resets the scene after point is made
