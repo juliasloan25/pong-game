@@ -18,7 +18,7 @@ LIBS = $(LIB_MATH) -lSDL2 -lSDL2_gfx
 # List of demo programs
 DEMOS = pong #bounce gravity pacman nbodies damping pegs breakout
 # List of C files in "libraries" that we provide
-STAFF_LIBS = test_util sdl_wrapper
+STAFF_LIBS = sdl_wrapper
 # List of C files in "libraries" that you will write
 STUDENT_LIBS = vector list \
 	polygon body scene \

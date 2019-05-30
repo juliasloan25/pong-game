@@ -6,7 +6,7 @@ const double BALL_RADIUS = 10.0; //radius of pong ball
 const double PADDLE_HEIGHT = 100.0; //width of the pong paddle
 const double PADDLE_WIDTH = 30.0; // height of the pong paddle
 const double BALL_MASS = 100; // mass of the pong ball;
-const double ELASTICITY = 0.9; //elasticity of collisions
+const double ELASTICITY = 1; //elasticity of collisions
 const double PADDLE_VEL = 500.0; //velocity that the paddle can go
 const double MASS = 50.0; //mass of all objects
 const double BALL_VEL = 800.0; // initial velocity of ball
@@ -65,10 +65,10 @@ int main(int argc, char **argv){
     //initialize scores
     int left_score = 0; //score of player with left paddle
     int right_score = 0; //score of player with right paddle
-
+    double ai_timer = 0;
     while(!sdl_is_done(scene)) {
         double wait_time = time_since_last_tick();
-
+        ai_timer += wait_time;
         //checks if paddle or ball has hit walls
         char ball_hit_side = move_if_offscreen(paddle_one, paddle_two, ball);
         if(ball_hit_side == 'l'){ //add point to right player
@@ -79,8 +79,10 @@ int main(int argc, char **argv){
             left_score++;
             reset(scene);
         }
-
-        set_paddle_vel(paddle_two, ball);
+        if(ai_timer > 0.01){
+          ai_timer = 0;
+          set_paddle_vel(paddle_two, ball, PADDLE_VEL);
+        }
 
         //render and update scene at every tick
         scene_tick(scene, wait_time);
@@ -127,7 +129,7 @@ Body *make_body(BodyType *type, Vector center){
         points = 4; //to form rectangle
         color = PADDLE_COLOR;
     }
-    List *shape = list_init(points, free, (EqualFunc)vec_equal);
+    List *shape = list_init(points, free, (EqualFunc)vec_equal_v);
 
     //construct the ball
     if (*(type)==BALL){

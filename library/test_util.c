@@ -7,7 +7,7 @@
 #include <sys/wait.h>
 #include <unistd.h>
 
-#define DEFAULT_EPSILON 1e-7
+#define DEFAULT_EPSILON 1
 
 bool isclose(double d1, double d2) {
     return within(DEFAULT_EPSILON, d1, d2);

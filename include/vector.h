@@ -120,6 +120,6 @@ double vec_magnitude(Vector v);
 * @param v2 the second vector
 * @return whether the vectors are equal or not
 */
-bool vec_equal(Vector *v1, Vector *v2);
+bool vec_equal_v(Vector *v1, Vector *v2);
 
 #endif // #ifndef __VECTOR_H__
