@@ -120,13 +120,14 @@ int main(int argc, char **argv){
     TTF_Quit();
     return 1;
 }
-void window_init(){
+
+SDL_Renderer *window_init(){
     Vector vec_min = VEC_ZERO;
     Vector vec_max = {
         .x = WIDTH,
         .y = HEIGHT
     };
-    sdl_init(vec_min, vec_max);
+    return sdl_init(vec_min, vec_max);
 }
 
 Body *make_body(BodyType *type, Vector center){
