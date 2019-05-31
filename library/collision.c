@@ -45,7 +45,7 @@ bool brute_force(List *shape1, List *shape2) {
 }
 
 List *find_edges(List *shape) {
-    List *edges = list_init(list_size(shape), free, (EqualFunc)vec_equal);
+    List *edges = list_init(list_size(shape), free, (EqualFunc)vec_equal_v);
 
     for (int i = 0; i < list_size(shape) - 1; i++) {
         Vector *edge = malloc(sizeof(Vector));
@@ -59,7 +59,7 @@ List *find_edges(List *shape) {
 
 List *find_axes(List *shape) {
     List *edges = find_edges(shape);
-    List *norm_list = list_init(list_size(edges), free, (EqualFunc)vec_equal);
+    List *norm_list = list_init(list_size(edges), free, (EqualFunc)vec_equal_v);
 
     for (int i = 0; i < list_size(edges); i++) {
         Vector edge = *(Vector *)list_get(edges, i);
@@ -80,7 +80,7 @@ List *find_axes(List *shape) {
 
 // return vertices of shape 2 contained in shape1
 List *find_contained_verts(List *shape1, List *shape2) {
-    List *contained_vert = list_init(list_size(shape2), NULL, (EqualFunc)vec_equal);
+    List *contained_vert = list_init(list_size(shape2), NULL, (EqualFunc)vec_equal_v);
 
     List *edges = find_edges(shape1);
     for (int j = 0; j < list_size(shape2); j++) { // loop through vertices of 2
@@ -115,7 +115,7 @@ Vector find_coll_axis(List *shape1, List *shape2) {
     for (int i = 0; i < list_size(shape1); i++) {
         // current vertex of shape1 is contained in shape2
         if(list_contains(shape1_cont, (Vector *)list_get(shape1, i))) {
-            
+
             Vector vec1 = vec_subtract(*(Vector *)list_get(shape1, i),
                                 *(Vector *)list_get(shape1, (i - 1) % list_size(shape1)));
             Vector vec2 = vec_subtract(*(Vector *)list_get(shape1, i),

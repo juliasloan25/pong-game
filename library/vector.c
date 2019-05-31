@@ -61,6 +61,6 @@ double vec_magnitude(Vector v){
   return mag;
 }
 
-bool vec_equal(Vector *v1, Vector *v2){
+bool vec_equal_v(Vector *v1, Vector *v2){
     return (v1->x == v2->x && v1->y == v2->y);
 }

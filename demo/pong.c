@@ -1,17 +1,15 @@
 #include "pong.h"
-#include <string.h>
-#include <stdlib.h>
 
 const double WIDTH = 800; //screen width
 const double HEIGHT = 600; //screen height
 const double BALL_RADIUS = 10.0; //radius of pong ball
 const double PADDLE_HEIGHT = 100.0; //width of the pong paddle
-const double PADDLE_WIDTH = 30.0; //height of the pong paddle
+const double PADDLE_WIDTH = 30.0; // height of the pong paddle
 const double BALL_MASS = 100; // mass of the pong ball;
-const double ELASTICITY = 0.9; //elasticity of collisions
-const double PADDLE_VEL = 500.0; //velocity that the paddle can go
+const double ELASTICITY = 1; //elasticity of collisions
+const double PADDLE_VEL = 600.0; //velocity that the paddle can go
 const double MASS = 50.0; //mass of all objects
-const double BALL_VEL = 300.0; //initial velocity of ball
+const double BALL_VEL = 700.0; // initial velocity of ball
 const int LEFT_SCORE_X = (WIDTH / 2) - 40; //left side of player 1 score
 const int RIGHT_SCORE_X = (WIDTH / 2) - 40; //left side of player 2 score
 const int SCORE_Y = HEIGHT - 10; //top side of scores
@@ -68,15 +66,21 @@ int main(int argc, char **argv){
     create_physics_collision(scene, ELASTICITY, paddle_two, ball);
 
     sdl_on_key(on_key); //handles key inputs
+/*     if(MOUSE_MOVED){
+        Body * paddle_one  = scene_get_body(scene,0);
+        body_set_centroid(paddle_one, (Vector){paddle_one_center.x, return_mouse_y_position(scene)});
+      }
+      */
 
-    //initialize scores
+    //initialize scores and AI timer
     int left_score = 0; //score of player with left paddle
     int right_score = 0; //score of player with right paddle
     char *left_score_str = "", *right_score_str = "";
+    double ai_timer = 0;
 
     while(!sdl_is_done(scene)) {
         double wait_time = time_since_last_tick();
-
+        ai_timer += wait_time;
         //checks if paddle or ball has hit walls
         char ball_hit_side = move_if_offscreen(paddle_one, paddle_two, ball);
         if(ball_hit_side == 'l'){ //add point to right player
@@ -87,13 +91,19 @@ int main(int argc, char **argv){
             left_score++;
             reset(scene);
         }
+        if(ai_timer > 0.01){
+            ai_timer = 0;
+            set_paddle_vel(paddle_two, ball, PADDLE_VEL);
+        }
 
         //render and update scene at every tick
         scene_tick(scene, wait_time);
         sdl_render_scene(scene);
 
         // end game if either score reaches 10
-        if (right_score >= 10 || left_score >= 10) break;
+        if (right_score >= 10 || left_score >= 10 || scene_get_end(scene)){
+            break;
+        }
 
         snprintf(right_score_str, 10, "%d", right_score);
         snprintf(left_score_str, 10, "%d", left_score);
@@ -104,21 +114,19 @@ int main(int argc, char **argv){
         display_text(renderer, left_score_str, 30, LEFT_SCORE_X, SCORE_Y,
                         TEXT_WIDTH, TEXT_HEIGHT);
     }
-
     //free all elements of scene and the renderer
     scene_free(scene);
     SDL_DestroyRenderer(renderer);
     TTF_Quit();
     return 1;
 }
-
-SDL_Renderer *window_init(){
+void window_init(){
     Vector vec_min = VEC_ZERO;
     Vector vec_max = {
         .x = WIDTH,
         .y = HEIGHT
     };
-    return sdl_init(vec_min, vec_max);
+    sdl_init(vec_min, vec_max);
 }
 
 Body *make_body(BodyType *type, Vector center){
@@ -139,7 +147,7 @@ Body *make_body(BodyType *type, Vector center){
         points = 4; //to form rectangle
         color = PADDLE_COLOR;
     }
-    List *shape = list_init(points, free, (EqualFunc)vec_equal);
+    List *shape = list_init(points, free, (EqualFunc)vec_equal_v);
 
     //construct the ball
     if (*(type)==BALL){
@@ -216,6 +224,10 @@ void on_key(char key, KeyEventType type, double held_time, Scene *scene) {
                 new_vel.y = -1.0 * new_vel.y;
                 body_set_velocity(paddle_one, new_vel);
                 break;
+
+            case ESCAPE:
+                //ends the scene
+                scene_set_end(scene);
         }
     }
     else{

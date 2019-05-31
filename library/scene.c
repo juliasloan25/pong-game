@@ -3,6 +3,7 @@
 struct scene{
     List *BodyList;
     List *ForceCreators;
+    bool end;
 };
 
 struct Force_Param{
@@ -22,6 +23,7 @@ Scene *scene_init(void){
     Scene *new_scene = malloc(sizeof(Scene));
     new_scene->BodyList = list_init(100, (FreeFunc) body_free, NULL);
     new_scene->ForceCreators = list_init(100, (FreeFunc) force_free, NULL);
+    new_scene->end = false;
     return new_scene;
 }
 
@@ -96,4 +98,12 @@ void scene_tick(Scene *scene, double dt){
             scene_remove_body(scene, i);
         }
     }
+}
+
+void scene_set_end(Scene *scene){
+    scene->end = true;
+}
+
+bool scene_get_end(Scene *scene){
+    return scene->end;
 }

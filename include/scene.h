@@ -119,4 +119,16 @@ void scene_add_bodies_force_creator(
  */
 void scene_tick(Scene *scene, double dt);
 
+/**
+* @brief Sets the scene to end
+*/
+void scene_set_end(Scene *scene);
+
+/**
+* @brief Returns whether scene is ended
+*
+* @return bool whether scene is ended
+*/
+bool scene_get_end(Scene *scene);
+
 #endif // #ifndef __SCENE_H__
