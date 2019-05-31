@@ -1,15 +1,22 @@
 #include "pong.h"
+#include <string.h>
+#include <stdlib.h>
 
 const double WIDTH = 800; //screen width
 const double HEIGHT = 600; //screen height
 const double BALL_RADIUS = 10.0; //radius of pong ball
 const double PADDLE_HEIGHT = 100.0; //width of the pong paddle
-const double PADDLE_WIDTH = 30.0; // height of the pong paddle
+const double PADDLE_WIDTH = 30.0; //height of the pong paddle
 const double BALL_MASS = 100; // mass of the pong ball;
 const double ELASTICITY = 0.9; //elasticity of collisions
 const double PADDLE_VEL = 500.0; //velocity that the paddle can go
 const double MASS = 50.0; //mass of all objects
-const double BALL_VEL = 300.0; // initial velocity of ball
+const double BALL_VEL = 300.0; //initial velocity of ball
+const int LEFT_SCORE_X = (WIDTH / 2) - 40; //left side of player 1 score
+const int RIGHT_SCORE_X = (WIDTH / 2) - 40; //left side of player 2 score
+const int SCORE_Y = HEIGHT - 10; //top side of scores
+const int TEXT_HEIGHT = 30;
+const int TEXT_WIDTH = 20;
 const RGBColor PADDLE_COLOR = {
     .r = 0,
     .g = 0,
@@ -37,7 +44,7 @@ const Vector ball_center = {
 int main(int argc, char **argv){
     //initialize scene and window
     Scene *scene = scene_init();
-    window_init();
+    SDL_Renderer *renderer= window_init();
 
     //creates two paddles and initializes them on either side of the screen
     BodyType *paddle_one_type = malloc(sizeof(BodyType));
@@ -65,6 +72,7 @@ int main(int argc, char **argv){
     //initialize scores
     int left_score = 0; //score of player with left paddle
     int right_score = 0; //score of player with right paddle
+    char *left_score_str = "", *right_score_str = "";
 
     while(!sdl_is_done(scene)) {
         double wait_time = time_since_last_tick();
@@ -87,24 +95,30 @@ int main(int argc, char **argv){
         // end game if either score reaches 10
         if (right_score >= 10 || left_score >= 10) break;
 
+        snprintf(right_score_str, 10, "%d", right_score);
+        snprintf(left_score_str, 10, "%d", left_score);
+
         //display the current scores on-screen
-        display_text(itoa(right_score), 30);
-        display_text(itoa(left_score), 30);
+        display_text(renderer, right_score_str, 30, RIGHT_SCORE_X, SCORE_Y,
+                        TEXT_WIDTH, TEXT_HEIGHT);
+        display_text(renderer, left_score_str, 30, LEFT_SCORE_X, SCORE_Y,
+                        TEXT_WIDTH, TEXT_HEIGHT);
     }
 
-    //free all elements of scene
+    //free all elements of scene and the renderer
     scene_free(scene);
+    SDL_DestroyRenderer(renderer);
     TTF_Quit();
     return 1;
 }
 
-void window_init(){
+SDL_Renderer *window_init(){
     Vector vec_min = VEC_ZERO;
     Vector vec_max = {
         .x = WIDTH,
         .y = HEIGHT
     };
-    sdl_init(vec_min, vec_max);
+    return sdl_init(vec_min, vec_max);
 }
 
 Body *make_body(BodyType *type, Vector center){

@@ -6,6 +6,7 @@
 #include "forces.h"
 #include "scene.h"
 #include "collision.h"
+#include "text.h"
 #include <stdbool.h>
 #include <math.h>
 
@@ -19,8 +20,10 @@ typedef enum {
 
 /*
 * @brief Initializes a window with the given height and width
+*
+* @return the renderer associated with this window
 */
-void window_init();
+SDL_Renderer *window_init();
 
 /*
 * @brief Creates and returns a body object based off its BodyType

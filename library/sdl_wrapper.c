@@ -60,7 +60,7 @@ char get_keycode(SDL_Keycode key) {
     }
 }
 
-void sdl_init(Vector min, Vector max) {
+SDL_Renderer *sdl_init(Vector min, Vector max) {
     // Check parameters
     assert(min.x < max.x);
     assert(min.y < max.y);
@@ -76,7 +76,8 @@ void sdl_init(Vector min, Vector max) {
         WINDOW_HEIGHT,
         SDL_WINDOW_RESIZABLE
     );
-    renderer = SDL_CreateRenderer(window, -1, 0);
+    SDL_Renderer *renderer = SDL_CreateRenderer(window, -1, 0);
+    return renderer;
 }
 
 bool sdl_is_done(Scene *scene) {
