@@ -13,8 +13,8 @@ const double BALL_VEL = 700.0; // initial velocity of ball
 const int LEFT_SCORE_X = (WIDTH / 2) - 40; //left side of player 1 score
 const int RIGHT_SCORE_X = (WIDTH / 2) - 40; //left side of player 2 score
 const int SCORE_Y = HEIGHT - 10; //top side of scores
-const int TEXT_HEIGHT = 30;
-const int TEXT_WIDTH = 20;
+const int TEXT_HEIGHT = 30; //height of standard text onscreen
+const int TEXT_WIDTH = 20; //width of standard text onscreen
 const RGBColor PADDLE_COLOR = {
     .r = 0,
     .g = 0,
@@ -118,6 +118,7 @@ int main(int argc, char **argv){
     scene_free(scene);
     SDL_DestroyRenderer(renderer);
     TTF_Quit();
+    SDL_Quit();
     return 1;
 }
 
