@@ -2,6 +2,7 @@
 #define __SDL_WRAPPER_H__
 
 #include <stdbool.h>
+#include <SDL2/SDL.h>
 #include "color.h"
 #include "list.h"
 #include "scene.h"
@@ -49,8 +50,9 @@ typedef void (*KeyHandler)(char key, KeyEventType type, double held_time,
  *
  * @param min the x and y coordinates of the bottom left of the scene
  * @param max the x and y coordinates of the top right of the scene
+ * @return a pointer to the renderer
  */
-void sdl_init(Vector min, Vector max);
+SDL_Renderer *sdl_init(Vector min, Vector max);
 
 /**
  * Processes all SDL events and returns whether the window has been closed.

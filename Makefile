@@ -13,7 +13,7 @@ LIB_MATH = -lm
 # Compiler flags that link the program with the math and SDL libraries.
 # Note that $(...) substitutes a variable's value, so this line is equivalent to
 # LIBS = -lm -lSDL2 -lSDL2_gfx
-LIBS = $(LIB_MATH) -lSDL2 -lSDL2_gfx
+LIBS = $(LIB_MATH) -lSDL2 -lSDL2_gfx -lSDL2_ttf
 
 # List of demo programs
 DEMOS = pong #bounce gravity pacman nbodies damping pegs breakout
@@ -22,7 +22,7 @@ STAFF_LIBS = sdl_wrapper
 # List of C files in "libraries" that you will write
 STUDENT_LIBS = vector list \
 	polygon body scene \
-	collision forces  ai #color
+	collision forces text ai #color
 
 # List of compiled .o files corresponding to STUDENT_LIBS, e.g. "out/vector.o".
 # Don't worry about the syntax; it's just adding "out/" to the start

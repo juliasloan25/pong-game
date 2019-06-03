@@ -60,16 +60,7 @@ char get_keycode(SDL_Keycode key) {
     }
 }
 
-/*
-int return_mouse_y_position(Scene *scene){
-  SDL_Event *event = malloc(sizeof(*event));
-  if(SDL_MOUSEMOTION){
-  return event->motion.x;
-}
-}
-*/
-
-void sdl_init(Vector min, Vector max) {
+SDL_Renderer *sdl_init(Vector min, Vector max) {
     // Check parameters
     assert(min.x < max.x);
     assert(min.y < max.y);
@@ -85,7 +76,8 @@ void sdl_init(Vector min, Vector max) {
         WINDOW_HEIGHT,
         SDL_WINDOW_RESIZABLE
     );
-    renderer = SDL_CreateRenderer(window, -1, 0);
+    SDL_Renderer *renderer = SDL_CreateRenderer(window, -1, 0);
+    return renderer;
 }
 
 bool sdl_is_done(Scene *scene) {
@@ -199,9 +191,6 @@ void sdl_render_scene(Scene *scene) {
 void sdl_on_key(KeyHandler handler) {
     key_handler = handler;
 }
-
-
-
 
 double time_since_last_tick(void) {
     clock_t now = clock();
