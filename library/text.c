@@ -24,11 +24,6 @@ void display_text(SDL_Renderer *renderer, char *text, int font_size, int score_x
     SDL_Color color = {0, 0, 0}; //black
 
     SDL_Surface *text_surface = TTF_RenderText_Solid(font, text, color);
-    if (!(text_surface = TTF_RenderText_Solid(font, text, color))) {
-        printf("TTF_Render: %s\n", TTF_GetError());
-        exit(1);
-    }
-
     SDL_Texture *texture = SDL_CreateTextureFromSurface(renderer, text_surface);
     SDL_FreeSurface(text_surface);
 
@@ -39,10 +34,14 @@ void display_text(SDL_Renderer *renderer, char *text, int font_size, int score_x
     message_rect->w = width;
     message_rect->h = height;
 
+    if (!(text_surface = TTF_RenderText_Solid(font, text, color))) {
+        printf("TTF_Render: %s\n", TTF_GetError());
+        exit(1);
+    }
+
     SDL_RenderCopy(renderer, texture, NULL, message_rect);
     SDL_RenderPresent(renderer);
 
-    free(message_rect); //need to free fields?
     TTF_CloseFont(font);
     SDL_DestroyTexture(texture);
 }

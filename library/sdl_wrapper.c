@@ -192,6 +192,9 @@ void sdl_on_key(KeyHandler handler) {
     key_handler = handler;
 }
 
+
+
+
 double time_since_last_tick(void) {
     clock_t now = clock();
     double difference = last_clock
