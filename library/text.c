@@ -103,10 +103,10 @@ int handle_buttons(int num_buttons) {
                 case SDL_QUIT:
                     break;
                 case SDL_MOUSEBUTTONDOWN:
-                    int x = mbe.x;
-                    int y = mbe.y;
-                    if ((x >= TEXT_X && x <= TEXT_X + TEXT_WIDTH) &&
-                        (y >= i * TEXT_Y_START && y < i * TEXT_Y_START + TEXT_HEIGHT)) {
+                    //int x = mbe.x;
+                    //int y = mbe.y;
+                    if ((mbe.x >= TEXT_X && mbe.x <= TEXT_X + TEXT_WIDTH) &&
+                        (mbe.y >= i * TEXT_Y_START && mbe.y < i * TEXT_Y_START + TEXT_HEIGHT)) {
                             return i;
                         }
             }
