@@ -37,7 +37,6 @@ const Vector ball_center = {
 int main(int argc, char **argv){
     //initialize scene and window
     Scene *scene = scene_init();
-    window_init();
     //creates two paddles and initializes them on either side of the screen
     BodyType *paddle_one_type = malloc(sizeof(BodyType));
     *(paddle_one_type) = PADDLE;
@@ -59,10 +58,30 @@ int main(int argc, char **argv){
     create_physics_collision(scene, ELASTICITY, paddle_one, ball);
     create_physics_collision(scene, ELASTICITY, paddle_two, ball);
 
-    create_ai(scene, paddle_two, ball, EASY);
-    create_ai(scene, paddle_one, ball, HARD);
-    sdl_on_key(on_key); //handles key inputs
-/*     if(MOUSE_MOVED){
+    if(*argv[1] == '1'){
+      AiDifficulty difficulty;
+      switch(*argv[2]){
+        case '1':
+          difficulty = EASY;
+          break;
+        case '2':
+          difficulty = MEDIUM;
+          break;
+        case '3':
+          difficulty = HARD;
+          break;
+      }
+      sdl_on_key(on_key); //handles key inputs
+      create_ai(scene, paddle_two, ball, difficulty);
+    }
+
+    else if(*argv[1] == '2'){
+      create_ai(scene, paddle_two, ball, MEDIUM);
+      create_ai(scene, paddle_one, ball, MEDIUM);
+    }
+    window_init();
+
+     /*if(MOUSE_MOVED){
         Body * paddle_one  = scene_get_body(scene,0);
         body_set_centroid(paddle_one, (Vector){paddle_one_center.x, return_mouse_y_position(scene)});
       }
