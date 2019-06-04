@@ -75,7 +75,6 @@ int main(int argc, char **argv){
     //initialize scores and AI timer
     int left_score = 0; //score of player with left paddle
     int right_score = 0; //score of player with right paddle
-    char *left_score_str = "", *right_score_str = "";
     double ai_timer = 0;
 
     while(!sdl_is_done(scene)) {
@@ -105,6 +104,10 @@ int main(int argc, char **argv){
             break;
         }
 
+        char left_score_str[4];
+        char right_score_str[4];
+        left_score_str[0] = '\0';
+        right_score_str[0] = '\0';
         snprintf(right_score_str, 10, "%d", right_score);
         snprintf(left_score_str, 10, "%d", left_score);
 
