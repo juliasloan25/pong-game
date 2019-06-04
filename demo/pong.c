@@ -35,6 +35,10 @@ const Vector ball_center = {
 
 
 int main(int argc, char **argv){
+    if(argc != 2 && argc != 3){
+      printf("usage: %s [1 or 2 for single player and demo mode respectively] [1, 2, or 3 for easy, medium, or hard AI (single player only)]\n", argv[0]);
+      return 1;
+    }
     //initialize scene and window
     Scene *scene = scene_init();
     //creates two paddles and initializes them on either side of the screen
