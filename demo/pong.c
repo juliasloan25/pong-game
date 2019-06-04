@@ -77,6 +77,7 @@ int main(int argc, char **argv){
     int right_score = 0; //score of player with right paddle
     double ai_timer = 0;
 
+    printf("before while");
     while(!sdl_is_done(scene)) {
         double wait_time = time_since_last_tick();
         ai_timer += wait_time;
@@ -111,12 +112,16 @@ int main(int argc, char **argv){
         snprintf(right_score_str, 10, "%d", right_score);
         snprintf(left_score_str, 10, "%d", left_score);
 
+        printf("displaying text");
         //display the current scores on-screen
         display_text(renderer, right_score_str, 30, RIGHT_SCORE_X, SCORE_Y,
                         TEXT_WIDTH, TEXT_HEIGHT);
         display_text(renderer, left_score_str, 30, LEFT_SCORE_X, SCORE_Y,
                         TEXT_WIDTH, TEXT_HEIGHT);
     }
+    printf("after while");
+
+
     //free all elements of scene and the renderer
     scene_free(scene);
     SDL_DestroyRenderer(renderer);
