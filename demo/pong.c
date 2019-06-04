@@ -59,6 +59,8 @@ int main(int argc, char **argv){
     create_physics_collision(scene, ELASTICITY, paddle_one, ball);
     create_physics_collision(scene, ELASTICITY, paddle_two, ball);
 
+    create_ai(scene, paddle_two, ball, EASY);
+    create_ai(scene, paddle_one, ball, HARD);
     sdl_on_key(on_key); //handles key inputs
 /*     if(MOUSE_MOVED){
         Body * paddle_one  = scene_get_body(scene,0);
@@ -82,10 +84,6 @@ int main(int argc, char **argv){
         else if (ball_hit_side == 'r') { //add point to left player
             left_score++;
             reset(scene);
-        }
-        if(ai_timer > 0.01){
-            ai_timer = 0;
-            set_paddle_vel(paddle_two, ball, PADDLE_VEL);
         }
 
         //render and update scene at every tick

@@ -6,6 +6,7 @@
 #include "collision.h"
 #include <math.h>
 #include <stdio.h>
+#include "ai.h"
 
 
 /**
@@ -18,6 +19,7 @@
  */
 typedef void (*CollisionHandler)
     (Body *body1, Body *body2, Vector axis, void *aux);
+
 
 /**
  * Adds a Newtonian gravitational force between two bodies in a scene.
@@ -77,6 +79,8 @@ void create_collision(
     void *aux,
     FreeFunc freer
 );
+
+void create_ai(Scene *scene, Body *smart, Body *target, AiDifficulty diff);
 
 
 /**
