@@ -1,7 +1,10 @@
 #include "text.h"
 
 TTF_Font *load_font(int font_size) {
-    TTF_Font *font = TTF_OpenFont("ostrich-regular.ttf", font_size);
+    char *font_path = SDL_GetBasePath();
+    snprintf(font_path, "ostrich-regular.ttf");
+    printf("path: %s", font_path);
+    TTF_Font *font = TTF_OpenFont(font_path, font_size);
     if (font == NULL) {
         printf("TTF_OpenFont: %s\n", TTF_GetError());
         exit(1);

@@ -1,7 +1,7 @@
 #include "pong.h"
 
-//const double WIDTH = 800; //screen width
-//const double HEIGHT = 600; //screen height
+const double WIDTH = 800; //screen width
+const double HEIGHT = 600; //screen height
 const double BALL_RADIUS = 10.0; //radius of pong ball
 const double PADDLE_HEIGHT = 100.0; //width of the pong paddle
 const double PADDLE_WIDTH = 30.0; // height of the pong paddle
@@ -13,8 +13,8 @@ const double BALL_VEL = 700.0; // initial velocity of ball
 const int LEFT_SCORE_X = (WIDTH / 2) - 40; //left side of player 1 score
 const int RIGHT_SCORE_X = (WIDTH / 2) - 40; //left side of player 2 score
 const int SCORE_Y = HEIGHT - 10; //top side of scores
-//const int TEXT_HEIGHT = 30; //height of standard text onscreen
-//const int TEXT_WIDTH = 20; //width of standard text onscreen
+const int TEXT_HEIGHT = 30; //height of standard text onscreen
+const int TEXT_WIDTH = 20; //width of standard text onscreen
 const RGBColor PADDLE_COLOR = {
     .r = 0,
     .g = 0,
@@ -103,7 +103,7 @@ int main(int argc, char **argv){
 
         //render and update scene at every tick
         scene_tick(scene, wait_time);
-        sdl_render_scene(scene, renderer);
+        sdl_render_scene(scene, renderer, surface_left, surface_right);
 
         // end game if either score reaches 10
         if (right_score >= 10 || left_score >= 10 || scene_get_end(scene)){

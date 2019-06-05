@@ -198,7 +198,8 @@ void sdl_show(SDL_Renderer *renderer) {
     SDL_RenderPresent(renderer);
 }
 
-void sdl_render_scene(Scene *scene, SDL_Renderer *renderer) {
+void sdl_render_scene(Scene *scene, SDL_Renderer *renderer, SDL_Surface *surface1,
+                        SDL_Surface *surface2) {
     sdl_clear(renderer);
     size_t body_count = scene_bodies(scene);
     for (size_t i = 0; i < body_count; i++) {
@@ -207,6 +208,11 @@ void sdl_render_scene(Scene *scene, SDL_Renderer *renderer) {
         sdl_draw_polygon(shape, body_get_color(body), renderer);
         list_free(shape);
     }
+    SDL_Texture *texture1 = SDL_CreateTextureFromSurface(renderer, surface1);
+    SDL_Texture *texture2 = SDL_CreateTextureFromSurface(renderer, surface2);
+    SDL_RenderCopy(renderer, texture1, NULL, rect);
+    SDL_RenderCopy(renderer, texture2, NULL, rect);
+
     sdl_show(renderer);
 }
 
