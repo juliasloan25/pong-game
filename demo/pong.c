@@ -77,7 +77,7 @@ int main(int argc, char **argv){
     int right_score = 0; //score of player with right paddle
     double ai_timer = 0;
 
-    printf("before while");
+    printf("before while\n");
     while(!sdl_is_done(scene)) {
         double wait_time = time_since_last_tick();
         ai_timer += wait_time;
