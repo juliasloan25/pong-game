@@ -38,7 +38,6 @@ const Vector ball_center = {
     .y = HEIGHT/ 2.0
 }; //initial and reset center of the ball
 
-
 int main(int argc, char **argv){
     //initialize scene and window
     Scene *scene = scene_init();
@@ -81,19 +80,34 @@ int main(int argc, char **argv){
     TTF_Font *font = load_font(font_size);
     //TTF_Font *font = TTF_OpenFont("ostrich-regular.ttf", font_size);
 
-    printf("before while\n");
-
     while(!sdl_is_done(scene)) {
         double wait_time = time_since_last_tick();
         ai_timer += wait_time;
         //checks if paddle or ball has hit walls
         char ball_hit_side = move_if_offscreen(paddle_one, paddle_two, ball);
+
         if(ball_hit_side == 'l'){ //add point to right player
             right_score++;
+            char right_score_str[4];
+            right_score_str[0] = '\0';
+            snprintf(right_score_str, 10, "%d", right_score);
+            //display the updated right score
+            display_text(renderer, right_score_str, font, RIGHT_SCORE_X, SCORE_Y,
+                            TEXT_WIDTH, TEXT_HEIGHT);
+            sdl_render_scene(scene, renderer);
+            SDL_Delay(1000);
             reset(scene);
         }
         else if (ball_hit_side == 'r') { //add point to left player
             left_score++;
+            char left_score_str[4];
+            left_score_str[0] = '\0';
+            snprintf(left_score_str, 10, "%d", left_score);
+            //display the updated right score
+            display_text(renderer, left_score_str, font, LEFT_SCORE_X, SCORE_Y,
+                             TEXT_WIDTH, TEXT_HEIGHT);
+            sdl_render_scene(scene, renderer);
+            SDL_Delay(1000);
             reset(scene);
         }
         if(ai_timer > 0.01){
@@ -103,28 +117,18 @@ int main(int argc, char **argv){
 
         //render and update scene at every tick
         scene_tick(scene, wait_time);
+
         sdl_render_scene(scene, renderer, surface_left, surface_right);
+        //sdl_render_scene(scene, renderer);
 
         // end game if either score reaches 10
         if (right_score >= 10 || left_score >= 10 || scene_get_end(scene)){
             break;
         }
 
-        char left_score_str[4];
-        char right_score_str[4];
-        left_score_str[0] = '\0';
-        right_score_str[0] = '\0';
-        snprintf(right_score_str, 10, "%d", right_score);
-        snprintf(left_score_str, 10, "%d", left_score);
 
-        printf("displaying text\n");
-        //display the current scores on-screen
-        display_text(renderer, right_score_str, font, RIGHT_SCORE_X, SCORE_Y,
-                        TEXT_WIDTH, TEXT_HEIGHT);
-        display_text(renderer, left_score_str, font, LEFT_SCORE_X, SCORE_Y,
-                        TEXT_WIDTH, TEXT_HEIGHT);
+
     }
-    printf("after while\n");
 
     //free all elements of scene and the renderer
     scene_free(scene);

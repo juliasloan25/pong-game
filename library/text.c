@@ -2,8 +2,10 @@
 
 TTF_Font *load_font(int font_size) {
     char *font_path = SDL_GetBasePath();
-    snprintf(font_path, "ostrich-regular.ttf");
-    printf("path: %s", font_path);
+    const char *font_str = "ostrich-regular.ttf";
+    snprintf(font_path, 100, "%s", font_str);
+    printf("path: %s\n", font_path);
+    
     TTF_Font *font = TTF_OpenFont(font_path, font_size);
     if (font == NULL) {
         printf("TTF_OpenFont: %s\n", TTF_GetError());
@@ -16,10 +18,13 @@ void display_text(SDL_Renderer *renderer, char *text, TTF_Font *font, int x_pos,
                 int y_pos, int width, int height) {
     //get vector instead of x and y pos, then use sdl_wrapper scaling
     //or change scene so coordinates match up with sdl pixel coordinates
-    SDL_Color color = {0, 0, 0}; //black
+    SDL_Color color = {0, 0, 0}; //white
 
-    //SDL_Surface *text_surface = TTF_RenderText_Solid(font, text, color);
-    SDL_Surface *text_surface = TTF_RenderText_Solid(font, "pls work", color);
+    if (font == NULL) {
+        printf("font null");
+        exit(1);
+    }
+    SDL_Surface *text_surface = TTF_RenderText_Solid(font, text, color);
     if (text_surface == NULL) {
         printf("TTF_Render: %s\n", TTF_GetError());
         exit(1);
@@ -29,18 +34,18 @@ void display_text(SDL_Renderer *renderer, char *text, TTF_Font *font, int x_pos,
 
     //create rectangle to position text
     SDL_Rect *rect = malloc(sizeof(SDL_Rect));
-    rect->x = x_pos;
-    rect->y = y_pos;
-    rect->w = width;
-    rect->h = height;
-    sdl_scale_rect(rect, renderer);
+    rect->x = 400;
+    rect->y = 300;
+    rect->w = 30;
+    rect->h = 40;
+    //sdl_scale_rect(rect, renderer);
 
     SDL_RenderCopy(renderer, texture, NULL, rect);
-    SDL_RenderPresent(renderer);
-    SDL_Delay(2000);
+    // SDL_RenderPresent(renderer);
+    sdl_show(renderer);
+    //SDL_Delay(10000);
 
     free(rect);
-    TTF_CloseFont(font);
     SDL_FreeSurface(text_surface);
     SDL_DestroyTexture(texture);
 }
