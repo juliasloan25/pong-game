@@ -10,19 +10,12 @@ TTF_Font *load_font(int font_size) {
     return font;
 }
 
-void display_text(SDL_Renderer *renderer, char *text, int font_size, int x_pos,
+void display_text(SDL_Renderer *renderer, char *text, TTF_Font *font, int x_pos,
                 int y_pos, int width, int height) {
-    TTF_Init();
-    if (!TTF_WasInit() && TTF_Init() == -1) {
-        printf("TTF_Init: %s\n", TTF_GetError());
-        exit(1);
-    }
-
-    TTF_Font *font = load_font(font_size);
-    SDL_Color color = {255, 255, 255}; //white
+    SDL_Color color = {0, 0, 0}; //black
 
     SDL_Surface *text_surface = TTF_RenderText_Solid(font, text, color);
-    if (!(text_surface = TTF_RenderText_Solid(font, text, color))) {
+    if (text_surface == NULL) {
         printf("TTF_Render: %s\n", TTF_GetError());
         exit(1);
     }
@@ -57,7 +50,7 @@ void set_background(SDL_Renderer *renderer, int r, int g, int b) {
     SDL_Delay(2000);
 }
 
-int start_screen(SDL_Renderer *renderer, int width, int height) {
+int start_screen(SDL_Renderer *renderer, int width, int height, TTF_Font *font) {
     //set background to black
     set_background(renderer, 0, 0, 0);
 
@@ -67,10 +60,10 @@ int start_screen(SDL_Renderer *renderer, int width, int height) {
     int num_buttons = 2;
 
     //display title to start screen
-    display_text(renderer, title, 60, TITLE_X, TITLE_Y, TITLE_WIDTH, TITLE_HEIGHT);
+    display_text(renderer, title, font, TITLE_X, TITLE_Y, TITLE_WIDTH, TITLE_HEIGHT);
     //display play modes
-    display_text(renderer, text1, 30, TEXT_X, TEXT_Y_START, TEXT_WIDTH, TEXT_HEIGHT);
-    display_text(renderer, text2, 30, TEXT_X, TEXT_Y_START + (2 * TEXT_HEIGHT),
+    display_text(renderer, text1, font, TEXT_X, TEXT_Y_START, TEXT_WIDTH, TEXT_HEIGHT);
+    display_text(renderer, text2, font, TEXT_X, TEXT_Y_START + (2 * TEXT_HEIGHT),
                     TEXT_WIDTH, TEXT_HEIGHT);
 
     //1 if single player, 2 if demo mode, 0 if no press
@@ -78,7 +71,7 @@ int start_screen(SDL_Renderer *renderer, int width, int height) {
 }
 
 //after calling this, call display_text on the scores to overlay them
-int end_screen(SDL_Renderer *renderer, int width, int height) {
+int end_screen(SDL_Renderer *renderer, int width, int height, TTF_Font *font) {
     //set background to black
     set_background(renderer, 0, 0, 0);
 
@@ -87,8 +80,8 @@ int end_screen(SDL_Renderer *renderer, int width, int height) {
     int num_buttons = 1;
 
     //display text to screen
-    display_text(renderer, text0, 60, TITLE_X, TITLE_Y, TITLE_WIDTH, TITLE_HEIGHT);
-    display_text(renderer, text1, 30, TEXT_X, TEXT_Y_START, TEXT_WIDTH, TEXT_HEIGHT);
+    display_text(renderer, text0, font, TITLE_X, TITLE_Y, TITLE_WIDTH, TITLE_HEIGHT);
+    display_text(renderer, text1, font, TEXT_X, TEXT_Y_START, TEXT_WIDTH, TEXT_HEIGHT);
 
     return handle_buttons(num_buttons);
 }

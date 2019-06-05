@@ -76,6 +76,12 @@ SDL_Renderer *sdl_init(Vector min, Vector max) {
         WINDOW_HEIGHT,
         SDL_WINDOW_RESIZABLE
     );
+
+    if (TTF_Init() == -1) {
+        printf("TTF_Init: %s\n", TTF_GetError());
+        exit(1);
+    }
+
     SDL_Renderer *renderer = SDL_CreateRenderer(window, -1, 0);
     return renderer;
 }

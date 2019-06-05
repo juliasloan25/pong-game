@@ -34,7 +34,7 @@ TTF_Font *load_font(int font_size);
 * @param width the width of the text box
 * @param height the height of the text box
 */
-void display_text(SDL_Renderer *renderer, char *text, int font_size, int x_pos,
+void display_text(SDL_Renderer *renderer, char *text, TTF_Font *font, int x_pos,
                     int y_pos, int width, int height);
 
 /*
@@ -53,7 +53,7 @@ void set_background(SDL_Renderer *renderer, int r, int g, int b);
 * @param height the height of the window
 * @return an integer representing which text was clicked
 */
-int start_screen(SDL_Renderer *renderer, int width, int height);
+int start_screen(SDL_Renderer *renderer, int width, int height, TTF_Font *font);
 
 /*
 * Initializes the end game screen with buttons.
@@ -62,7 +62,7 @@ int start_screen(SDL_Renderer *renderer, int width, int height);
 * @param height the height of the window
 * @return an integer representing which text was clicked
 */
-int end_screen(SDL_Renderer *renderer, int width, int height);
+int end_screen(SDL_Renderer *renderer, int width, int height, TTF_Font *font);
 
 /*
 * Handles buttons and returns an integer corresponding to the number of the

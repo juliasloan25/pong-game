@@ -77,6 +77,9 @@ int main(int argc, char **argv){
     int right_score = 0; //score of player with right paddle
     double ai_timer = 0;
 
+    int font_size = 20;
+    TTF_Font *font = load_font(font_size);
+
     printf("before while");
     while(!sdl_is_done(scene)) {
         double wait_time = time_since_last_tick();
@@ -114,9 +117,9 @@ int main(int argc, char **argv){
 
         printf("displaying text");
         //display the current scores on-screen
-        display_text(renderer, right_score_str, 30, RIGHT_SCORE_X, SCORE_Y,
+        display_text(renderer, right_score_str, font, RIGHT_SCORE_X, SCORE_Y,
                         TEXT_WIDTH, TEXT_HEIGHT);
-        display_text(renderer, left_score_str, 30, LEFT_SCORE_X, SCORE_Y,
+        display_text(renderer, left_score_str, font, LEFT_SCORE_X, SCORE_Y,
                         TEXT_WIDTH, TEXT_HEIGHT);
     }
     printf("after while");
