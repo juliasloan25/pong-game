@@ -12,6 +12,8 @@ TTF_Font *load_font(int font_size) {
 
 void display_text(SDL_Renderer *renderer, char *text, TTF_Font *font, int x_pos,
                 int y_pos, int width, int height) {
+    //get vector instead of x and y pos, then use sdl_wrapper scaling
+    //or change scene so coordinates match up with sdl pixel coordinates
     SDL_Color color = {0, 0, 0}; //black
 
     SDL_Surface *text_surface = TTF_RenderText_Solid(font, text, color);
@@ -22,18 +24,19 @@ void display_text(SDL_Renderer *renderer, char *text, TTF_Font *font, int x_pos,
 
     SDL_Texture *texture = SDL_CreateTextureFromSurface(renderer, text_surface);
 
-    //rectangle to position text
-    SDL_Rect *message_rect = malloc(sizeof(SDL_Rect));
-    message_rect->x = x_pos;
-    message_rect->y = y_pos;
-    message_rect->w = width;
-    message_rect->h = height;
+    //create rectangle to position text
+    SDL_Rect *rect = malloc(sizeof(SDL_Rect));
+    rect->x = x_pos;
+    rect->y = y_pos;
+    rect->w = width;
+    rect->h = height;
+    sdl_scale_rect(rect, renderer);
 
-    SDL_RenderCopy(renderer, texture, NULL, message_rect);
+    SDL_RenderCopy(renderer, texture, NULL, rect);
     SDL_RenderPresent(renderer);
     SDL_Delay(2000);
 
-    free(message_rect);
+    free(rect);
     TTF_CloseFont(font);
     SDL_FreeSurface(text_surface);
     SDL_DestroyTexture(texture);
@@ -47,7 +50,7 @@ void set_background(SDL_Renderer *renderer, int r, int g, int b) {
     SDL_RenderClear(renderer);
 
     SDL_RenderPresent(renderer);
-    SDL_Delay(2000);
+    SDL_Delay(50); //delay time in milliseconds
 }
 
 int start_screen(SDL_Renderer *renderer, int width, int height, TTF_Font *font) {

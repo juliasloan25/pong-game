@@ -69,6 +69,12 @@ bool sdl_is_done(Scene *scene);
  */
 void sdl_clear(SDL_Renderer *renderer);
 
+void sdl_set_center();
+
+double sdl_get_scale();
+
+void sdl_scale_rect(SDL_Rect *rect, SDL_Renderer *renderer);
+
 /**
  * Draws a polygon from the given list of vertices and a color.
  *

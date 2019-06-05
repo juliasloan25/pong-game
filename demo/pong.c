@@ -73,8 +73,8 @@ int main(int argc, char **argv){
       */
 
     //initialize scores and AI timer
-    int left_score = 0; //score of player with left paddle
-    int right_score = 0; //score of player with right paddle
+    int left_score = 0,  //score of player with left paddle
+        right_score = 0; //score of player with right paddle
     double ai_timer = 0;
 
     int font_size = 20;
@@ -124,7 +124,6 @@ int main(int argc, char **argv){
                         TEXT_WIDTH, TEXT_HEIGHT);
     }
     printf("after while\n");
-
 
     //free all elements of scene and the renderer
     scene_free(scene);

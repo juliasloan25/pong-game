@@ -131,6 +131,35 @@ void sdl_clear(SDL_Renderer *renderer) {
     SDL_RenderClear(renderer);
 }
 
+void sdl_set_center() {
+    int *width = malloc(sizeof(*width)),
+        *height = malloc(sizeof(*height));
+    assert(width);
+    assert(height);
+    // Fill width and height with appropriate values
+    SDL_GetWindowSize(window, width, height);
+    center.x = *width / 2.0;
+    center.y = *height / 2.0;
+    free(width);
+    free(height);
+}
+
+double sdl_get_scale() {
+    double x_scale = center.x / max_diff.x,
+           y_scale = center.y / max_diff.y;
+
+    return x_scale < y_scale ? x_scale : y_scale;
+}
+
+void sdl_scale_rect(SDL_Rect *rect, SDL_Renderer *renderer) {
+    double scale = sdl_get_scale();
+
+    rect->x *= scale;
+    rect->y *= scale * -1.0;
+    rect->w *= scale;
+    rect->h *= scale;
+}
+
 void sdl_draw_polygon(List *points, RGBColor color, SDL_Renderer *renderer) {
     // Check parameters
     size_t n = list_size(points);
@@ -139,20 +168,7 @@ void sdl_draw_polygon(List *points, RGBColor color, SDL_Renderer *renderer) {
     assert(0 <= color.g && color.g <= 1);
     assert(0 <= color.b && color.b <= 1);
 
-    // Scale scene so it fits entirely in the window,
-    // with the center of the scene at the center of the window
-    int *width = malloc(sizeof(*width)),
-        *height = malloc(sizeof(*height));
-    assert(width);
-    assert(height);
-    SDL_GetWindowSize(window, width, height);
-    double center_x = *width / 2.0,
-           center_y = *height / 2.0;
-    free(width);
-    free(height);
-    double x_scale = center_x / max_diff.x,
-           y_scale = center_y / max_diff.y;
-    double scale = x_scale < y_scale ? x_scale : y_scale;
+    double scale = sdl_get_scale();
 
     // Convert each vertex to a point on screen
     short *x_points = malloc(sizeof(*x_points) * n),
@@ -164,8 +180,8 @@ void sdl_draw_polygon(List *points, RGBColor color, SDL_Renderer *renderer) {
         Vector pos_from_center =
             vec_multiply(scale, vec_subtract(*vertex, center));
         // Flip y axis since positive y is down on the screen
-        x_points[i] = round(center_x + pos_from_center.x);
-        y_points[i] = round(center_y - pos_from_center.y);
+        x_points[i] = round(center.x + pos_from_center.x);
+        y_points[i] = round(center.y - pos_from_center.y);
     }
 
     // Draw polygon with the given color
