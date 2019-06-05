@@ -10,8 +10,8 @@ const double ELASTICITY = 1; //elasticity of collisions
 const double PADDLE_VEL = 600.0; //velocity that the paddle can go
 const double MASS = 50.0; //mass of all objects
 const double BALL_VEL = 700.0; // initial velocity of ball
-const int LEFT_SCORE_X = (WIDTH / 2) - 40; //left side of player 1 score
-const int RIGHT_SCORE_X = (WIDTH / 2) - 40; //left side of player 2 score
+const int LEFT_SCORE_X = (WIDTH / 2) - 2*TEXT_WIDTH; //left side of player 1 score
+const int RIGHT_SCORE_X = (WIDTH / 2) + 2*TEXT_WIDTH; //left side of player 2 score
 const int SCORE_Y = HEIGHT - 10; //top side of scores
 const int TEXT_HEIGHT = 30; //height of standard text onscreen
 const int TEXT_WIDTH = 20; //width of standard text onscreen
@@ -79,6 +79,8 @@ int main(int argc, char **argv){
     int font_size = 20;
     TTF_Font *font = load_font(font_size);
     //TTF_Font *font = TTF_OpenFont("ostrich-regular.ttf", font_size);
+    SDL_Surface *surface_right;
+    SDL_Surface *surface_left;
 
     while(!sdl_is_done(scene)) {
         double wait_time = time_since_last_tick();
@@ -91,10 +93,14 @@ int main(int argc, char **argv){
             char right_score_str[4];
             right_score_str[0] = '\0';
             snprintf(right_score_str, 10, "%d", right_score);
+
+            SDL_Rect *rect_right = make_rect(RIGHT_SCORE_X, SCORE_Y, TEXT_WIDTH,
+                                        TEXT_HEIGHT);
+
             //display the updated right score
-            display_text(renderer, right_score_str, font, RIGHT_SCORE_X, SCORE_Y,
-                            TEXT_WIDTH, TEXT_HEIGHT);
-            sdl_render_scene(scene, renderer);
+            surface_right = display_text(renderer, right_score_str, font,
+                            rect_right);
+            sdl_render_scene(scene, renderer, surface_left, surface_right);
             SDL_Delay(1000);
             reset(scene);
         }
@@ -103,10 +109,14 @@ int main(int argc, char **argv){
             char left_score_str[4];
             left_score_str[0] = '\0';
             snprintf(left_score_str, 10, "%d", left_score);
+
+            SDL_Rect *rect_left = make_rect(LEFT_SCORE_X, SCORE_Y, TEXT_WIDTH,
+                                        TEXT_HEIGHT);
+
             //display the updated right score
-            display_text(renderer, left_score_str, font, LEFT_SCORE_X, SCORE_Y,
-                             TEXT_WIDTH, TEXT_HEIGHT);
-            sdl_render_scene(scene, renderer);
+            surface_left = display_text(renderer, left_score_str, font,
+                            rect_left);
+            sdl_render_scene(scene, renderer, surface_left, surface_right);
             SDL_Delay(1000);
             reset(scene);
         }
@@ -125,14 +135,13 @@ int main(int argc, char **argv){
         if (right_score >= 10 || left_score >= 10 || scene_get_end(scene)){
             break;
         }
-
-
-
     }
 
     //free all elements of scene and the renderer
     scene_free(scene);
     SDL_DestroyRenderer(renderer);
+    SDL_FreeSurface(surface_right);
+    SDL_FreeSurface(surface_left);
     TTF_Quit();
     SDL_Quit();
     return 1;

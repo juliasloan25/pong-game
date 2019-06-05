@@ -5,7 +5,7 @@ TTF_Font *load_font(int font_size) {
     const char *font_str = "ostrich-regular.ttf";
     snprintf(font_path, 100, "%s", font_str);
     printf("path: %s\n", font_path);
-    
+
     TTF_Font *font = TTF_OpenFont(font_path, font_size);
     if (font == NULL) {
         printf("TTF_OpenFont: %s\n", TTF_GetError());
@@ -14,8 +14,20 @@ TTF_Font *load_font(int font_size) {
     return font;
 }
 
-void display_text(SDL_Renderer *renderer, char *text, TTF_Font *font, int x_pos,
-                int y_pos, int width, int height) {
+SDL_Rect *make_rect(int x_pos, int y_pos, int width, int height) {
+    //create rectangle to position text
+    SDL_Rect *rect = malloc(sizeof(SDL_Rect));
+    rect->x = x_pos;
+    rect->y = y_pos;
+    rect->w = width;
+    rect->h = height;
+
+    //sdl_scale_rect(rect, renderer);
+    return rect;
+}
+
+SDL_Surface *display_text(SDL_Renderer *renderer, char *text, TTF_Font *font,
+                            SDL_Rect *rect) {
     //get vector instead of x and y pos, then use sdl_wrapper scaling
     //or change scene so coordinates match up with sdl pixel coordinates
     SDL_Color color = {0, 0, 0}; //white
@@ -32,22 +44,14 @@ void display_text(SDL_Renderer *renderer, char *text, TTF_Font *font, int x_pos,
 
     SDL_Texture *texture = SDL_CreateTextureFromSurface(renderer, text_surface);
 
-    //create rectangle to position text
-    SDL_Rect *rect = malloc(sizeof(SDL_Rect));
-    rect->x = 400;
-    rect->y = 300;
-    rect->w = 30;
-    rect->h = 40;
-    //sdl_scale_rect(rect, renderer);
-
     SDL_RenderCopy(renderer, texture, NULL, rect);
     // SDL_RenderPresent(renderer);
     sdl_show(renderer);
     //SDL_Delay(10000);
 
     free(rect);
-    SDL_FreeSurface(text_surface);
     SDL_DestroyTexture(texture);
+    return text_surface;
 }
 
 void set_background(SDL_Renderer *renderer, int r, int g, int b) {
@@ -70,12 +74,17 @@ int start_screen(SDL_Renderer *renderer, int width, int height, TTF_Font *font) 
     char *text2 = "Demo mode";
     int num_buttons = 2;
 
-    //display title to start screen
-    display_text(renderer, title, font, TITLE_X, TITLE_Y, TITLE_WIDTH, TITLE_HEIGHT);
-    //display play modes
-    display_text(renderer, text1, font, TEXT_X, TEXT_Y_START, TEXT_WIDTH, TEXT_HEIGHT);
-    display_text(renderer, text2, font, TEXT_X, TEXT_Y_START + (2 * TEXT_HEIGHT),
+    //set positioning rectangles
+    SDL_Rect *rect_title = make_rect(TITLE_X, TITLE_Y, TITLE_WIDTH, TITLE_HEIGHT);
+    SDL_Rect *rect1 = make_rect(TEXT_X, TEXT_Y_START, TEXT_WIDTH, TEXT_HEIGHT);
+    SDL_Rect *rect2 = make_rect(TEXT_X, TEXT_Y_START + (2 * TEXT_HEIGHT),
                     TEXT_WIDTH, TEXT_HEIGHT);
+
+    //display title to start screen
+    display_text(renderer, title, font, rect_title);
+    //display play modes
+    display_text(renderer, text1, font, rect1);
+    display_text(renderer, text2, font, rect2);
 
     //1 if single player, 2 if demo mode, 0 if no press
     return handle_buttons(num_buttons);
@@ -90,9 +99,12 @@ int end_screen(SDL_Renderer *renderer, int width, int height, TTF_Font *font) {
     char *text1 = "Play again?"; //If selected, return to start screen
     int num_buttons = 1;
 
+    SDL_Rect *rect_title = make_rect(TITLE_X, TITLE_Y, TITLE_WIDTH, TITLE_HEIGHT);
+    SDL_Rect *rect1 = make_rect(TEXT_X, TEXT_Y_START, TEXT_WIDTH, TEXT_HEIGHT);
+
     //display text to screen
-    display_text(renderer, text0, font, TITLE_X, TITLE_Y, TITLE_WIDTH, TITLE_HEIGHT);
-    display_text(renderer, text1, font, TEXT_X, TEXT_Y_START, TEXT_WIDTH, TEXT_HEIGHT);
+    display_text(renderer, text0, font, rect_title);
+    display_text(renderer, text1, font, rect1);
 
     return handle_buttons(num_buttons);
 }

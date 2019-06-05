@@ -95,8 +95,12 @@ void sdl_show(SDL_Renderer *renderer);
  * so those functions should not be called directly.
  *
  * @param scene the scene to draw
+ * @param renderer the associated SDL_Renderer
+ * @param surface1 the first text surface to draw
+ * @param surface2 the second text surface to draw
  */
-void sdl_render_scene(Scene *scene, SDL_Renderer *renderer);
+void sdl_render_scene(Scene *scene, SDL_Renderer *renderer, SDL_Surface *surface1,
+                        SDL_Surface *surface2);
 
 /**
  * Registers a function to be called every time a key is pressed.
