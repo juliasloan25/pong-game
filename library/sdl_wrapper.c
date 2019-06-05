@@ -26,7 +26,7 @@ SDL_Window *window;
 /**
  * The renderer used to draw the scene.
  */
-SDL_Renderer *renderer;
+// SDL_Renderer *renderer;
 /**
  * The keypress handler, or NULL if none has been configured.
  */
@@ -120,12 +120,12 @@ bool sdl_is_done(Scene *scene) {
 }
 
 
-void sdl_clear(void) {
+void sdl_clear(SDL_Renderer *renderer) {
     SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
     SDL_RenderClear(renderer);
 }
 
-void sdl_draw_polygon(List *points, RGBColor color) {
+void sdl_draw_polygon(List *points, RGBColor color, SDL_Renderer *renderer) {
     // Check parameters
     size_t n = list_size(points);
     assert(n >= 3);
@@ -172,20 +172,20 @@ void sdl_draw_polygon(List *points, RGBColor color) {
     free(y_points);
 }
 
-void sdl_show(void) {
+void sdl_show(SDL_Renderer *renderer) {
     SDL_RenderPresent(renderer);
 }
 
-void sdl_render_scene(Scene *scene) {
-    sdl_clear();
+void sdl_render_scene(Scene *scene, SDL_Renderer *renderer) {
+    sdl_clear(renderer);
     size_t body_count = scene_bodies(scene);
     for (size_t i = 0; i < body_count; i++) {
         Body *body = scene_get_body(scene, i);
         List *shape = body_get_shape(body);
-        sdl_draw_polygon(shape, body_get_color(body));
+        sdl_draw_polygon(shape, body_get_color(body), renderer);
         list_free(shape);
     }
-    sdl_show();
+    sdl_show(renderer);
 }
 
 void sdl_on_key(KeyHandler handler) {

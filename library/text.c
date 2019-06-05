@@ -19,7 +19,7 @@ void display_text(SDL_Renderer *renderer, char *text, int font_size, int x_pos,
     }
 
     TTF_Font *font = load_font(font_size);
-    SDL_Color color = {0, 0, 0}; //black
+    SDL_Color color = {255, 255, 255}; //white
 
     SDL_Surface *text_surface = TTF_RenderText_Solid(font, text, color);
     if (!(text_surface = TTF_RenderText_Solid(font, text, color))) {
@@ -28,7 +28,6 @@ void display_text(SDL_Renderer *renderer, char *text, int font_size, int x_pos,
     }
 
     SDL_Texture *texture = SDL_CreateTextureFromSurface(renderer, text_surface);
-    SDL_FreeSurface(text_surface);
 
     //rectangle to position text
     SDL_Rect *message_rect = malloc(sizeof(SDL_Rect));
@@ -41,8 +40,9 @@ void display_text(SDL_Renderer *renderer, char *text, int font_size, int x_pos,
     SDL_RenderPresent(renderer);
     SDL_Delay(2000);
 
-    free(message_rect); //need to free fields?
+    free(message_rect);
     TTF_CloseFont(font);
+    SDL_FreeSurface(text_surface);
     SDL_DestroyTexture(texture);
 }
 
