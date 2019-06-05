@@ -1,7 +1,5 @@
 #include "pong.h"
 
-const double WIDTH = 800; //screen width
-const double HEIGHT = 600; //screen height
 const double BALL_RADIUS = 10.0; //radius of pong ball
 const double PADDLE_HEIGHT = 100.0; //width of the pong paddle
 const double PADDLE_WIDTH = 30.0; // height of the pong paddle
@@ -11,10 +9,11 @@ const double PADDLE_VEL = 600.0; //velocity that the paddle can go
 const double MASS = 50.0; //mass of all objects
 const double BALL_VEL = 700.0; // initial velocity of ball
 const int SCORE_Y = HEIGHT - 10; //top side of scores
-const int TEXT_HEIGHT = 30; //height of standard text onscreen
-const int TEXT_WIDTH = 20; //width of standard text onscreen
+const int TEXT_WIDTH = WIDTH / 4;
+const int TEXT_HEIGHT = HEIGHT / 8;
 const int LEFT_SCORE_X = (WIDTH / 2) - 2*TEXT_WIDTH; //left side of player 1 score
 const int RIGHT_SCORE_X = (WIDTH / 2) + 2*TEXT_WIDTH; //left side of player 2 score
+
 const RGBColor PADDLE_COLOR = {
     .r = 0,
     .g = 0,

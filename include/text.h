@@ -3,20 +3,16 @@
 #include <stdlib.h>
 #include <string.h>
 #include <sdl_wrapper.h>
+#include "constants.h"
 
+const int TITLE_X = WIDTH / 2 - 100;
+const int TITLE_Y = 40;
+const int TITLE_WIDTH = WIDTH / 2;
+const int TITLE_HEIGHT = HEIGHT / 4;
 
-static const double WIDTH = 800; //screen width
-static const double HEIGHT = 600; //screen height
+const int TEXT_X = WIDTH / 2 - 50;
+const int TEXT_Y_START = 200;
 
-static const int TITLE_X = WIDTH / 2 - 100;
-static const int TITLE_Y = 40;
-static const int TITLE_WIDTH = WIDTH / 2;
-static const int TITLE_HEIGHT = HEIGHT / 4;
-
-static const int TEXT_X = WIDTH / 2 - 50;
-static const int TEXT_Y_START = 200;
-static const int TEXT_WIDTH = WIDTH / 4;
-static const int TEXT_HEIGHT = HEIGHT / 8;
 
 /*
 * Set the font to be used in displaying text. Currently there is only one font,
