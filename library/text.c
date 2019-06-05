@@ -15,7 +15,8 @@ void display_text(SDL_Renderer *renderer, char *text, TTF_Font *font, int x_pos,
     //or change scene so coordinates match up with sdl pixel coordinates
     SDL_Color color = {0, 0, 0}; //black
 
-    SDL_Surface *text_surface = TTF_RenderText_Solid(font, text, color);
+    //SDL_Surface *text_surface = TTF_RenderText_Solid(font, text, color);
+    SDL_Surface *text_surface = TTF_RenderText_Solid(font, "pls work", color);
     if (text_surface == NULL) {
         printf("TTF_Render: %s\n", TTF_GetError());
         exit(1);
