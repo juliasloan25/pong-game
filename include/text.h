@@ -4,6 +4,7 @@
 #include <string.h>
 #include <sdl_wrapper.h>
 
+
 static const double WIDTH = 800; //screen width
 static const double HEIGHT = 600; //screen height
 
