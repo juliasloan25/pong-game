@@ -42,7 +42,7 @@ const Vector ball_center = {
 int main(int argc, char **argv){
     //initialize scene and window
     Scene *scene = scene_init();
-    SDL_Renderer *renderer= window_init();
+    SDL_Renderer *renderer = window_init();
 
     //creates two paddles and initializes them on either side of the screen
     BodyType *paddle_one_type = malloc(sizeof(BodyType));
@@ -98,7 +98,7 @@ int main(int argc, char **argv){
 
         //render and update scene at every tick
         scene_tick(scene, wait_time);
-        sdl_render_scene(scene);
+        sdl_render_scene(scene, renderer);
 
         // end game if either score reaches 10
         if (right_score >= 10 || left_score >= 10 || scene_get_end(scene)){
