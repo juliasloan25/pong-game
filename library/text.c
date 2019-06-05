@@ -2,7 +2,7 @@
 
 TTF_Font *load_font(int font_size) {
     TTF_Font *font = TTF_OpenFont("ostrich-regular.ttf", font_size);
-    if (!font) {
+    if (font == NULL) {
         printf("TTF_OpenFont: %s\n", TTF_GetError());
         exit(1);
     }
