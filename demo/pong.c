@@ -80,7 +80,8 @@ int main(int argc, char **argv){
     int font_size = 20;
     TTF_Font *font = load_font(font_size);
 
-    printf("before while");
+    printf("before while\n");
+
     while(!sdl_is_done(scene)) {
         double wait_time = time_since_last_tick();
         ai_timer += wait_time;
@@ -115,14 +116,14 @@ int main(int argc, char **argv){
         snprintf(right_score_str, 10, "%d", right_score);
         snprintf(left_score_str, 10, "%d", left_score);
 
-        printf("displaying text");
+        printf("displaying text\n");
         //display the current scores on-screen
         display_text(renderer, right_score_str, font, RIGHT_SCORE_X, SCORE_Y,
                         TEXT_WIDTH, TEXT_HEIGHT);
         display_text(renderer, left_score_str, font, LEFT_SCORE_X, SCORE_Y,
                         TEXT_WIDTH, TEXT_HEIGHT);
     }
-    printf("after while");
+    printf("after while\n");
 
 
     //free all elements of scene and the renderer
