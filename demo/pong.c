@@ -78,7 +78,8 @@ int main(int argc, char **argv){
     double ai_timer = 0;
 
     int font_size = 20;
-    TTF_Font *font = load_font(font_size);
+    //TTF_Font *font = load_font(font_size);
+    TTF_Font *font = TTF_OpenFont("ostrich-regular.ttf", font_size);
 
     printf("before while\n");
 
