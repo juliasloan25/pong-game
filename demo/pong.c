@@ -80,6 +80,10 @@ int main(int argc, char **argv){
     //TTF_Font *font = TTF_OpenFont("ostrich-regular.ttf", font_size);
     SDL_Surface *surface_right;
     SDL_Surface *surface_left;
+    SDL_Rect *rect_right = make_rect(RIGHT_SCORE_X, SCORE_Y, TEXT_WIDTH,
+                                TEXT_HEIGHT);
+    SDL_Rect *rect_left = make_rect(LEFT_SCORE_X, SCORE_Y, TEXT_WIDTH,
+                                TEXT_HEIGHT);
 
     while(!sdl_is_done(scene)) {
         double wait_time = time_since_last_tick();
@@ -93,13 +97,13 @@ int main(int argc, char **argv){
             right_score_str[0] = '\0';
             snprintf(right_score_str, 10, "%d", right_score);
 
-            SDL_Rect *rect_right = make_rect(RIGHT_SCORE_X, SCORE_Y, TEXT_WIDTH,
+            rect_right = make_rect(RIGHT_SCORE_X, SCORE_Y, TEXT_WIDTH,
                                         TEXT_HEIGHT);
 
             //display the updated right score
             surface_right = display_text(renderer, right_score_str, font,
                             rect_right);
-            sdl_render_scene(scene, renderer, surface_left, surface_right);
+            sdl_render_scene(scene, renderer, surface_left, surface_right, rect_left, rect_right);
             SDL_Delay(1000);
             reset(scene);
         }
@@ -109,13 +113,14 @@ int main(int argc, char **argv){
             left_score_str[0] = '\0';
             snprintf(left_score_str, 10, "%d", left_score);
 
-            SDL_Rect *rect_left = make_rect(LEFT_SCORE_X, SCORE_Y, TEXT_WIDTH,
+            rect_left = make_rect(LEFT_SCORE_X, SCORE_Y, TEXT_WIDTH,
                                         TEXT_HEIGHT);
 
             //display the updated right score
             surface_left = display_text(renderer, left_score_str, font,
                             rect_left);
-            sdl_render_scene(scene, renderer, surface_left, surface_right);
+            sdl_render_scene(scene, renderer, surface_left, surface_right,
+                rect_left, rect_right);
             SDL_Delay(1000);
             reset(scene);
         }
@@ -127,7 +132,8 @@ int main(int argc, char **argv){
         //render and update scene at every tick
         scene_tick(scene, wait_time);
 
-        sdl_render_scene(scene, renderer, surface_left, surface_right);
+        sdl_render_scene(scene, renderer, surface_left, surface_right,
+            rect_left, rect_right);
         //sdl_render_scene(scene, renderer);
 
         // end game if either score reaches 10
