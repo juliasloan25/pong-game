@@ -98,9 +98,11 @@ void sdl_show(SDL_Renderer *renderer);
  * @param renderer the associated SDL_Renderer
  * @param surface1 the first text surface to draw
  * @param surface2 the second text surface to draw
+ * @param rect1 the positioning rectangle for the first surface
+ * @param rect2 the positioning rectangle for the second surface
  */
 void sdl_render_scene(Scene *scene, SDL_Renderer *renderer, SDL_Surface *surface1,
-                        SDL_Surface *surface2);
+                        SDL_Surface *surface2, SDL_Rect *rect1, SDL_Rect *rect2);
 
 /**
  * Registers a function to be called every time a key is pressed.

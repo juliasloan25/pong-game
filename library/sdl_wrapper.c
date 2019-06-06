@@ -5,6 +5,7 @@
 #include <SDL2/SDL2_gfxPrimitives.h>
 #include <time.h>
 #include "sdl_wrapper.h"
+#include "constants.h"
 
 #define WINDOW_TITLE "CS 3"
 #define WINDOW_WIDTH 800
@@ -199,7 +200,7 @@ void sdl_show(SDL_Renderer *renderer) {
 }
 
 void sdl_render_scene(Scene *scene, SDL_Renderer *renderer, SDL_Surface *surface1,
-                        SDL_Surface *surface2) {
+                        SDL_Surface *surface2, SDL_Rect *rect1, SDL_Rect *rect2) {
     sdl_clear(renderer);
     size_t body_count = scene_bodies(scene);
     for (size_t i = 0; i < body_count; i++) {
@@ -210,8 +211,8 @@ void sdl_render_scene(Scene *scene, SDL_Renderer *renderer, SDL_Surface *surface
     }
     SDL_Texture *texture1 = SDL_CreateTextureFromSurface(renderer, surface1);
     SDL_Texture *texture2 = SDL_CreateTextureFromSurface(renderer, surface2);
-    SDL_RenderCopy(renderer, texture1, NULL, rect);
-    SDL_RenderCopy(renderer, texture2, NULL, rect);
+    SDL_RenderCopy(renderer, texture1, NULL, rect1);
+    SDL_RenderCopy(renderer, texture2, NULL, rect2);
 
     sdl_show(renderer);
 }
