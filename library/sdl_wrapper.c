@@ -5,6 +5,7 @@
 #include <SDL2/SDL2_gfxPrimitives.h>
 #include <time.h>
 #include "sdl_wrapper.h"
+#include "constants.h"
 
 #define WINDOW_TITLE "CS 3"
 #define WINDOW_WIDTH 800
@@ -26,7 +27,7 @@ SDL_Window *window;
 /**
  * The renderer used to draw the scene.
  */
-SDL_Renderer *renderer;
+// SDL_Renderer *renderer;
 /**
  * The keypress handler, or NULL if none has been configured.
  */
@@ -76,6 +77,12 @@ SDL_Renderer *sdl_init(Vector min, Vector max) {
         WINDOW_HEIGHT,
         SDL_WINDOW_RESIZABLE
     );
+
+    if (TTF_Init() == -1) {
+        printf("TTF_Init: %s\n", TTF_GetError());
+        exit(1);
+    }
+
     SDL_Renderer *renderer = SDL_CreateRenderer(window, -1, 0);
     return renderer;
 }
@@ -120,12 +127,41 @@ bool sdl_is_done(Scene *scene) {
 }
 
 
-void sdl_clear(void) {
+void sdl_clear(SDL_Renderer *renderer) {
     SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
     SDL_RenderClear(renderer);
 }
 
-void sdl_draw_polygon(List *points, RGBColor color) {
+void sdl_set_center() {
+    int *width = malloc(sizeof(*width)),
+        *height = malloc(sizeof(*height));
+    assert(width);
+    assert(height);
+    // Fill width and height with appropriate values
+    SDL_GetWindowSize(window, width, height);
+    center.x = *width / 2.0;
+    center.y = *height / 2.0;
+    free(width);
+    free(height);
+}
+
+double sdl_get_scale() {
+    double x_scale = center.x / max_diff.x,
+           y_scale = center.y / max_diff.y;
+
+    return x_scale < y_scale ? x_scale : y_scale;
+}
+
+void sdl_scale_rect(SDL_Rect *rect, SDL_Renderer *renderer) {
+    double scale = sdl_get_scale();
+
+    rect->x *= scale;
+    rect->y *= scale * -1.0;
+    rect->w *= scale;
+    rect->h *= scale;
+}
+
+void sdl_draw_polygon(List *points, RGBColor color, SDL_Renderer *renderer) {
     // Check parameters
     size_t n = list_size(points);
     assert(n >= 3);
@@ -133,20 +169,7 @@ void sdl_draw_polygon(List *points, RGBColor color) {
     assert(0 <= color.g && color.g <= 1);
     assert(0 <= color.b && color.b <= 1);
 
-    // Scale scene so it fits entirely in the window,
-    // with the center of the scene at the center of the window
-    int *width = malloc(sizeof(*width)),
-        *height = malloc(sizeof(*height));
-    assert(width);
-    assert(height);
-    SDL_GetWindowSize(window, width, height);
-    double center_x = *width / 2.0,
-           center_y = *height / 2.0;
-    free(width);
-    free(height);
-    double x_scale = center_x / max_diff.x,
-           y_scale = center_y / max_diff.y;
-    double scale = x_scale < y_scale ? x_scale : y_scale;
+    double scale = sdl_get_scale();
 
     // Convert each vertex to a point on screen
     short *x_points = malloc(sizeof(*x_points) * n),
@@ -158,8 +181,8 @@ void sdl_draw_polygon(List *points, RGBColor color) {
         Vector pos_from_center =
             vec_multiply(scale, vec_subtract(*vertex, center));
         // Flip y axis since positive y is down on the screen
-        x_points[i] = round(center_x + pos_from_center.x);
-        y_points[i] = round(center_y - pos_from_center.y);
+        x_points[i] = round(center.x + pos_from_center.x);
+        y_points[i] = round(center.y - pos_from_center.y);
     }
 
     // Draw polygon with the given color
@@ -172,20 +195,26 @@ void sdl_draw_polygon(List *points, RGBColor color) {
     free(y_points);
 }
 
-void sdl_show(void) {
+void sdl_show(SDL_Renderer *renderer) {
     SDL_RenderPresent(renderer);
 }
 
-void sdl_render_scene(Scene *scene) {
-    sdl_clear();
+void sdl_render_scene(Scene *scene, SDL_Renderer *renderer, SDL_Surface *surface1,
+                        SDL_Surface *surface2, SDL_Rect *rect1, SDL_Rect *rect2) {
+    sdl_clear(renderer);
     size_t body_count = scene_bodies(scene);
     for (size_t i = 0; i < body_count; i++) {
         Body *body = scene_get_body(scene, i);
         List *shape = body_get_shape(body);
-        sdl_draw_polygon(shape, body_get_color(body));
+        sdl_draw_polygon(shape, body_get_color(body), renderer);
         list_free(shape);
     }
-    sdl_show();
+    SDL_Texture *texture1 = SDL_CreateTextureFromSurface(renderer, surface1);
+    SDL_Texture *texture2 = SDL_CreateTextureFromSurface(renderer, surface2);
+    SDL_RenderCopy(renderer, texture1, NULL, rect1);
+    SDL_RenderCopy(renderer, texture2, NULL, rect2);
+
+    sdl_show(renderer);
 }
 
 void sdl_on_key(KeyHandler handler) {

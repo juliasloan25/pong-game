@@ -3,6 +3,7 @@
 
 #include <stdbool.h>
 #include <SDL2/SDL.h>
+#include <SDL2/SDL_ttf.h>
 #include "color.h"
 #include "list.h"
 #include "scene.h"
@@ -66,7 +67,13 @@ bool sdl_is_done(Scene *scene);
 /**
  * Clears the screen. Should be called before drawing polygons in each frame.
  */
-void sdl_clear(void);
+void sdl_clear(SDL_Renderer *renderer);
+
+void sdl_set_center();
+
+double sdl_get_scale();
+
+void sdl_scale_rect(SDL_Rect *rect, SDL_Renderer *renderer);
 
 /**
  * Draws a polygon from the given list of vertices and a color.
@@ -74,13 +81,13 @@ void sdl_clear(void);
  * @param points the list of vertices of the polygon
  * @param color the color used to fill in the polygon
  */
-void sdl_draw_polygon(List *points, RGBColor color);
+void sdl_draw_polygon(List *points, RGBColor color, SDL_Renderer *renderer);
 
 /**
  * Displays the rendered frame on the SDL window.
  * Must be called after drawing the polygons in order to show them.
  */
-void sdl_show(void);
+void sdl_show(SDL_Renderer *renderer);
 
 /**
  * Draws all bodies in a scene.
@@ -88,8 +95,14 @@ void sdl_show(void);
  * so those functions should not be called directly.
  *
  * @param scene the scene to draw
+ * @param renderer the associated SDL_Renderer
+ * @param surface1 the first text surface to draw
+ * @param surface2 the second text surface to draw
+ * @param rect1 the positioning rectangle for the first surface
+ * @param rect2 the positioning rectangle for the second surface
  */
-void sdl_render_scene(Scene *scene);
+void sdl_render_scene(Scene *scene, SDL_Renderer *renderer, SDL_Surface *surface1,
+                        SDL_Surface *surface2, SDL_Rect *rect1, SDL_Rect *rect2);
 
 /**
  * Registers a function to be called every time a key is pressed.
