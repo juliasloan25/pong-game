@@ -5,6 +5,8 @@
 #include <sdl_wrapper.h>
 #include "constants.h"
 
+const int WIDTH = 800; //screen width
+const int HEIGHT = 600; //screen height
 const int TITLE_X = WIDTH / 2 - 100;
 const int TITLE_Y = 40;
 const int TITLE_WIDTH = WIDTH / 2;
@@ -12,7 +14,6 @@ const int TITLE_HEIGHT = HEIGHT / 4;
 
 const int TEXT_X = WIDTH / 2 - 50;
 const int TEXT_Y_START = 200;
-
 
 /*
 * Set the font to be used in displaying text. Currently there is only one font,

@@ -20,9 +20,9 @@ DEMOS = pong #bounce gravity pacman nbodies damping pegs breakout
 # List of C files in "libraries" that we provide
 STAFF_LIBS = sdl_wrapper
 # List of C files in "libraries" that you will write
-STUDENT_LIBS = vector list \
+STUDENT_LIBS = constants vector list \
 	polygon body scene \
-	collision constants forces text ai #color
+	collision forces text ai #color
 
 # List of compiled .o files corresponding to STUDENT_LIBS, e.g. "out/vector.o".
 # Don't worry about the syntax; it's just adding "out/" to the start

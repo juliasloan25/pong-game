@@ -1,8 +1,8 @@
 #ifndef __CONSTANTS_H__
 #define __CONSTANTS_H__
 
-extern const double WIDTH; //screen width
-extern const double HEIGHT; //screen height
+extern const int WIDTH; //screen width
+extern const int HEIGHT; //screen height
 extern const double BALL_RADIUS; //radius of pong ball
 extern const double PADDLE_HEIGHT; //width of the pong paddle
 extern const double PADDLE_WIDTH; // height of the pong paddle

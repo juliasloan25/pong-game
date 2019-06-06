@@ -1,5 +1,6 @@
 #include "text.h"
 
+
 TTF_Font *load_font(int font_size) {
     char *font_path = SDL_GetBasePath();
     const char *font_str = "ostrich-regular.ttf";
