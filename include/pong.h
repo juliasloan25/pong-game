@@ -16,6 +16,7 @@
 typedef enum {
     PADDLE,
     BALL,
+    BOUNCE
 } BodyType;
 
 /*

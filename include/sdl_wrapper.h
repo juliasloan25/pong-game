@@ -14,6 +14,8 @@
 #define DOWN_ARROW 4
 #define SPACE 5
 #define ESCAPE 6
+#define W 7
+#define S 8
 
 /**
  * The possible types of key events.
