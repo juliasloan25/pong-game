@@ -229,6 +229,8 @@ void sdl_render_scene(Scene *scene, SDL_Renderer *renderer, SDL_Surface *surface
     SDL_RenderCopy(renderer, texture1, NULL, rect1);
     SDL_RenderCopy(renderer, texture2, NULL, rect2);
 
+    SDL_DestroyTexture(texture1);
+    SDL_DestroyTexture(texture2);
     sdl_show(renderer);
 }
 
