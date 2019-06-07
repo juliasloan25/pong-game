@@ -13,6 +13,7 @@ const int TEXT_WIDTH = WIDTH / 4;
 const int TEXT_HEIGHT = HEIGHT / 8;
 const int LEFT_SCORE_X = (WIDTH / 2) - 2*TEXT_WIDTH; //left side of player 1 score
 const int RIGHT_SCORE_X = (WIDTH / 2) + 2*TEXT_WIDTH; //left side of player 2 score
+const bool AI = true;
 
 const RGBColor PADDLE_COLOR = {
     .r = 0,
@@ -124,7 +125,7 @@ int main(int argc, char **argv){
             SDL_Delay(1000);
             reset(scene);
         }
-        if(ai_timer > 0.01){
+        if(ai_timer > 0.01 && AI == true){
             ai_timer = 0;
             set_paddle_vel(paddle_two, ball, PADDLE_VEL);
         }
@@ -237,6 +238,7 @@ Body *make_body(BodyType *type, Vector center){
 
 void on_key(char key, KeyEventType type, double held_time, Scene *scene) {
     Body *paddle_one = scene_get_body(scene, 0);
+    Body *paddle_two = scene_get_body(scene, 1);
 
     //velocity to use if an arrow key was pressed
     Vector new_vel = {
@@ -257,9 +259,23 @@ void on_key(char key, KeyEventType type, double held_time, Scene *scene) {
                 body_set_velocity(paddle_one, new_vel);
                 break;
 
+            if(AI == false){
+                case W:
+                    //makes paddle go up if up arrow is pressed
+                    body_set_velocity(paddle_two, new_vel);
+                    break;
+
+                case S:
+                    //makes paddle go down if down arrow is pressed
+                    new_vel.y = -1.0 * new_vel.y;
+                    body_set_velocity(paddle_two, new_vel);
+                    break;
+            }
+
             case ESCAPE:
                 //ends the scene
                 scene_set_end(scene);
+
         }
     }
     else{
@@ -272,6 +288,15 @@ void on_key(char key, KeyEventType type, double held_time, Scene *scene) {
             case DOWN_ARROW:
                 body_set_velocity(paddle_one, VEC_ZERO);
                 break;
+            if(AI == false){
+                case W:
+                    body_set_velocity(paddle_two, VEC_ZERO);
+                    break;
+
+                case S:
+                    body_set_velocity(paddle_two, VEC_ZERO);
+                    break;
+            }
         }
     }
 }
