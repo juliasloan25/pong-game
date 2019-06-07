@@ -44,9 +44,12 @@ const bool AI = true;
 
 
 int main(int argc, char **argv){
+    if(argc != 2 && argc != 3){
+      printf("usage: %s [1 or 2 for single player and demo mode respectively] [1, 2, or 3 for easy, medium, or hard AI (single player only)]\n", argv[0]);
+      return 1;
+    }
     //initialize scene and window
     Scene *scene = scene_init();
-    window_init();
     //creates two paddles and initializes them on either side of the screen
     BodyType *paddle_one_type = malloc(sizeof(BodyType));
     *(paddle_one_type) = PADDLE;
@@ -82,8 +85,30 @@ int main(int argc, char **argv){
     create_physics_collision(scene, ELASTICITY, paddle_one, ball);
     create_physics_collision(scene, ELASTICITY, paddle_two, ball);
 
-    sdl_on_key(on_key); //handles key inputs
-/*     if(MOUSE_MOVED){
+    if(*argv[1] == '1'){
+      AiDifficulty difficulty;
+      switch(*argv[2]){
+        case '1':
+          difficulty = EASY;
+          break;
+        case '2':
+          difficulty = MEDIUM;
+          break;
+        case '3':
+          difficulty = HARD;
+          break;
+      }
+      sdl_on_key(on_key); //handles key inputs
+      create_ai(scene, paddle_two, ball, difficulty);
+    }
+
+    else if(*argv[1] == '2'){
+      create_ai(scene, paddle_two, ball, MEDIUM);
+      create_ai(scene, paddle_one, ball, MEDIUM);
+    }
+    window_init();
+
+     /*if(MOUSE_MOVED){
         Body * paddle_one  = scene_get_body(scene,0);
         body_set_centroid(paddle_one, (Vector){paddle_one_center.x, return_mouse_y_position(scene)});
       }
@@ -108,10 +133,13 @@ int main(int argc, char **argv){
             left_score++;
             reset(scene);
         }
+<<<<<<< HEAD
         if(ai_timer > 0.01 && AI){
             ai_timer = 0;
             set_paddle_vel(paddle_two, ball, PADDLE_VEL);
         }
+=======
+>>>>>>> bee86fafa9ad688c1916f3a7ff68add4540da4bd
 
         if(bounce_timer >= BOUNCE_INTERVAL){
             Vector bounce_center = {
