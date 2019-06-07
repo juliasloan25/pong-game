@@ -162,9 +162,15 @@ double sdl_get_scale(double x, double y) {
 void sdl_scale_rect(SDL_Rect *rect, SDL_Renderer *renderer) {
     Vector window_center = sdl_get_window_center();
     double scale = sdl_get_scale(window_center.x, window_center.y);
+    Vector rect_pos = {
+        rect->x,
+        rect->y
+    };
+    Vector pos_from_center = vec_multiply(scale, vec_subtract(rect_pos, center));
 
-    rect->x *= scale; //wrong
-    rect->y *= scale * -1.0; //wrong
+
+    rect->x = window_center.x + pos_from_center.x; //wrong
+    rect->y *= (window_center.x + pos_from_center.x) * -1.0; //wrong
     rect->w *= scale;
     rect->h *= scale;
 }
