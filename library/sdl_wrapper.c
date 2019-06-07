@@ -56,6 +56,8 @@ char get_keycode(SDL_Keycode key) {
         case SDLK_DOWN: return DOWN_ARROW;
         case SDLK_SPACE: return SPACE;
         case SDLK_ESCAPE: return ESCAPE;
+        case SDLK_W: return W;
+        case SDLK_S: return S;
         default:
             // Only process 7-bit ASCII characters
             return key == (SDL_Keycode) (char) key ? key : '\0';
@@ -168,9 +170,8 @@ void sdl_scale_rect(SDL_Rect *rect, SDL_Renderer *renderer) {
     };
     Vector pos_from_center = vec_multiply(scale, vec_subtract(rect_pos, center));
 
-
     rect->x = window_center.x + pos_from_center.x; //wrong
-    rect->y *= (window_center.x + pos_from_center.x) * -1.0; //wrong
+    rect->y = (window_center.y + pos_from_center.y) * -1.0; //wrong
     rect->w *= scale;
     rect->h *= scale;
 }
@@ -223,14 +224,18 @@ void sdl_render_scene(Scene *scene, SDL_Renderer *renderer, SDL_Surface *surface
         List *shape = body_get_shape(body);
         sdl_draw_polygon(shape, body_get_color(body), renderer);
         list_free(shape);
+        body_free(body);
     }
-    SDL_Texture *texture1 = SDL_CreateTextureFromSurface(renderer, surface1);
-    SDL_Texture *texture2 = SDL_CreateTextureFromSurface(renderer, surface2);
-    SDL_RenderCopy(renderer, texture1, NULL, rect1);
-    SDL_RenderCopy(renderer, texture2, NULL, rect2);
-
-    SDL_DestroyTexture(texture1);
-    SDL_DestroyTexture(texture2);
+    if (surface1) {
+        SDL_Texture *texture1 = SDL_CreateTextureFromSurface(renderer, surface1);
+        SDL_RenderCopy(renderer, texture1, NULL, rect1);
+        SDL_DestroyTexture(texture1);
+    }
+    if (surface2) {
+        SDL_Texture *texture2 = SDL_CreateTextureFromSurface(renderer, surface2);
+        SDL_RenderCopy(renderer, texture2, NULL, rect2);
+        SDL_DestroyTexture(texture2);
+    }
     sdl_show(renderer);
 }
 

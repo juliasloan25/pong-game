@@ -42,12 +42,14 @@ int main(int argc, char **argv){
     int font_size = 20;
     TTF_Font *font = load_font(font_size);
     //TTF_Font *font = TTF_OpenFont("ostrich-regular.ttf", font_size);
-    SDL_Surface *surface_right;
-    SDL_Surface *surface_left;
+    SDL_Surface *surface_right = malloc(sizeof(SDL_Surface));
+    SDL_Surface *surface_left = malloc(sizeof(SDL_Surface));
     SDL_Rect *rect_right = make_rect(RIGHT_SCORE_X, SCORE_Y, TEXT_WIDTH,
                                 TEXT_HEIGHT);
     SDL_Rect *rect_left = make_rect(LEFT_SCORE_X, SCORE_Y, TEXT_WIDTH,
                                 TEXT_HEIGHT);
+    surface_right = display_text(renderer, " ", font, rect_right);
+    surface_left = display_text(renderer, " ", font, rect_left);
 
     while(!sdl_is_done(scene)) {
         double wait_time = time_since_last_tick();
@@ -111,6 +113,8 @@ int main(int argc, char **argv){
     SDL_DestroyRenderer(renderer);
     SDL_FreeSurface(surface_right);
     SDL_FreeSurface(surface_left);
+    free(rect_left);
+    free(rect_right);
     TTF_Quit();
     SDL_Quit();
     return 1;
@@ -241,18 +245,18 @@ void on_key(char key, KeyEventType type, double held_time, Scene *scene) {
 }
 
 char move_if_offscreen(Body *paddle_one, Body *paddle_two, Body *ball){
-    Vector paddle_one_center = body_get_centroid(paddle_one);
-    Vector paddle_two_center = body_get_centroid(paddle_two);
-    Vector ball_center = body_get_centroid(ball);
+    Vector paddle_one_loc = body_get_centroid(paddle_one);
+    Vector paddle_two_loc = body_get_centroid(paddle_two);
+    Vector ball_center_loc = body_get_centroid(ball);
 
-    if(paddle_one_center.y <  PADDLE_HEIGHT / 2.0){
+    if(paddle_one_loc.y <  PADDLE_HEIGHT / 2.0){
         Vector new_center = {
             .x = PADDLE_WIDTH / 2.0,
             .y = PADDLE_HEIGHT / 2.0
         };
         body_set_centroid(paddle_one, new_center);
     }
-    if(paddle_one_center.y > (HEIGHT - PADDLE_HEIGHT / 2.0)){
+    if(paddle_one_loc.y > (HEIGHT - PADDLE_HEIGHT / 2.0)){
         Vector new_center = {
             .x = PADDLE_WIDTH / 2.0,
             .y = HEIGHT - PADDLE_HEIGHT / 2.0
@@ -260,14 +264,14 @@ char move_if_offscreen(Body *paddle_one, Body *paddle_two, Body *ball){
         body_set_centroid(paddle_one, new_center);
     }
 
-    if(paddle_two_center.y <  PADDLE_HEIGHT / 2.0){
+    if(paddle_two_loc.y <  PADDLE_HEIGHT / 2.0){
         Vector new_center = {
             .x = WIDTH - PADDLE_WIDTH / 2.0,
             .y = PADDLE_HEIGHT / 2.0
         };
         body_set_centroid(paddle_two, new_center);
     }
-    if(paddle_two_center.y > (HEIGHT - PADDLE_HEIGHT / 2.0)){
+    if(paddle_two_loc.y > (HEIGHT - PADDLE_HEIGHT / 2.0)){
         Vector new_center = {
             .x = WIDTH - PADDLE_WIDTH / 2.0,
             .y = HEIGHT - PADDLE_HEIGHT / 2.0
@@ -275,44 +279,44 @@ char move_if_offscreen(Body *paddle_one, Body *paddle_two, Body *ball){
         body_set_centroid(paddle_two, new_center);
     }
 
-    if(ball_center.x < BALL_RADIUS){ //ball goes off left side (return 'l')
+    if(ball_center_loc.x < BALL_RADIUS){ //ball goes off left side (return 'l')
         Vector translate = {
-            .x = BALL_RADIUS - ball_center.x,
+            .x = BALL_RADIUS - ball_center_loc.x,
             .y = 0.0
         };
-        body_set_centroid(ball, vec_add(ball_center, translate));
+        body_set_centroid(ball, vec_add(ball_center_loc, translate));
         Vector velocity = body_get_velocity(ball);
         velocity.x *= -1.0;
         body_set_velocity(ball, velocity);
         return 'l';
     }
-    if(ball_center.x > WIDTH - BALL_RADIUS){ //ball goes off right side (return 'r')
+    if(ball_center_loc.x > WIDTH - BALL_RADIUS){ //ball goes off right side (return 'r')
         Vector translate = {
-            .x = WIDTH - BALL_RADIUS - ball_center.x,
+            .x = WIDTH - BALL_RADIUS - ball_center_loc.x,
             .y = 0.0
         };
-        body_set_centroid(ball, vec_add(ball_center, translate));
+        body_set_centroid(ball, vec_add(ball_center_loc, translate));
         Vector velocity = body_get_velocity(ball);
         velocity.x *= -1.0;
         body_set_velocity(ball, velocity);
         return 'r';
     }
-    if(ball_center.y > HEIGHT - BALL_RADIUS){ //ball goes off top (bounce)
+    if(ball_center_loc.y > HEIGHT - BALL_RADIUS){ //ball goes off top (bounce)
         Vector translate = {
             .x = 0.0,
-            .y =  HEIGHT - BALL_RADIUS - ball_center.y
+            .y =  HEIGHT - BALL_RADIUS - ball_center_loc.y
         };
-        body_set_centroid(ball, vec_add(ball_center, translate));
+        body_set_centroid(ball, vec_add(ball_center_loc, translate));
         Vector velocity = body_get_velocity(ball);
         velocity.y *= -1.0;
         body_set_velocity(ball, velocity);
     }
-    if(ball_center.y < BALL_RADIUS){ //ball goes off bottom (bounce)
+    if(ball_center_loc.y < BALL_RADIUS){ //ball goes off bottom (bounce)
         Vector translate = {
             .x = 0.0,
-            .y =  BALL_RADIUS - ball_center.y
+            .y =  BALL_RADIUS - ball_center_loc.y
         };
-        body_set_centroid(ball, vec_add(ball_center, translate));
+        body_set_centroid(ball, vec_add(ball_center_loc, translate));
         Vector velocity = body_get_velocity(ball);
         velocity.y *= -1.0;
         body_set_velocity(ball, velocity);
