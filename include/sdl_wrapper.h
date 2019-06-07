@@ -66,13 +66,33 @@ bool sdl_is_done(Scene *scene);
 
 /**
  * Clears the screen. Should be called before drawing polygons in each frame.
+ *
+ * @param renderer the associated SDL_Renderer
  */
 void sdl_clear(SDL_Renderer *renderer);
 
-void sdl_set_center();
+/**
+ * Returns the current center of the window in pixel coordinates.
+ *
+ * @return a vector pointing to the center of the window
+ */
+Vector sdl_get_window_center();
 
-double sdl_get_scale();
+/**
+ * Calcultes the scale factor to align the scene and window.
+ *
+ * @param x the current window center x value
+ * @param y the current window center y value
+ * @return the scale factor
+ */
+double sdl_get_scale(double x, double y);
 
+/**
+ * Scales a positioning rectangle appropriately.
+ *
+ * @param rect a pointer to the SDL_Rect to scale
+ * @param renderer the associated SDL_Renderer
+ */
 void sdl_scale_rect(SDL_Rect *rect, SDL_Renderer *renderer);
 
 /**
@@ -80,12 +100,15 @@ void sdl_scale_rect(SDL_Rect *rect, SDL_Renderer *renderer);
  *
  * @param points the list of vertices of the polygon
  * @param color the color used to fill in the polygon
+ * @param renderer the associated SDL_Renderer
  */
 void sdl_draw_polygon(List *points, RGBColor color, SDL_Renderer *renderer);
 
 /**
  * Displays the rendered frame on the SDL window.
  * Must be called after drawing the polygons in order to show them.
+ *
+ * @param renderer the associated SDL_Renderer
  */
 void sdl_show(SDL_Renderer *renderer);
 

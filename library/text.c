@@ -30,7 +30,7 @@ SDL_Surface *display_text(SDL_Renderer *renderer, char *text, TTF_Font *font,
                             SDL_Rect *rect) {
     //get vector instead of x and y pos, then use sdl_wrapper scaling
     //or change scene so coordinates match up with sdl pixel coordinates
-    SDL_Color color = {0, 0, 0}; //white
+    SDL_Color color = {0, 0, 0, 0}; //white
 
     if (font == NULL) {
         printf("font null");
