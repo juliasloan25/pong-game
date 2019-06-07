@@ -10,6 +10,7 @@
 #include "ai.h"
 #include <stdbool.h>
 #include <math.h>
+#include "constants.h"
 
 /*
 * The possible types of bodies to make.

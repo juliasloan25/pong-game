@@ -20,7 +20,7 @@ DEMOS = pong #bounce gravity pacman nbodies damping pegs breakout
 # List of C files in "libraries" that we provide
 STAFF_LIBS = sdl_wrapper
 # List of C files in "libraries" that you will write
-STUDENT_LIBS = vector list \
+STUDENT_LIBS = constants vector list \
 	polygon body scene \
 	collision forces text ai #color
 

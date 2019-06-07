@@ -13,7 +13,8 @@
 #define MS_PER_S 1e3
 
 /**
- * The coordinate at the center of the screen.
+ * The coordinate at the center of the screen. scene coordinates
+ * don't make global bc want to change if window resizes
  */
 Vector center;
 /**
@@ -134,31 +135,44 @@ void sdl_clear(SDL_Renderer *renderer) {
     SDL_RenderClear(renderer);
 }
 
-void sdl_set_center() {
+Vector sdl_get_window_center() {
     int *width = malloc(sizeof(*width)),
         *height = malloc(sizeof(*height));
     assert(width);
     assert(height);
+
     // Fill width and height with appropriate values
     SDL_GetWindowSize(window, width, height);
-    center.x = *width / 2.0;
-    center.y = *height / 2.0;
+    Vector window_center = {
+        .x = *width / 2.0,
+        .y = *height / 2.0
+    };
+
     free(width);
     free(height);
+
+    return window_center;
 }
 
-double sdl_get_scale() {
-    double x_scale = center.x / max_diff.x,
-           y_scale = center.y / max_diff.y;
+double sdl_get_scale(double x, double y) {
+    double x_scale = x / max_diff.x, //center should be pixel coords (window)
+           y_scale = y / max_diff.y;
 
-    return x_scale < y_scale ? x_scale : y_scale;
+    return x_scale < y_scale ? x_scale : y_scale; //take min of scales to find constraining coordinate
 }
 
 void sdl_scale_rect(SDL_Rect *rect, SDL_Renderer *renderer) {
-    double scale = sdl_get_scale();
+    Vector window_center = sdl_get_window_center();
+    double scale = sdl_get_scale(window_center.x, window_center.y);
+    Vector rect_pos = {
+        rect->x,
+        rect->y
+    };
+    Vector pos_from_center = vec_multiply(scale, vec_subtract(rect_pos, center));
 
-    rect->x *= scale;
-    rect->y *= scale * -1.0;
+
+    rect->x = window_center.x + pos_from_center.x; //wrong
+    rect->y *= (window_center.x + pos_from_center.x) * -1.0; //wrong
     rect->w *= scale;
     rect->h *= scale;
 }
@@ -171,7 +185,8 @@ void sdl_draw_polygon(List *points, RGBColor color, SDL_Renderer *renderer) {
     assert(0 <= color.g && color.g <= 1);
     assert(0 <= color.b && color.b <= 1);
 
-    double scale = sdl_get_scale();
+    Vector window_center = sdl_get_window_center();
+    double scale = sdl_get_scale(window_center.x, window_center.y);
 
     // Convert each vertex to a point on screen
     short *x_points = malloc(sizeof(*x_points) * n),
@@ -181,10 +196,10 @@ void sdl_draw_polygon(List *points, RGBColor color, SDL_Renderer *renderer) {
     for (size_t i = 0; i < n; i++) {
         Vector *vertex = list_get(points, i);
         Vector pos_from_center =
-            vec_multiply(scale, vec_subtract(*vertex, center));
+            vec_multiply(scale, vec_subtract(*vertex, center)); //converting scene to pixel coords
         // Flip y axis since positive y is down on the screen
-        x_points[i] = round(center.x + pos_from_center.x);
-        y_points[i] = round(center.y - pos_from_center.y);
+        x_points[i] = round(window_center.x + pos_from_center.x); //pixel coordinates
+        y_points[i] = round(window_center.y - pos_from_center.y);
     }
 
     // Draw polygon with the given color
