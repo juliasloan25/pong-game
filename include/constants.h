@@ -1,6 +1,9 @@
 #ifndef __CONSTANTS_H__
 #define __CONSTANTS_H__
 
+#include "vector.h"
+#include "color.h"
+
 extern const int WIDTH; //screen width
 extern const int HEIGHT; //screen height
 extern const double BALL_RADIUS; //radius of pong ball
@@ -21,5 +24,15 @@ extern const int TEXT_X;
 extern const int TEXT_Y_START;
 extern const int TEXT_WIDTH;
 extern const int TEXT_HEIGHT;
+
+extern const int SCORE_Y;
+extern const int LEFT_SCORE_X;
+extern const int RIGHT_SCORE_X;
+
+extern const RGBColor PADDLE_COLOR;
+extern const RGBColor BALL_COLOR;
+extern const Vector paddle_one_center;
+extern const Vector paddle_two_center;
+extern const Vector ball_center;
 
 #endif //#__CONSTANTS_H__
