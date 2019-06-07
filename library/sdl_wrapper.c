@@ -1,11 +1,4 @@
-#include <assert.h>
-#include <math.h>
-#include <stdlib.h>
-#include <SDL2/SDL.h>
-#include <SDL2/SDL2_gfxPrimitives.h>
-#include <time.h>
 #include "sdl_wrapper.h"
-#include "constants.h"
 
 #define WINDOW_TITLE "CS 3"
 #define WINDOW_WIDTH 800
