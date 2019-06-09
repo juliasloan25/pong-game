@@ -1,24 +1,25 @@
 #include "pong.h"
 
 const double WIDTH = 800; //screen width
-const double HEIGHT = 600; //screen height
+const double HEIGHT = 800; //screen height
 const double BALL_RADIUS = 10.0; //radius of pong ball
 const double GRAV_RADIUS = 20.0;
 const double PADDLE_HEIGHT = 100.0; //width of the pong paddle
 const double PADDLE_WIDTH = 30.0; // height of the pong paddle
 const double BOUNCE_HEIGHT = 20.0;
 const double BOUNCE_WIDTH = 80.0;
-const double OBSTACLE_INTERVAL = 10.0;
+const double COLOR_INTERVAL = 2.0;
+const double OBSTACLE_INTERVAL = 7.0;
 const double ELASTICITY = 1; //elasticity of collisions
 const double PADDLE_VEL = 600.0; //velocity that the paddle can go
 const double MASS = 50.0; //mass of non-infinity mass objects
 const double BALL_VEL = 700.0; // initial velocity of ball
-const RGBColor PADDLE_COLOR = {
+const RGBColor PADDLE_AI_COLOR = {
     .r = 0,
     .g = 0,
     .b = 0
 }; //black paddle color
-const RGBColor BALL_COLOR = {
+const RGBColor PADDLE_USER_COLOR = {
     .r = 1,
     .g = 0,
     .b = 0
@@ -33,6 +34,11 @@ const RGBColor GRAV_COLOR = {
     .g = 1,
     .b = 0
 };
+const RGBColor POLYGON_COLOR = {
+    .r = .9,
+    .g = .9,
+    .b = .9
+};
 const Vector paddle_one_center = {
     .x = PADDLE_WIDTH / 2.0,
     .y = HEIGHT/2
@@ -45,32 +51,64 @@ const Vector ball_center = {
     .x = WIDTH / 2.0,
     .y = HEIGHT/ 2.0
 }; //initial and reset center of the ball
-const double G = 10000.0;
+const double G = 8000.0; //gravity for obstacle
 
 
 int main(int argc, char **argv){
-    if(argc != 2 && argc != 3){
-      printf("usage: %s [1, 2, or 3 for single player, double player, and demo mode respectively] [1, 2, or 3 for easy, medium, or hard AI (single player only)]\n", argv[0]);
+    if(argc != 3 && argc != 4){
+      //if(argc != 2 && argc != 3){
+      //printf("usage: %s [1, 2, or 3 for single player, double player, and demo mode respectively] [1, 2, or 3 for easy, medium, or hard AI (single player only)]\n", argv[0]);
+      printf("usage: %s [Total number of players (2, 4, 6, or 8)] [Number of users (1 or 2)] [Difficulty of AI (1, 2, or 3 for easy, medium, or hard) if applicable]\n", argv[0]);
       return 1;
     }
+
+    int num_players = *argv[1] - '0';
+    int num_users = *argv[2] - '0';
+    int num_ai = num_players - num_users;
+    AiDifficulty difficulty = MEDIUM;
+    if(num_ai != 0){
+        switch(*argv[2]){
+            case '1':
+                difficulty = EASY;
+                break;
+            case '2':
+                difficulty = MEDIUM;
+                break;
+            case '3':
+                difficulty = HARD;
+                break;
+        }
+    }
+
     //initialize scene and window
     Scene *scene = scene_init();
-    //creates two paddles and initializes them on either side of the screen
-    BodyType *paddle_one_type = malloc(sizeof(BodyType));
-    *(paddle_one_type) = PADDLE;
-    Body *paddle_one = make_body(paddle_one_type, paddle_one_center);
-    scene_add_body(scene, paddle_one);
 
-    BodyType *paddle_two_type = malloc(sizeof(BodyType));
-    *(paddle_two_type) = PADDLE;
-    Body *paddle_two = make_body(paddle_two_type, paddle_two_center);
-    scene_add_body(scene, paddle_two);
+    BodyType *polygon_type = malloc(sizeof(BodyType));
+    double rotation_angle = 0;
+    if(num_players <= 4){
+        *(polygon_type) = SQUARE;
+        rotation_angle = M_PI / 4;
+    }
+    else if(num_players == 6){
+        *(polygon_type) = HEXAGON;
+        rotation_angle = M_PI / 6;
+    }
+    else{
+        *(polygon_type) = OCTOGON;
+        rotation_angle = M_PI / 8;
+    }
+    Body *polygon = make_body(polygon_type, (Vector) {WIDTH/2, HEIGHT/2});
+    body_set_rotation(polygon, rotation_angle); //to place polygon upright
+    scene_add_body(scene, polygon);
 
     //create ball
     BodyType *ball_type = malloc(sizeof(BodyType));
     *(ball_type) = BALL;
     Body *ball = make_body(ball_type, ball_center);
     scene_add_body(scene, ball);
+
+    //create paddles
+    Body **paddles = create_paddles(scene, num_players, num_users, difficulty);
 
     //create obstacles
     BodyType *bounce_type = malloc(sizeof(BodyType));
@@ -85,65 +123,36 @@ int main(int argc, char **argv){
 
     reset_obstacles(bounce, grav);
 
-    //create forces between paddles and ball and obstacles and ball
-    create_physics_collision(scene, ELASTICITY, paddle_one, ball);
-    create_physics_collision(scene, ELASTICITY, paddle_two, ball);
+    //create forces between obstacles and ball
     create_physics_collision(scene, ELASTICITY, bounce, ball);
     create_newtonian_gravity(scene, G, ball, grav, false);
-
-    bool is_two_player = false;
-    if(*argv[1] == '1'){
-        AiDifficulty difficulty;
-        switch(*argv[2]){
-            case '1':
-                difficulty = EASY;
-                break;
-            case '2':
-                difficulty = MEDIUM;
-                break;
-            case '3':
-                difficulty = HARD;
-                break;
-        }
-        sdl_on_key(on_key); //handles key inputs
-        create_ai(scene, paddle_two, ball, difficulty);
-    }
-
-    else if(*argv[1] == '2'){
-        sdl_on_key(on_key);
-        is_two_player = true;
-    }
-
-    else if(*argv[1] == '3'){
-        create_ai(scene, paddle_two, ball, MEDIUM);
-        create_ai(scene, paddle_one, ball, MEDIUM);
-    }
 
      /*if(MOUSE_MOVED){
         Body * paddle_one  = scene_get_body(scene,0);
         body_set_centroid(paddle_one, (Vector){paddle_one_center.x, return_mouse_y_position(scene)});
       }
       */
-
     window_init();
+    sdl_on_key(on_key);
 
     //initialize scores
-    int left_score = 0; //score of player with left paddle
-    int right_score = 0; //score of player with right paddle
+    int *scores = malloc(sizeof(int) * num_players);
+    for(int i = 0; i < num_players; i++){
+        scores[i] = 0;
+    }
     double ai_timer = 0;
     double obstacle_timer = 0;
-    while(!sdl_is_done(scene, is_two_player)) {
+    double color_index = 0;
+    double color_timer = 0;
+    while(!sdl_is_done(scene, num_users)) {
         double wait_time = time_since_last_tick();
         ai_timer += wait_time;
         obstacle_timer += wait_time;
+        color_timer += wait_time;
         //checks if paddle or ball has hit walls
-        char ball_hit_side = move_if_offscreen(paddle_one, paddle_two, ball);
-        if(ball_hit_side == 'l'){ //add point to right player
-            right_score++;
-            reset(scene);
-        }
-        else if (ball_hit_side == 'r') { //add point to left player
-            left_score++;
+        int ball_hit_side = move_if_offscreen(scene_get_body(scene, 2), scene_get_body(scene, 3), ball);
+        if(ball_hit_side != -1){
+            scores[ball_hit_side]++;
             reset(scene);
         }
 
@@ -152,12 +161,24 @@ int main(int argc, char **argv){
             obstacle_timer = 0;
         }
 
+        if(color_timer >= COLOR_INTERVAL){
+            color_index++;
+            body_set_color(ball, get_color(color_index));
+            color_timer = 0;
+        }
+
         //render and update scene at every tick
         scene_tick(scene, wait_time);
         sdl_render_scene(scene);
 
         // end game if either score reaches 10
-        if (right_score >= 10 || left_score >= 10 || scene_get_end(scene)){
+        for(int j = 0; j < num_players; j++){
+            if(scores[j] >= 10){
+                scene_set_end(scene);
+            }
+        }
+
+        if(scene_get_end(scene)){
             break;
         }
         //display the current scores on-screen
@@ -166,6 +187,7 @@ int main(int argc, char **argv){
     }
     //free all elements of scene
     scene_free(scene);
+    free(scores);
     //TTF_Quit();
     return 1;
 }
@@ -184,29 +206,33 @@ Body *make_body(BodyType *type, Vector center){
     Vector velocity = VEC_ZERO;
     size_t points;
     RGBColor color;
-    double mass;
+    double mass = INFINITY;
     double radius;
     double width;
     double height;
     if (*(type) == BALL) {
         mass = MASS;
         points = 2000; //large number of points to create circle
-        color = BALL_COLOR;
+        color = get_color(0);
         velocity.x = BALL_VEL;
         velocity.y = BALL_VEL;
         radius = BALL_RADIUS;
     }
-    if(*(type) == PADDLE){
+    if(*(type) == PADDLE_USER){
         width = PADDLE_WIDTH;
         height = PADDLE_HEIGHT;
-        mass = INFINITY;
         points = 4; //to form rectangle
-        color = PADDLE_COLOR;
+        color = PADDLE_USER_COLOR;
+    }
+    if(*(type) == PADDLE_AI){
+        width = PADDLE_WIDTH;
+        height = PADDLE_HEIGHT;
+        points = 4; //to form rectangle
+        color = PADDLE_AI_COLOR;
     }
     if(*(type) == BOUNCE){
         width = BOUNCE_WIDTH;
         height = BOUNCE_HEIGHT;
-        mass = INFINITY;
         points = 4; //to form rectangle
         color = BOUNCE_COLOR;
     }
@@ -216,20 +242,25 @@ Body *make_body(BodyType *type, Vector center){
         color = GRAV_COLOR;
         radius = GRAV_RADIUS;
     }
+    if (*(type) == SQUARE) {
+        points = 4;
+        color = POLYGON_COLOR;
+        radius = HEIGHT * sqrt(2.0) / 2.0;
+    }
+    if (*(type) == HEXAGON) {
+        points = 6;
+        color = POLYGON_COLOR;
+        radius = HEIGHT / 2.0;
+    }
+    if (*(type) == OCTOGON) {
+        points = 8;
+        color = POLYGON_COLOR;
+        radius = HEIGHT / 2.0;
+    }
     List *shape = list_init(points, free, (EqualFunc)vec_equal_v);
 
-    //construct the ball or gravity obstacle
-    if (*(type) == BALL || *(type) == GRAVITY){
-        double angle = (2 * M_PI / points);
-        for (int i =0; i < points; i++){
-            Vector *vec = malloc(sizeof(Vector));
-            vec->x = radius *cos(angle*i);
-            vec->y = radius *sin(angle*i);
-            list_add(shape, (void*)vec);
-        }
-    }
     //construct paddle or bounce obstacle
-    else{
+    if (*(type) == PADDLE_USER || *(type) == PADDLE_AI || *(type) == BOUNCE){
         //add four points
         Vector translate_up_left = {
             .x = -1.0 * width / 2.0,
@@ -263,6 +294,15 @@ Body *make_body(BodyType *type, Vector center){
         *vec4 = vec_add(translate_up_right, center);
         list_add(shape, vec4);
     }
+    else { //construct the ball or gravity obstacle
+        double angle = (2 * M_PI / points);
+        for (int i =0; i < points; i++){
+            Vector *vec = malloc(sizeof(Vector));
+            vec->x = radius *cos(angle*i);
+            vec->y = radius *sin(angle*i);
+            list_add(shape, (void*)vec);
+        }
+    }
 
     body = body_init_with_info(shape, mass, color, (void*)type, (FreeFunc)free);
     body_set_centroid(body, center);
@@ -271,10 +311,39 @@ Body *make_body(BodyType *type, Vector center){
     return body;
 }
 
+Body ** create_paddles(Scene *scene, int num_players, int num_users, AiDifficulty difficulty){
+    Body **paddles = malloc(sizeof(Body *) * num_players);
+    Body *ball = scene_get_body(scene, 1);
+    for(int i = 0; i < num_players; i++){
+        BodyType *paddle_type = malloc(sizeof(BodyType));
+        if(i < num_users){
+            *(paddle_type) = PADDLE_USER;
+        }
+        else{
+            *(paddle_type) = PADDLE_AI;
+        }
+        Vector paddle_center;
+        if(i == 0){
+            paddle_center = paddle_one_center;
+        }
+        else{
+            paddle_center = paddle_two_center;
+        }
+        Body *paddle = make_body(paddle_type, paddle_center);
+        scene_add_body(scene, paddle);
+        create_physics_collision(scene, ELASTICITY, paddle, ball);
+        if(i >= num_users){
+            create_ai(scene, paddle, ball, difficulty);
+        }
+        paddles[0] = paddle;
+    }
+    return paddles;
+}
+
 void on_key(char key, KeyEventType type, double held_time, Scene *scene,
-                                                        bool is_two_player) {
-    Body *paddle_one = scene_get_body(scene, 0);
-    Body *paddle_two = scene_get_body(scene, 1);
+                                                        int num_users) {
+    Body *paddle_one = scene_get_body(scene, 2);
+    Body *paddle_two = scene_get_body(scene, 3);
 
     //velocity to use if an arrow key was pressed
     Vector new_vel = {
@@ -284,18 +353,19 @@ void on_key(char key, KeyEventType type, double held_time, Scene *scene,
 
     if (type == KEY_PRESSED) {
         switch(key) {
-            case UP_ARROW:
-                //makes paddle go up if up arrow is pressed
-                body_set_velocity(paddle_one, new_vel);
-                break;
+            if(num_users >= 1){
+                case UP_ARROW:
+                    //makes paddle go up if up arrow is pressed
+                    body_set_velocity(paddle_one, new_vel);
+                    break;
 
-            case DOWN_ARROW:
-                //makes paddle go down if down arrow is pressed
-                new_vel.y = -1.0 * new_vel.y;
-                body_set_velocity(paddle_one, new_vel);
-                break;
-
-            if(is_two_player){
+                case DOWN_ARROW:
+                    //makes paddle go down if down arrow is pressed
+                    new_vel.y = -1.0 * new_vel.y;
+                    body_set_velocity(paddle_one, new_vel);
+                    break;
+            }
+            if(num_users == 2){
                 case W:
                     //makes paddle go up if up arrow is pressed
                     body_set_velocity(paddle_two, new_vel);
@@ -321,15 +391,16 @@ void on_key(char key, KeyEventType type, double held_time, Scene *scene,
     else{
         //sets velocity of shooter back to zero after arrow key is released
         switch (key) {
-            case UP_ARROW:
-                body_set_velocity(paddle_one, VEC_ZERO);
-                break;
+            if(num_users >= 1){
+                case UP_ARROW:
+                    body_set_velocity(paddle_one, VEC_ZERO);
+                    break;
 
-            case DOWN_ARROW:
-                body_set_velocity(paddle_one, VEC_ZERO);
-                break;
-
-            if(is_two_player){
+                case DOWN_ARROW:
+                    body_set_velocity(paddle_one, VEC_ZERO);
+                    break;
+            }
+            if(num_users == 2){
                 case W:
                     body_set_velocity(paddle_two, VEC_ZERO);
                     break;
@@ -342,7 +413,7 @@ void on_key(char key, KeyEventType type, double held_time, Scene *scene,
     }
 }
 
-char move_if_offscreen(Body *paddle_one, Body *paddle_two, Body *ball){
+int move_if_offscreen(Body *paddle_one, Body *paddle_two, Body *ball){
     Vector paddle_one_center = body_get_centroid(paddle_one);
     Vector paddle_two_center = body_get_centroid(paddle_two);
     Vector ball_center = body_get_centroid(ball);
@@ -377,7 +448,7 @@ char move_if_offscreen(Body *paddle_one, Body *paddle_two, Body *ball){
         body_set_centroid(paddle_two, new_center);
     }
 
-    if(ball_center.x < BALL_RADIUS){ //ball goes off left side (return 'l')
+    if(ball_center.x < BALL_RADIUS){ //ball goes off left side (return 0)
         Vector translate = {
             .x = BALL_RADIUS - ball_center.x,
             .y = 0.0
@@ -386,9 +457,9 @@ char move_if_offscreen(Body *paddle_one, Body *paddle_two, Body *ball){
         Vector velocity = body_get_velocity(ball);
         velocity.x *= -1.0;
         body_set_velocity(ball, velocity);
-        return 'l';
+        return 0;
     }
-    if(ball_center.x > WIDTH - BALL_RADIUS){ //ball goes off right side (return 'r')
+    if(ball_center.x > WIDTH - BALL_RADIUS){ //ball goes off right side (return 1)
         Vector translate = {
             .x = WIDTH - BALL_RADIUS - ball_center.x,
             .y = 0.0
@@ -397,7 +468,7 @@ char move_if_offscreen(Body *paddle_one, Body *paddle_two, Body *ball){
         Vector velocity = body_get_velocity(ball);
         velocity.x *= -1.0;
         body_set_velocity(ball, velocity);
-        return 'r';
+        return 1;
     }
     if(ball_center.y > HEIGHT - BALL_RADIUS){ //ball goes off top (bounce)
         Vector translate = {
@@ -419,13 +490,13 @@ char move_if_offscreen(Body *paddle_one, Body *paddle_two, Body *ball){
         velocity.y *= -1.0;
         body_set_velocity(ball, velocity);
     }
-    return 'n'; //'n' for "no collision"
+    return -1;
 }
 
 void reset(Scene *scene){
-    Body *paddle_one = scene_get_body(scene, 0);
-    Body *paddle_two = scene_get_body(scene, 1);
-    Body *ball = scene_get_body(scene, 2);
+    Body *paddle_one = scene_get_body(scene, 2);
+    Body *paddle_two = scene_get_body(scene, 3);
+    Body *ball = scene_get_body(scene, 1);
 
     //places the two paddles and the ball in the starting position
     body_set_centroid(paddle_one, paddle_one_center);
@@ -455,4 +526,17 @@ void reset_obstacles(Body *bounce, Body *grav){
     if(coll.collided){
         reset_obstacles(bounce, grav);
     }
+}
+
+RGBColor get_color(int shape_index){
+    //Determines how quickly colors repeat
+    double frequency = .3;
+
+    //Use sin functions with a shift to rotate through colors of the rainbow
+    RGBColor color;
+    color.r = fabs(sin(frequency * shape_index));
+    color.g = fabs(sin(frequency * shape_index + (M_PI / 3.0)));
+    color.b = fabs(sin(frequency * shape_index + (2.0 * M_PI / 3.0)));
+
+    return color;
 }

@@ -149,3 +149,7 @@ void body_add_collision(Body *body){
 		}
 	}
 }
+
+void body_set_color(Body *body, RGBColor color){
+	body->body_color = color;
+}
