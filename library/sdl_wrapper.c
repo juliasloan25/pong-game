@@ -85,7 +85,7 @@ void sdl_init(Vector min, Vector max) {
 }
 
 void mouse_motion(Body *body, int y_position){
-  body_set_centroid(body, (Vector){body_get_centroid(body).x, -1*(y_position - 800)});
+  body_set_centroid(body, (Vector){body_get_centroid(body).x, -1*(y_position - HEIGHT)});
 }
 
 bool sdl_is_done(Scene *scene, int num_users) {
