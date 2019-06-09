@@ -10,6 +10,7 @@
 #include <stdbool.h>
 #include <math.h>
 
+
 /*
 * The possible types of bodies to make.
 */
@@ -24,6 +25,8 @@ typedef enum {
 * @brief Initializes a window with the given height and width
 */
 void window_init();
+
+void mouse_motion( Scene *scene, Body *body, int y_position);
 
 /*
 * @brief Creates and returns a body object based off its BodyType

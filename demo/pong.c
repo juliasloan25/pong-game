@@ -1,5 +1,6 @@
 #include "pong.h"
 
+
 const double WIDTH = 800; //screen width
 const double HEIGHT = 600; //screen height
 const double BALL_RADIUS = 10.0; //radius of pong ball
@@ -105,7 +106,7 @@ int main(int argc, char **argv){
                 difficulty = HARD;
                 break;
         }
-        sdl_on_key(on_key); //handles key inputs
+      //  sdl_on_key(on_key); //handles key inputs
         create_ai(scene, paddle_two, ball, difficulty);
     }
 
@@ -118,12 +119,6 @@ int main(int argc, char **argv){
         create_ai(scene, paddle_two, ball, MEDIUM);
         create_ai(scene, paddle_one, ball, MEDIUM);
     }
-
-     /*if(MOUSE_MOVED){
-        Body * paddle_one  = scene_get_body(scene,0);
-        body_set_centroid(paddle_one, (Vector){paddle_one_center.x, return_mouse_y_position(scene)});
-      }
-      */
 
     window_init();
 
@@ -270,6 +265,8 @@ Body *make_body(BodyType *type, Vector center){
 
     return body;
 }
+
+
 
 void on_key(char key, KeyEventType type, double held_time, Scene *scene,
                                                         bool is_two_player) {
