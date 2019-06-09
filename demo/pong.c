@@ -106,7 +106,7 @@ int main(int argc, char **argv){
                 difficulty = HARD;
                 break;
         }
-      //  sdl_on_key(on_key); //handles key inputs
+        sdl_on_key(on_key); //handles key inputs
         create_ai(scene, paddle_two, ball, difficulty);
     }
 
