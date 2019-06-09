@@ -15,6 +15,7 @@ int main(int argc, char **argv){
     // TESTING TEXT
     SDL_Rect *rect = make_rect(WIDTH/2 - TEXT_WIDTH/2, HEIGHT/2 - TEXT_HEIGHT/2,
                                 TEXT_WIDTH, TEXT_HEIGHT);
+    //test line
     //test_display_text(renderer, "HELLO", font, rect);
     //SDL_Surface *surface = test_display_text(renderer, "HELLO", font, rect);
     //sdl_render_scene(scene, renderer, surface, NULL, rect, NULL);
