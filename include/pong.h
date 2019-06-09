@@ -60,4 +60,6 @@ char move_if_offscreen(Body *paddle_one, Body *paddle_two, Body *ball);
 */
 void reset(Scene *scene);
 
+void reset_obstacles(Body *bounce, Body *grav);
+
 #endif // #ifndef __PONG_H__

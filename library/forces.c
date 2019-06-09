@@ -4,6 +4,7 @@
 typedef struct grav_param{
     double G;
     List *bodies;
+    bool force_on_body2;
 }GravParam;
 
 typedef struct spring_param{
@@ -82,7 +83,8 @@ void destructive_collision(Body *body1, Body *body2, Vector axis, void *aux);
 */
 void physics_collision(Body *body1, Body *body2, Vector axis, void *aux);
 
-void create_newtonian_gravity(Scene *scene, double G, Body *body1, Body *body2){
+void create_newtonian_gravity(Scene *scene, double G, Body *body1, Body *body2,
+                                    bool force_on_body2){
     GravParam* grav = malloc(sizeof(GravParam));
     grav->G = G;
     List *grav_bodies = list_init(2, (FreeFunc)free, NULL);
@@ -96,6 +98,8 @@ void create_newtonian_gravity(Scene *scene, double G, Body *body1, Body *body2){
     list_add(grav_bodies, (void *)body1_point);
     list_add(grav_bodies, (void *)body2_point);
     grav->bodies = grav_bodies;
+
+    grav->force_on_body2 = force_on_body2;
 
     scene_add_bodies_force_creator(scene, (ForceCreator)newtonian_gravity, grav,
                                             (FreeFunc)free, grav_bodies);
@@ -247,7 +251,9 @@ void newtonian_gravity(void *aux){
         Vector force = vec_multiply(force_mag, unit_dist);
 
         body_add_force(Body1, force);
-        body_add_force(Body2, vec_negate(force));
+        if(grav->force_on_body2){
+            body_add_force(Body2, vec_negate(force));
+        }
     }
 }
 

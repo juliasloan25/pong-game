@@ -30,8 +30,8 @@ const RGBColor BOUNCE_COLOR = {
 };
 const RGBColor GRAV_COLOR = {
     .r = 0,
-    .g = 0,
-    .b = 1
+    .g = 1,
+    .b = 0
 };
 const Vector paddle_one_center = {
     .x = PADDLE_WIDTH / 2.0,
@@ -45,6 +45,7 @@ const Vector ball_center = {
     .x = WIDTH / 2.0,
     .y = HEIGHT/ 2.0
 }; //initial and reset center of the ball
+const double G = 10000.0;
 
 
 int main(int argc, char **argv){
@@ -84,10 +85,11 @@ int main(int argc, char **argv){
 
     reset_obstacles(bounce, grav);
 
-    //create bouncing collision between paddles and ball and obstacles and ball
+    //create forces between paddles and ball and obstacles and ball
     create_physics_collision(scene, ELASTICITY, paddle_one, ball);
     create_physics_collision(scene, ELASTICITY, paddle_two, ball);
     create_physics_collision(scene, ELASTICITY, bounce, ball);
+    create_newtonian_gravity(scene, G, ball, grav, false);
 
     bool is_two_player = false;
     if(*argv[1] == '1'){
@@ -209,7 +211,7 @@ Body *make_body(BodyType *type, Vector center){
         color = BOUNCE_COLOR;
     }
     if (*(type) == GRAVITY) {
-        mass = INFINITY;
+        mass = MASS * 10;
         points = 2000; //large number of points to create circle
         color = GRAV_COLOR;
         radius = GRAV_RADIUS;
@@ -449,7 +451,7 @@ void reset_obstacles(Body *bounce, Body *grav){
     double angle = degree * (M_PI/ 180.0);
     body_set_rotation(bounce, angle);
 
-    CollisionInfo coll = find_collision(bounce, grav);
+    CollisionInfo coll = find_collision(body_get_shape(bounce), body_get_shape(grav));
     if(coll.collided){
         reset_obstacles(bounce, grav);
     }

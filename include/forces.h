@@ -32,7 +32,8 @@ typedef void (*CollisionHandler)
  * @param body1 the first body
  * @param body2 the second body
  */
-void create_newtonian_gravity(Scene *scene, double G, Body *body1, Body *body2);
+void create_newtonian_gravity(Scene *scene, double G, Body *body1, Body *body2,
+                                                    bool force_on_body2);
 
 /**
  * Adds a Hooke's-Law spring force between two bodies in a scene.
