@@ -90,7 +90,7 @@ void sdl_init(Vector min, Vector max) {
     renderer = SDL_CreateRenderer(window, -1, 0);
 }
 
-bool sdl_is_done(Scene *scene) {
+bool sdl_is_done(Scene *scene, bool is_two_player) {
     SDL_Event *event = malloc(sizeof(*event));
     //int x_pos;
     //int y_pos;
@@ -121,7 +121,7 @@ bool sdl_is_done(Scene *scene) {
                     event->type == SDL_KEYDOWN ? KEY_PRESSED : KEY_RELEASED;
                 double held_time =
                     (timestamp - key_start_timestamp) / MS_PER_S;
-                key_handler(key, type, held_time, scene);
+                key_handler(key, type, held_time, scene, is_two_player);
                 break;
         }
     }

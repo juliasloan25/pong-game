@@ -42,7 +42,7 @@ typedef enum {
  * @param scene The scene that the key presses will impact
  */
 typedef void (*KeyHandler)(char key, KeyEventType type, double held_time,
-                                                                Scene *scene);
+                                            Scene *scene, bool is_two_player);
 
 //int return_mouse_y_position(Scene *scene);
 /**
@@ -61,7 +61,7 @@ void sdl_init(Vector min, Vector max);
  *
  * @return true if the window was closed, false otherwise
  */
-bool sdl_is_done(Scene *scene);
+bool sdl_is_done(Scene *scene, bool is_two_player);
 
 /**
  * Clears the screen. Should be called before drawing polygons in each frame.

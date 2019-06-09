@@ -16,7 +16,8 @@
 typedef enum {
     PADDLE,
     BALL,
-    BOUNCE
+    BOUNCE,
+    GRAVITY
 } BodyType;
 
 /*
@@ -42,7 +43,8 @@ Body *make_body(BodyType *type, Vector center);
 * @param held_time The amount of time the key is held down for
 * @param scene The scene that the key presses will impact
 */
-void on_key(char key, KeyEventType type, double held_time, Scene *scene);
+void on_key(char key, KeyEventType type, double held_time, Scene *scene,
+                                                        bool is_two_player);
 
 /*
 * @brief Handles if ships move offscreen. If one of the paddles are offscreen,
