@@ -70,8 +70,8 @@ void set_background(SDL_Renderer *renderer, TTF_Font *font) {
 int start_screen(SDL_Renderer *renderer, TTF_Font *font) {
     set_background(renderer, font);
     int font_size = 20;
-    SDL_Color black = {255, 255, 255, 0};
-    SDL_Color white = {0, 0, 0, 0};
+    SDL_Color black = {255, 255, 255};
+    SDL_Color white = {0, 0, 0};
 
 
     // TESTING TEXT
@@ -95,6 +95,7 @@ int start_screen(SDL_Renderer *renderer, TTF_Font *font) {
     SDL_Rect *rect2 = make_rect(TEXT_X, TEXT_Y_START + (2 * TEXT_HEIGHT),
                     TEXT_WIDTH, TEXT_HEIGHT);*/
 
+    printf("(%d, %d, %d, %d)", WIDTH/2 - TITLE_WIDTH, HEIGHT/2 - TITLE_HEIGHT, TITLE_WIDTH, TITLE_HEIGHT);
     SDL_Rect *rect_title = make_rect(WIDTH/2 - TITLE_WIDTH, HEIGHT/2 - TITLE_HEIGHT, TITLE_WIDTH, TITLE_HEIGHT);
     SDL_Rect *rect1 = make_rect(TEXT_X, TEXT_Y_START, TEXT_WIDTH, TEXT_HEIGHT);
     SDL_Rect *rect2 = make_rect(TEXT_X, TEXT_Y_START + (2 * TEXT_HEIGHT),
@@ -110,9 +111,10 @@ int start_screen(SDL_Renderer *renderer, TTF_Font *font) {
     free(rect_title);
     free(rect1);
     free(rect2);
+    return 0;
 
     //1 if single player, 2 if demo mode, 0 if no press
-    return handle_buttons(num_buttons);
+    //return handle_buttons(num_buttons);
 }
 
 //after calling this, call display_text on the scores to overlay them

@@ -247,6 +247,10 @@ void sdl_render_text(SDL_Renderer *renderer, SDL_Surface *surface, SDL_Rect *rec
 void sdl_on_key(KeyHandler handler) {
     key_handler = handler;
 }
+
+void close_window() {
+  SDL_DestroyWindow(window);
+}
 /*
 double time_since_last_tick(void) {
     clock_t now = clock();

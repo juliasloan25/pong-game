@@ -8,135 +8,22 @@ int main(int argc, char **argv){
     SDL_Renderer *renderer = window_init();
     int font_size = 20;
     TTF_Font *font = load_font(font_size);
+    SDL_Color black = {255, 255, 255, 0};
 
-    //set_background(renderer, font);
-    int button_num = start_screen(renderer, font);
 
     // TESTING TEXT
     SDL_Rect *rect = make_rect(WIDTH/2 - TEXT_WIDTH/2, HEIGHT/2 - TEXT_HEIGHT/2,
                                 TEXT_WIDTH, TEXT_HEIGHT);
-    //test_display_text(renderer, "HELLO", font, rect);
-    //SDL_Surface *surface = test_display_text(renderer, "HELLO", font, rect);
-    //sdl_render_scene(scene, renderer, surface, NULL, rect, NULL);
+    test_display_text(renderer, "HELLO", font, rect, black);
 
+    SDL_Delay(2000);
+    close_window(); //destroy window
+    SDL_Delay(2000);
 
-    /*
-    //creates two paddles and initializes them on either side of the screen
-    BodyType *paddle_one_type = malloc(sizeof(BodyType));
-    *(paddle_one_type) = PADDLE;
-    Body *paddle_one = make_body(paddle_one_type, paddle_one_center);
-    scene_add_body(scene, paddle_one);
-
-    BodyType *paddle_two_type = malloc(sizeof(BodyType));
-    *(paddle_two_type) = PADDLE;
-    Body *paddle_two = make_body(paddle_two_type, paddle_two_center);
-    scene_add_body(scene, paddle_two);
-
-    //create ball
-    BodyType *ball_type = malloc(sizeof(BodyType));
-    *(ball_type) = BALL;
-    Body *ball = make_body(ball_type, ball_center);
-    scene_add_body(scene, ball);
-
-    //create bouncing collision between paddles and ball
-    create_physics_collision(scene, ELASTICITY, paddle_one, ball);
-    create_physics_collision(scene, ELASTICITY, paddle_two, ball);
-
-    sdl_on_key(on_key); //handles key inputs
-/*     if(MOUSE_MOVED){
-        Body * paddle_one  = scene_get_body(scene,0);
-        body_set_centroid(paddle_one, (Vector){paddle_one_center.x, return_mouse_y_position(scene)});
-      }
-      */
-
-/*
-    //initialize scores and AI timer
-    int left_score = 0,  //score of player with left paddle
-        right_score = 0; //score of player with right paddle
-    double ai_timer = 0;
-
-    //TTF_Font *font = TTF_OpenFont("ostrich-regular.ttf", font_size);
-
-    SDL_Rect *rect_right = make_rect(RIGHT_SCORE_X, SCORE_Y, TEXT_WIDTH,
-                                TEXT_HEIGHT);
-    SDL_Rect *rect_left = make_rect(LEFT_SCORE_X, SCORE_Y, TEXT_WIDTH,
-                                TEXT_HEIGHT);
-    SDL_Surface *surface_right = malloc(sizeof(SDL_Surface));
-    SDL_Surface *surface_left = malloc(sizeof(SDL_Surface));
-    surface_right = display_text(renderer, " ", font, rect_right);
-    surface_left = display_text(renderer, " ", font, rect_left);
-
-    while(!sdl_is_done(scene)) {
-        double wait_time = time_since_last_tick();
-        ai_timer += wait_time;
-        //checks if paddle or ball has hit walls
-        char ball_hit_side = move_if_offscreen(paddle_one, paddle_two, ball);
-
-        if(ball_hit_side == 'l'){ //add point to right player
-            right_score++;
-            char right_score_str[4];
-            right_score_str[0] = '\0';
-            snprintf(right_score_str, 10, "%d", right_score);
-
-            rect_right = make_rect(RIGHT_SCORE_X, SCORE_Y, TEXT_WIDTH,
-                                        TEXT_HEIGHT);
-
-            //display the updated right score
-            surface_right = display_text(renderer, right_score_str, font,
-                            rect_right);
-            sdl_render_scene(scene, renderer, surface_left, surface_right, rect_left, rect_right);
-            SDL_Delay(1000);
-            reset(scene);
-        }
-        else if (ball_hit_side == 'r') { //add point to left player
-            left_score++;
-            char left_score_str[4];
-            left_score_str[0] = '\0';
-            snprintf(left_score_str, 10, "%d", left_score);
-
-            rect_left = make_rect(LEFT_SCORE_X, SCORE_Y, TEXT_WIDTH,
-                                        TEXT_HEIGHT);
-
-            //display the updated right score
-            surface_left = display_text(renderer, left_score_str, font,
-                            rect_left);
-            sdl_render_scene(scene, renderer, surface_left, surface_right,
-                rect_left, rect_right);
-            SDL_Delay(1000);
-            reset(scene);
-        }
-        if(ai_timer > 0.01){
-            ai_timer = 0;
-            set_paddle_vel(paddle_two, ball, PADDLE_VEL);
-        }
-
-        //render and update scene at every tick
-        scene_tick(scene, wait_time);
-
-        sdl_render_scene(scene, renderer, surface_left, surface_right,
-            rect_left, rect_right);
-        //sdl_render_scene(scene, renderer);
-
-        // end game if either score reaches 10
-        if (right_score >= 10 || left_score >= 10 || scene_get_end(scene)){
-            break;
-        }
-    }
-
-    //free all elements of scene and the renderer
-
-    SDL_FreeSurface(surface_right);
-    SDL_FreeSurface(surface_left);
-    free(rect_left);
-    free(rect_right);*/
-
-    //TESTING TEXT
-    SDL_Delay(10000);
-    //SDL_FreeSurface(surface);
     free(rect);
     scene_free(scene);
     SDL_DestroyRenderer(renderer);
-    TTF_CloseFont(font); //CHANGE IN NON-SIMPLE
+    TTF_CloseFont(font); //CHANGE IN NON-EXAMPLE
     TTF_Quit();
     SDL_Quit();
     return 1;

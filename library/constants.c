@@ -1,20 +1,23 @@
 #include "constants.h"
 
+const int WIDTH = 800; //screen width
+const int HEIGHT = 600; //screen height
 const double BALL_RADIUS = 10.0; //radius of pong ball
 const double PADDLE_HEIGHT = 100.0; //width of the pong paddle
-const double PADDLE_WIDTH = 30.0; // height of the pong paddle
-const double BALL_MASS = 100; // mass of the pong ball;
+const double PADDLE_WIDTH = 30.0; //height of the pong paddle
+const double BALL_MASS = 100; //mass of the pong ball;
 const double ELASTICITY = 1; //elasticity of collisions
 const double PADDLE_VEL = 600.0; //velocity that the paddle can go
 const double MASS = 50.0; //mass of all objects
-const double BALL_VEL = 700.0; // initial velocity of ball
+const double BALL_VEL = 700.0; //initial velocity of ball
+const int FONT_SIZE = 20; //standard font size
 
-const int WIDTH = 800; //screen width
-const int HEIGHT = 600; //screen height
+
 const int TITLE_X = WIDTH / 2 - 100;
 const int TITLE_Y = 40;
 const int TITLE_WIDTH = WIDTH / 2;
 const int TITLE_HEIGHT = HEIGHT / 4;
+
 const int TEXT_X = WIDTH / 2 - 50;
 const int TEXT_Y_START = 200;
 const int TEXT_WIDTH = WIDTH / 4;
