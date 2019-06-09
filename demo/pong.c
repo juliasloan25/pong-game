@@ -2,18 +2,22 @@
 
 
 int main(int argc, char **argv){
+
     //initialize scene and window
     Scene *scene = scene_init();
     SDL_Renderer *renderer = window_init();
     int font_size = 20;
     TTF_Font *font = load_font(font_size);
 
+    //set_background(renderer, font);
+    int button_num = start_screen(renderer, font);
+
     // TESTING TEXT
-    SDL_Rect *rect = make_rect(WIDTH/2, HEIGHT/2, TEXT_WIDTH,
-                                TEXT_HEIGHT);
-    SDL_Surface *surface = malloc(sizeof(SDL_Surface));
-    surface = test_display_text(renderer, "HELLO", font, rect);
-    sdl_render_scene(scene, renderer, surface, NULL, rect, NULL);
+    SDL_Rect *rect = make_rect(WIDTH/2 - TEXT_WIDTH/2, HEIGHT/2 - TEXT_HEIGHT/2,
+                                TEXT_WIDTH, TEXT_HEIGHT);
+    //test_display_text(renderer, "HELLO", font, rect);
+    //SDL_Surface *surface = test_display_text(renderer, "HELLO", font, rect);
+    //sdl_render_scene(scene, renderer, surface, NULL, rect, NULL);
 
 
     /*
@@ -125,11 +129,14 @@ int main(int argc, char **argv){
     SDL_FreeSurface(surface_left);
     free(rect_left);
     free(rect_right);*/
+
     //TESTING TEXT
-    SDL_FreeSurface(surface);
+    SDL_Delay(10000);
+    //SDL_FreeSurface(surface);
     free(rect);
     scene_free(scene);
     SDL_DestroyRenderer(renderer);
+    TTF_CloseFont(font); //CHANGE IN NON-SIMPLE
     TTF_Quit();
     SDL_Quit();
     return 1;
