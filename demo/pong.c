@@ -1,4 +1,7 @@
 #include "pong.h"
+#include <SDL2/SDL.h>
+#include<SDL_mixer.h>
+#include<iostream>
 
 const double WIDTH = 800; //screen width
 const double HEIGHT = 800; //screen height
@@ -55,6 +58,9 @@ const double G = 8000.0; //gravity for obstacle
 
 
 int main(int argc, char **argv){
+    sdl_init(SDL_INIT_AUDIO);
+    Mix_Music *bgs = Mix_LoadMUS(" price_is_right.mp3");
+    Mix_PlayMusic(bgm, -1);
     if(argc != 3 && argc != 4){
       //if(argc != 2 && argc != 3){
       //printf("usage: %s [1, 2, or 3 for single player, double player, and demo mode respectively] [1, 2, or 3 for easy, medium, or hard AI (single player only)]\n", argv[0]);
@@ -188,6 +194,7 @@ int main(int argc, char **argv){
     //free all elements of scene
     scene_free(scene);
     free(scores);
+    Mix_Quit();
     //TTF_Quit();
     return 1;
 }

@@ -11,6 +11,7 @@
 #define WINDOW_HEIGHT 800
 #define MS_PER_S 1e3
 
+
 /**
  * The coordinate at the center of the screen.
  */
@@ -62,14 +63,7 @@ char get_keycode(SDL_Keycode key) {
     }
 }
 
-/*
-int return_mouse_y_position(Scene *scene){
-  SDL_Event *event = malloc(sizeof(*event));
-  if(SDL_MOUSEMOTION){
-  return event->motion.x;
-}
-}
-*/
+
 
 void sdl_init(Vector min, Vector max) {
     // Check parameters
@@ -90,21 +84,23 @@ void sdl_init(Vector min, Vector max) {
     renderer = SDL_CreateRenderer(window, -1, 0);
 }
 
-bool sdl_is_done(Scene *scene, int num_users) {
+void mouse_motion(Body *body, int y_position){
+  body_set_centroid(body, (Vector){body_get_centroid(body).x, y_position});
+}
+
+bool sdl_is_done(Scene *scene, bool num_users) {
     SDL_Event *event = malloc(sizeof(*event));
     //int x_pos;
-    //int y_pos;
+    int y_pos;
     assert(event);
     while (SDL_PollEvent(event)) {
         switch (event->type) {
             case SDL_QUIT:
                 free(event);
                 return true;
-            /* case SDL_MOUSEMOTION:
-              x_pos = (int) event->motion.x;
-              y_pos = (int) event->motion.y;
+            case SDL_MOUSEMOTION:
+              mouse_motion(scene_get_body(scene, 0), event->motion.y);
                 break;
-              */
             case SDL_KEYDOWN:
             case SDL_KEYUP:
                 // Skip the keypress if no handler is configured
@@ -128,7 +124,6 @@ bool sdl_is_done(Scene *scene, int num_users) {
     free(event);
     return false;
 }
-
 
 void sdl_clear(void) {
     SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);

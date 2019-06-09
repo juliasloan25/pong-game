@@ -82,6 +82,8 @@ void sdl_draw_polygon(List *points, RGBColor color);
  */
 void sdl_show(void);
 
+
+
 /**
  * Draws all bodies in a scene.
  * This internally calls sdl_clear(), sdl_draw_polygon(), and sdl_show(),
