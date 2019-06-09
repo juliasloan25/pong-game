@@ -5,10 +5,10 @@
 const double WIDTH = 800; //screen width
 const double HEIGHT = 800; //screen height
 const double BALL_RADIUS = 10.0; //radius of pong ball
-const double GRAV_RADIUS = 20.0;
+const double GRAV_RADIUS = 15.0;
 const double PADDLE_HEIGHT = 100.0; //width of the pong paddle
 const double PADDLE_WIDTH = 30.0; // height of the pong paddle
-const double BOUNCE_HEIGHT = 20.0;
+const double BOUNCE_HEIGHT = 10.0;
 const double BOUNCE_WIDTH = 80.0;
 const double COLOR_INTERVAL = 2.0;
 const double OBSTACLE_INTERVAL = 7.0;
