@@ -204,4 +204,6 @@ bool body_is_removed(Body *body);
  */
 void body_add_collision(Body *body);
 
+void body_set_color(Body *body, RGBColor color);
+
 #endif // #ifndef __BODY_H__

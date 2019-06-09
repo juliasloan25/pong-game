@@ -8,7 +8,7 @@
 
 #define WINDOW_TITLE "CS 3"
 #define WINDOW_WIDTH 800
-#define WINDOW_HEIGHT 600
+#define WINDOW_HEIGHT 800
 #define MS_PER_S 1e3
 
 
@@ -88,7 +88,7 @@ void mouse_motion(Body *body, int y_position){
   body_set_centroid(body, (Vector){body_get_centroid(body).x, y_position});
 }
 
-bool sdl_is_done(Scene *scene, bool is_two_player) {
+bool sdl_is_done(Scene *scene, int num_users) {
     SDL_Event *event = malloc(sizeof(*event));
     //int x_pos;
     int y_pos;
@@ -117,7 +117,7 @@ bool sdl_is_done(Scene *scene, bool is_two_player) {
                     event->type == SDL_KEYDOWN ? KEY_PRESSED : KEY_RELEASED;
                 double held_time =
                     (timestamp - key_start_timestamp) / MS_PER_S;
-                key_handler(key, type, held_time, scene, is_two_player);
+                key_handler(key, type, held_time, scene, num_users);
                 break;
         }
     }

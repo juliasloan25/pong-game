@@ -18,10 +18,14 @@
 * The possible types of bodies to make.
 */
 typedef enum {
-    PADDLE,
+    PADDLE_USER,
+    PADDLE_AI,
     BALL,
     BOUNCE,
-    GRAVITY
+    GRAVITY,
+    SQUARE,
+    HEXAGON,
+    OCTOGON
 } BodyType;
 
 /*
@@ -40,6 +44,8 @@ void mouse_motion( Scene *scene, Body *body, int y_position);
 */
 Body *make_body(BodyType *type, Vector center);
 
+Body ** create_paddles(Scene *scene, int num_players, int num_users, AiDifficulty difficulty);
+
 /*
 * @brief Handles key events. Left and right arrows move the shooter and the
 * space bar creates lasers from the shooter
@@ -50,16 +56,16 @@ Body *make_body(BodyType *type, Vector center);
 * @param scene The scene that the key presses will impact
 */
 void on_key(char key, KeyEventType type, double held_time, Scene *scene,
-                                                        bool is_two_player);
+                                                        int num_users);
 
 /*
 * @brief Handles if ships move offscreen. If one of the paddles are offscreen,
 * it is translated onto screen.  If an ball is offscreen, it bounces of the
 * ceiling or floor and would reset the game if it hits the side.
 *
-* @return bool Whether game needs to be reset because  ball hit the side
+* @return int Whether ball hit the side
 */
-char move_if_offscreen(Body *paddle_one, Body *paddle_two, Body *ball);
+int move_if_offscreen(Body *paddle_one, Body *paddle_two, Body *ball);
 
 /*
 * @brief Resets the scene after point is made
@@ -67,5 +73,7 @@ char move_if_offscreen(Body *paddle_one, Body *paddle_two, Body *ball);
 void reset(Scene *scene);
 
 void reset_obstacles(Body *bounce, Body *grav);
+
+RGBColor get_color(int shape_index);
 
 #endif // #ifndef __PONG_H__
