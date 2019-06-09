@@ -54,16 +54,7 @@ SDL_Surface *display_text(SDL_Renderer *renderer, char *text, TTF_Font *font,
     return text_surface;
 }
 
-void set_background(Scene *scene, SDL_Renderer *renderer, TTF_Font *font) {
-    /*int opacity = 255; //maximum value
-    //set render color to given color
-    SDL_SetRenderDrawColor(renderer, r, g, b, opacity);
-    //clear the window to the current color
-    SDL_RenderClear(renderer);
-
-    SDL_RenderPresent(renderer);
-    SDL_Delay(50); //delay time in milliseconds*/
-
+void set_background(SDL_Renderer *renderer, TTF_Font *font) {
     SDL_Color black = {255, 255, 255, 0};
     SDL_Rect *bkgrd_rect = make_rect(0, 0, WIDTH, HEIGHT);
     //SDL_Surface *background = test_display_text(renderer, " ", font, bkgrd_rect);
@@ -72,27 +63,22 @@ void set_background(Scene *scene, SDL_Renderer *renderer, TTF_Font *font) {
     //sdl_render_scene(scene, renderer, background, NULL, bkgrd_rect, NULL);
     SDL_Delay(100);
     free(bkgrd_rect);
-    //if (background != NULL) SDL_FreeSurface(background);
+
+    //need to close window when done?
 }
 
-int start_screen(SDL_Renderer *renderer, int width, int height, TTF_Font *font) {
-    //initialize scene and window
-    Scene *scene = scene_init();
-    //SDL_Renderer *renderer = window_init();
+int start_screen(SDL_Renderer *renderer, TTF_Font *font) {
+    set_background(renderer, font);
     int font_size = 20;
-    //TTF_Font *font = load_font(font_size);
     SDL_Color black = {255, 255, 255, 0};
     SDL_Color white = {0, 0, 0, 0};
 
-    SDL_Rect *bkgrd_rect = make_rect(0, 0, WIDTH, HEIGHT);
-    SDL_Surface *background = test_display_text(renderer, " ", font, bkgrd_rect);
-    sdl_render_scene(scene, renderer, background, NULL, bkgrd_rect, NULL);
 
     // TESTING TEXT
-    SDL_Rect *rect = make_rect(WIDTH/2 - TEXT_WIDTH/2, HEIGHT/2 - TEXT_HEIGHT/2,
+    /*SDL_Rect *rect = make_rect(WIDTH/2 - TEXT_WIDTH/2, HEIGHT/2 - TEXT_HEIGHT/2,
                                 TEXT_WIDTH, TEXT_HEIGHT);
     SDL_Surface *surface = test_display_text(renderer, "HELLO", font, rect);
-    sdl_render_scene(scene, renderer, surface, NULL, rect, NULL);
+    sdl_render_scene(scene, renderer, surface, NULL, rect, NULL);*/
 
 
     //set background to black
@@ -104,16 +90,26 @@ int start_screen(SDL_Renderer *renderer, int width, int height, TTF_Font *font) 
     int num_buttons = 2;
 
     //set positioning rectangles
-    SDL_Rect *rect_title = make_rect(TITLE_X, TITLE_Y, TITLE_WIDTH, TITLE_HEIGHT);
+    /*SDL_Rect *rect_title = make_rect(TITLE_X, TITLE_Y, TITLE_WIDTH, TITLE_HEIGHT);
+    SDL_Rect *rect1 = make_rect(TEXT_X, TEXT_Y_START, TEXT_WIDTH, TEXT_HEIGHT);
+    SDL_Rect *rect2 = make_rect(TEXT_X, TEXT_Y_START + (2 * TEXT_HEIGHT),
+                    TEXT_WIDTH, TEXT_HEIGHT);*/
+
+    SDL_Rect *rect_title = make_rect(WIDTH/2 - TITLE_WIDTH, HEIGHT/2 - TITLE_HEIGHT, TITLE_WIDTH, TITLE_HEIGHT);
     SDL_Rect *rect1 = make_rect(TEXT_X, TEXT_Y_START, TEXT_WIDTH, TEXT_HEIGHT);
     SDL_Rect *rect2 = make_rect(TEXT_X, TEXT_Y_START + (2 * TEXT_HEIGHT),
                     TEXT_WIDTH, TEXT_HEIGHT);
 
     //display title to start screen
-    display_text(renderer, title, font, rect_title);
+    test_display_text(renderer, title, font, rect_title, white);
     //display play modes
-    display_text(renderer, text1, font, rect1);
-    display_text(renderer, text2, font, rect2);
+    test_display_text(renderer, text1, font, rect1, white);
+    test_display_text(renderer, text2, font, rect2, white);
+    //sdl_render_scene(scene, renderer, surface, NULL, rect, NULL);
+
+    free(rect_title);
+    free(rect1);
+    free(rect2);
 
     //1 if single player, 2 if demo mode, 0 if no press
     return handle_buttons(num_buttons);
@@ -121,17 +117,16 @@ int start_screen(SDL_Renderer *renderer, int width, int height, TTF_Font *font) 
 
 //after calling this, call display_text on the scores to overlay them
 int end_screen(SDL_Renderer *renderer, int width, int height, TTF_Font *font) {
-    //initialize scene and window
-    Scene *scene = scene_init();
-    //SDL_Renderer *renderer = window_init();
+    set_background(renderer, font);
     int font_size = 20;
-    //TTF_Font *font = load_font(font_size);
+    SDL_Color black = {255, 255, 255, 0};
+    SDL_Color white = {0, 0, 0, 0};
 
     // TESTING TEXT
     SDL_Rect *rect = make_rect(WIDTH/2 - TEXT_WIDTH/2, HEIGHT/2 - TEXT_HEIGHT/2,
                                 TEXT_WIDTH, TEXT_HEIGHT);
     SDL_Surface *surface = test_display_text(renderer, "HELLO", font, rect);
-    sdl_render_scene(scene, renderer, surface, NULL, rect, NULL);
+    //sdl_render_scene(scene, renderer, surface, NULL, rect, NULL);
 
     //set background to black
     //set_background(renderer, 0, 0, 0);
@@ -144,8 +139,11 @@ int end_screen(SDL_Renderer *renderer, int width, int height, TTF_Font *font) {
     SDL_Rect *rect1 = make_rect(TEXT_X, TEXT_Y_START, TEXT_WIDTH, TEXT_HEIGHT);
 
     //display text to screen
-    display_text(renderer, text0, font, rect_title);
-    display_text(renderer, text1, font, rect1);
+    test_display_text(renderer, text0, font, rect_title);
+    test_display_text(renderer, text1, font, rect1);
+
+    free(rect_title);
+    free(rect1);
 
     return handle_buttons(num_buttons);
 }

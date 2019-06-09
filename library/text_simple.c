@@ -15,15 +15,16 @@ TTF_Font *test_load_font(int font_size) {
 }
 
 void test_display_text(SDL_Renderer *renderer, char *text, TTF_Font *font,
-                            SDL_Rect *rect) {
+                            SDL_Rect *rect, SDL_Color color) {
     //get vector instead of x and y pos, then use sdl_wrapper scaling
     //or change scene so coordinates match up with sdl pixel coordinates
-    SDL_Color color = {0, 0, 0, 0}; //white
+    //SDL_Color color = {0, 0, 0, 0}; //white
 
     if (font == NULL) {
         printf("font null");
         exit(1);
     }
+
     SDL_Surface *text_surface = TTF_RenderText_Solid(font, text, color);
     if (text_surface == NULL) {
         printf("TTF_Render: %s\n", TTF_GetError());
@@ -36,6 +37,7 @@ void test_display_text(SDL_Renderer *renderer, char *text, TTF_Font *font,
     SDL_RenderCopy(renderer, texture, NULL, rect);
     // SDL_RenderPresent(renderer);
     sdl_show(renderer);
+    sdl_render_text(renderer, text_surface, rect);
     //SDL_Delay(10000);
 
     //free(rect); //CHANGE IN NON-SIMPLE

@@ -9,11 +9,13 @@ int main(int argc, char **argv){
     int font_size = 20;
     TTF_Font *font = load_font(font_size);
 
-    set_background(scene, renderer, font);
+    //set_background(renderer, font);
+    int button_num = start_screen(renderer, font);
 
     // TESTING TEXT
     SDL_Rect *rect = make_rect(WIDTH/2 - TEXT_WIDTH/2, HEIGHT/2 - TEXT_HEIGHT/2,
                                 TEXT_WIDTH, TEXT_HEIGHT);
+    //test_display_text(renderer, "HELLO", font, rect);
     //SDL_Surface *surface = test_display_text(renderer, "HELLO", font, rect);
     //sdl_render_scene(scene, renderer, surface, NULL, rect, NULL);
 

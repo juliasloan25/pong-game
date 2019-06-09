@@ -129,6 +129,8 @@ void sdl_show(SDL_Renderer *renderer);
 void sdl_render_scene(Scene *scene, SDL_Renderer *renderer, SDL_Surface *surface1,
                         SDL_Surface *surface2, SDL_Rect *rect1, SDL_Rect *rect2);
 
+void sdl_render_text(SDL_Renderer *renderer, SDL_Surface *surface, SDL_Rect *rect);
+
 /**
  * Registers a function to be called every time a key is pressed.
  * Overwrites any existing handler.

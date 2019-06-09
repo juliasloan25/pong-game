@@ -219,7 +219,7 @@ void sdl_render_scene(Scene *scene, SDL_Renderer *renderer, SDL_Surface *surface
         list_free(shape);
         body_free(body);
     }
-    if (surface1) {
+    /*if (surface1) {
         printf("surface1\n");
         SDL_Texture *texture1 = SDL_CreateTextureFromSurface(renderer, surface1);
         SDL_RenderCopy(renderer, texture1, NULL, rect1);
@@ -230,7 +230,17 @@ void sdl_render_scene(Scene *scene, SDL_Renderer *renderer, SDL_Surface *surface
         SDL_Texture *texture2 = SDL_CreateTextureFromSurface(renderer, surface2);
         SDL_RenderCopy(renderer, texture2, NULL, rect2);
         SDL_DestroyTexture(texture2);
+    }*/
+    sdl_show(renderer);
+}
+
+void sdl_render_text(SDL_Renderer *renderer, SDL_Surface *surface, SDL_Rect *rect) {
+    if (surface) {
+        SDL_Texture *texture = SDL_CreateTextureFromSurface(renderer, surface);
+        SDL_RenderCopy(renderer, texture, NULL, rect);
+        SDL_DestroyTexture(texture);
     }
+    //free(rect);
     sdl_show(renderer);
 }
 
