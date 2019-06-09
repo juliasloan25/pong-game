@@ -20,5 +20,5 @@ TTF_Font *test_load_font(int font_size);
 * @param font_size the pixel height of the text
 * @param rect the positioning rectangle for the text
 */
-SDL_Surface *test_display_text(SDL_Renderer *renderer, char *text, TTF_Font *font,
+void test_display_text(SDL_Renderer *renderer, char *text, TTF_Font *font,
                             SDL_Rect *rect);

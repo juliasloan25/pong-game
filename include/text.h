@@ -42,7 +42,7 @@ SDL_Surface *display_text(SDL_Renderer *renderer, char *text, TTF_Font *font,
 * @param g the green value of the color
 * @param b the blue value of the color
 */
-void set_background(SDL_Renderer *renderer, int r, int g, int b);
+void set_background(Scene *scene, SDL_Renderer *renderer, TTF_Font *font);
 
 /*
 * Initializes the start screen with buttons.

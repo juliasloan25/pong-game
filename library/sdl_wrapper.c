@@ -220,11 +220,13 @@ void sdl_render_scene(Scene *scene, SDL_Renderer *renderer, SDL_Surface *surface
         body_free(body);
     }
     if (surface1) {
+        printf("surface1\n");
         SDL_Texture *texture1 = SDL_CreateTextureFromSurface(renderer, surface1);
         SDL_RenderCopy(renderer, texture1, NULL, rect1);
         SDL_DestroyTexture(texture1);
     }
     if (surface2) {
+        printf("surface2\n");
         SDL_Texture *texture2 = SDL_CreateTextureFromSurface(renderer, surface2);
         SDL_RenderCopy(renderer, texture2, NULL, rect2);
         SDL_DestroyTexture(texture2);
