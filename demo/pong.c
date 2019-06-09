@@ -5,7 +5,18 @@ int main(int argc, char **argv){
     //initialize scene and window
     Scene *scene = scene_init();
     SDL_Renderer *renderer = window_init();
+    int font_size = 20;
+    TTF_Font *font = load_font(font_size);
 
+    // TESTING TEXT
+    SDL_Rect *rect = make_rect(WIDTH/2, HEIGHT/2, TEXT_WIDTH,
+                                TEXT_HEIGHT);
+    SDL_Surface *surface = malloc(sizeof(SDL_Surface));
+    surface = test_display_text(renderer, "HELLO", font, rect);
+    sdl_render_scene(scene, renderer, surface_left, surface_right, rect_left, rect_right);
+
+
+    /*
     //creates two paddles and initializes them on either side of the screen
     BodyType *paddle_one_type = malloc(sizeof(BodyType));
     *(paddle_one_type) = PADDLE;
@@ -34,20 +45,20 @@ int main(int argc, char **argv){
       }
       */
 
+/*
     //initialize scores and AI timer
     int left_score = 0,  //score of player with left paddle
         right_score = 0; //score of player with right paddle
     double ai_timer = 0;
 
-    int font_size = 20;
-    TTF_Font *font = load_font(font_size);
     //TTF_Font *font = TTF_OpenFont("ostrich-regular.ttf", font_size);
-    SDL_Surface *surface_right = malloc(sizeof(SDL_Surface));
-    SDL_Surface *surface_left = malloc(sizeof(SDL_Surface));
+
     SDL_Rect *rect_right = make_rect(RIGHT_SCORE_X, SCORE_Y, TEXT_WIDTH,
                                 TEXT_HEIGHT);
     SDL_Rect *rect_left = make_rect(LEFT_SCORE_X, SCORE_Y, TEXT_WIDTH,
                                 TEXT_HEIGHT);
+    SDL_Surface *surface_right = malloc(sizeof(SDL_Surface));
+    SDL_Surface *surface_left = malloc(sizeof(SDL_Surface));
     surface_right = display_text(renderer, " ", font, rect_right);
     surface_left = display_text(renderer, " ", font, rect_left);
 
@@ -109,12 +120,16 @@ int main(int argc, char **argv){
     }
 
     //free all elements of scene and the renderer
-    scene_free(scene);
-    SDL_DestroyRenderer(renderer);
+
     SDL_FreeSurface(surface_right);
     SDL_FreeSurface(surface_left);
     free(rect_left);
-    free(rect_right);
+    free(rect_right);*/
+    //TESTING TEXT
+    SDL_FreeSurface(surface);
+    free(rect);
+    scene_free(scene);
+    SDL_DestroyRenderer(renderer);
     TTF_Quit();
     SDL_Quit();
     return 1;
