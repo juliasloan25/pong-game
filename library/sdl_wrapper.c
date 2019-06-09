@@ -85,7 +85,7 @@ void sdl_init(Vector min, Vector max) {
 }
 
 void mouse_motion(Body *body, int y_position){
-  body_set_centroid(body, (Vector){body_get_centroid(body).x, y_position});
+  body_set_centroid(body, (Vector){body_get_centroid(body).x, -1*(y_position - 800)});
 }
 
 bool sdl_is_done(Scene *scene, int num_users) {
@@ -99,7 +99,7 @@ bool sdl_is_done(Scene *scene, int num_users) {
                 free(event);
                 return true;
             case SDL_MOUSEMOTION:
-              mouse_motion(scene_get_body(scene, 0), event->motion.y);
+              mouse_motion(scene_get_body(scene, 2), event->motion.y);
                 break;
             case SDL_KEYDOWN:
             case SDL_KEYUP:
