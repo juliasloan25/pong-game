@@ -49,8 +49,8 @@ char get_keycode(SDL_Keycode key) {
         case SDLK_DOWN: return DOWN_ARROW;
         case SDLK_SPACE: return SPACE;
         case SDLK_ESCAPE: return ESCAPE;
-        case SDLK_W: return W;
-        case SDLK_S: return S;
+        //case SDLK_W: return W;
+        //case SDLK_S: return S;
         default:
             // Only process 7-bit ASCII characters
             return key == (SDL_Keycode) (char) key ? key : '\0';
@@ -235,7 +235,7 @@ void sdl_render_scene(Scene *scene, SDL_Renderer *renderer, SDL_Surface *surface
 void sdl_on_key(KeyHandler handler) {
     key_handler = handler;
 }
-
+/*
 double time_since_last_tick(void) {
     clock_t now = clock();
     double difference = last_clock
@@ -244,3 +244,4 @@ double time_since_last_tick(void) {
     last_clock = now;
     return difference;
 }
+*/

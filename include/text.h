@@ -15,6 +15,14 @@
 */
 TTF_Font *load_font(int font_size);
 
+/*
+* Create an SDL Rect to position text on the window.
+* @param x_pos the x coordinate of the left side of the text box
+* @param y_pos the y coordinate of the top side of the text box
+* @param width the width of the text box
+* @param height the height of the text box
+*/
+
 SDL_Rect *make_rect(int x_pos, int y_pos, int width, int height);
 
 /*

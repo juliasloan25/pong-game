@@ -13,7 +13,7 @@ int main(int argc, char **argv){
                                 TEXT_HEIGHT);
     SDL_Surface *surface = malloc(sizeof(SDL_Surface));
     surface = test_display_text(renderer, "HELLO", font, rect);
-    sdl_render_scene(scene, renderer, surface_left, surface_right, rect_left, rect_right);
+    sdl_render_scene(scene, renderer, surface, NULL, rect, NULL);
 
 
     /*

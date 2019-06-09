@@ -12,6 +12,8 @@
 #include <math.h>
 #include "constants.h"
 
+#include "text_simple.h"
+
 /*
 * The possible types of bodies to make.
 */
