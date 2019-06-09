@@ -58,7 +58,7 @@ const double G = 8000.0; //gravity for obstacle
 
 int main(int argc, char **argv){
     SDL_Init(SDL_INIT_AUDIO);
-    Mix_Music *bgs = Mix_LoadMUS(" price_is_right.mp3");
+    Mix_Music *bgs = Mix_LoadMUS("price_is_right.mp3");
     Mix_PlayMusic(bgs, -1);
     if(argc != 3 && argc != 4){
       //if(argc != 2 && argc != 3){
@@ -135,8 +135,8 @@ int main(int argc, char **argv){
      /*if(MOUSE_MOVED){
         Body * paddle_one  = scene_get_body(scene,0);
         body_set_centroid(paddle_one, (Vector){paddle_one_center.x, return_mouse_y_position(scene)});
-      }
-      */
+      }*/
+
     window_init();
     sdl_on_key(on_key);
 
