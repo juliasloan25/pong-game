@@ -67,7 +67,7 @@ void set_background(SDL_Renderer *renderer, int r, int g, int b) {
 
 int start_screen(SDL_Renderer *renderer, int width, int height, TTF_Font *font) {
     //set background to black
-    set_background(renderer, 0, 0, 0);
+    //set_background(renderer, 0, 0, 0);
 
     char *title = "PONG";
     char *text1 = "Single player";
@@ -93,7 +93,7 @@ int start_screen(SDL_Renderer *renderer, int width, int height, TTF_Font *font) 
 //after calling this, call display_text on the scores to overlay them
 int end_screen(SDL_Renderer *renderer, int width, int height, TTF_Font *font) {
     //set background to black
-    set_background(renderer, 0, 0, 0);
+    //set_background(renderer, 0, 0, 0);
 
     char *text0 = "GAME OVER";
     char *text1 = "Play again?"; //If selected, return to start screen
