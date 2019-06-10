@@ -59,7 +59,7 @@ const double G = 8000.0; //gravity for obstacle
 int main(int argc, char **argv){
     SDL_Init(SDL_INIT_AUDIO);
     Mix_Music *bgs;
-    Mix_OpenAudio(22050,MIX_DEFAULT_FORMAT,2,4096)
+    Mix_OpenAudio(22050,MIX_DEFAULT_FORMAT,2,4096);
     bgs = Mix_LoadMUS("price_is_right.mp3");
     Mix_PlayMusic(bgs, -1);
     if(argc != 3 && argc != 4){
@@ -195,7 +195,7 @@ int main(int argc, char **argv){
     //free all elements of scene
     scene_free(scene);
     free(scores);
-    Mix_FreeMusic(bgm);
+    Mix_FreeMusic(bgs);
     //TTF_Quit();
     return 1;
 }
