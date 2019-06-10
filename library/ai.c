@@ -8,7 +8,9 @@ void set_paddle_vel(Body *paddle, Body *ball, Vector axis){
     Vector paddle_cent = body_get_centroid(paddle);
     Vector base_velocity = vec_multiply(PADDLE_VEL, axis);
 
-    double rel_paddle_x = paddle_cent.x - (WIDTH/2);
+
+
+    /*double rel_paddle_x = paddle_cent.x - (WIDTH/2);
     if((rel_paddle_x / ball_vel.x) < 0){
         body_set_velocity(paddle, VEC_ZERO);
         return;
@@ -31,7 +33,7 @@ void set_paddle_vel(Body *paddle, Body *ball, Vector axis){
         else if(y_diff < 0){
             body_set_velocity(paddle, (Vector){0, -1 * PADDLE_VEL});
         }
-    }
+    }*/
 }
 
 double time_since_last_ai_tick(void) {

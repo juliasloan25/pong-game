@@ -153,8 +153,7 @@ int main(int argc, char **argv){
         int ball_hit = ball_hit_side(ball, polygon, num_players);
         if(ball_hit != -1){
             scores[ball_hit]++;
-            reset(scene, paddles, num_players);
-            reset_obstacles(bounce, grav, ball);
+            reset(scene, paddles, num_players, bounce);
         }
 
         paddle_hit_side(paddles, num_players);
@@ -544,6 +543,14 @@ void reset(Scene *scene, Paddle **paddles, int num_players){
     Body *ball = scene_get_body(scene, 1);
     body_set_centroid(ball, ball_center);
     body_set_velocity(ball, (Vector){BALL_VEL, 0});
+    List *bounce_shape = body_get_shape(bounce);
+    List *ball_shape =  body_get_shape(ball);
+    CollisionInfo coll = find_collision(bounce_shape, ball_shape);
+    list_free(bounce_shape);
+    list_free(ball_shape);
+    if(coll.collided){
+        reset_obstacles(bounce, grav, ball);
+    }
 
     for(int i = 0; i < num_players; i++){
         Paddle *paddle = paddles[i];
