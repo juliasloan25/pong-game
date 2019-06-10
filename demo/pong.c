@@ -195,6 +195,7 @@ int main(int argc, char **argv){
     //free all elements of scene
     scene_free(scene);
     free(scores);
+    free(paddles);
     Mix_FreeMusic(bgs);
     //TTF_Quit();
     return 1;
