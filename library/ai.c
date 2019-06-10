@@ -3,11 +3,12 @@
 clock_t ai_clock = 0;
 
 void set_paddle_vel(Paddle *paddle, Body *ball){
+    Body *paddle_body = paddle_get_body(paddle);
     Vector ball_cent = body_get_centroid(ball);
     Vector ball_vel = body_get_velocity(ball);
-    Vector paddle_cent = body_get_centroid(paddle);
-    Vector base_velocity = vec_multiply(PADDLE_VEL, axis);
+    Vector paddle_cent = body_get_centroid(paddle_body);
     Vector axis = paddle_get_axis(paddle);
+    Vector base_velocity = vec_multiply(PADDLE_VEL, axis);
     Vector cent_diff = vec_subtract(ball_cent, paddle_cent);
     Vector axis_perp = {axis.y, -1 * axis.x};
 
@@ -19,7 +20,6 @@ void set_paddle_vel(Paddle *paddle, Body *ball){
     Vector proj_vel_perp = vec_multiply(vec_dot(ball_vel, axis_perp)/vec_dot(axis_perp, axis_perp), axis_perp);
     Vector proj_vel_par = vec_multiply(vec_dot(ball_vel, axis)/vec_dot(axis, axis), axis);
 
-    Body *paddle_body = paddle_get_body(paddle);
 
 
     double t = vec_magnitude(proj_cent_perp)/vec_magnitude(proj_vel_perp);

@@ -68,7 +68,7 @@ void paddle_hit_side(Paddle **paddles, int num_players);
 /*
 * @brief Resets the scene after point is made
 */
-void reset(Scene *scene, Paddle **paddles, int num_players);
+void reset(Scene *scene, Paddle **paddles, int num_players, Body *bounce, Body *grav);
 
 void reset_obstacles(Body *bounce, Body *grav, Body *ball);
 

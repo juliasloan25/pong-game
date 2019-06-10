@@ -153,8 +153,7 @@ int main(int argc, char **argv){
         int ball_hit = ball_hit_side(ball, polygon, num_players);
         if(ball_hit != -1){
             scores[ball_hit]++;
-            reset(scene, paddles, num_players);
-            reset_obstacles(bounce, grav, ball);
+            reset(scene, paddles, num_players, bounce, grav);
         }
 
         paddle_hit_side(paddles, num_players);
@@ -367,14 +366,17 @@ Paddle **create_paddles(Scene *scene, int num_players, int num_users, AiDifficul
             body_set_rotation(paddle, angle * i);
             scene_add_body(scene, paddle);
             create_physics_collision(scene, ELASTICITY, paddle, ball);
-            /*if(i >= num_users){
-                create_ai(scene, paddle, ball, difficulty);
-            }*/
+            Paddle *paddle_obj;
             if(num_players == 2){
-                paddles[i / 2] = paddle_init(paddle, paddle_center, axis, point1, point2);
+                paddle_obj = paddle_init(paddle, paddle_center, axis, point1, point2);
+                paddles[i / 2] = paddle_obj;
             }
             else{
-                paddles[i] = paddle_init(paddle, paddle_center, axis, point1, point2);
+                paddle_obj = paddle_init(paddle, paddle_center, axis, point1, point2);
+                paddles[i] = paddle_obj;
+            }
+            if(!((i == 0 && num_users >= 1) || (i == polygon_size / 2 && num_users == 2))){
+                create_ai(scene, paddle_obj, ball, difficulty);
             }
         }
     }
@@ -540,10 +542,18 @@ void paddle_hit_side(Paddle **paddles, int num_players){
     }
 }
 
-void reset(Scene *scene, Paddle **paddles, int num_players){
+void reset(Scene *scene, Paddle **paddles, int num_players, Body *bounce, Body *grav){
     Body *ball = scene_get_body(scene, 1);
     body_set_centroid(ball, ball_center);
     body_set_velocity(ball, (Vector){BALL_VEL, 0});
+    List *bounce_shape = body_get_shape(bounce);
+    List *ball_shape =  body_get_shape(ball);
+    CollisionInfo coll = find_collision(bounce_shape, ball_shape);
+    list_free(bounce_shape);
+    list_free(ball_shape);
+    if(coll.collided){
+        reset_obstacles(bounce, grav, ball);
+    }
 
     for(int i = 0; i < num_players; i++){
         Paddle *paddle = paddles[i];
