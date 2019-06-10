@@ -529,8 +529,11 @@ void reset_obstacles(Body *bounce, Body *grav){
     int degree = rand() / (RAND_MAX / (360 + 1) + 1);
     double angle = degree * (M_PI/ 180.0);
     body_set_rotation(bounce, angle);
-
-    CollisionInfo coll = find_collision(body_get_shape(bounce), body_get_shape(grav));
+    List *bounce_shape = body_get_shape(bounce);
+    List *grav_shape =  body_get_shape(grav);
+    CollisionInfo coll = find_collision(bounce_shape, grav_shape);
+    list_free(bounce_shape);
+    list_free(grav_shape);
     if(coll.collided){
         reset_obstacles(bounce, grav);
     }
