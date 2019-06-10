@@ -3,17 +3,17 @@
 struct paddle {
     Body *body;
     Vector initial_center;
-    Vector base_velocity;
+    Vector axis;
     Vector positive_boundary;
     Vector negative_boundary;
 };
 
-Paddle *paddle_init(Body *body, Vector initial_center, Vector base_velocity, Vector positive_boundary, Vector negative_boundary){
+Paddle *paddle_init(Body *body, Vector initial_center, Vector axis, Vector positive_boundary, Vector negative_boundary){
     Paddle *paddle = malloc(sizeof(Paddle));
     assert(paddle != NULL);
     paddle->body = body;
     paddle->initial_center = initial_center;
-    paddle->base_velocity = base_velocity;
+    paddle->axis = axis;
     paddle->positive_boundary = positive_boundary;
     paddle->negative_boundary = negative_boundary;
     return paddle;
@@ -27,8 +27,8 @@ Vector paddle_get_initial_center(Paddle *paddle){
     return paddle->initial_center;
 }
 
-Vector paddle_get_base_velocity(Paddle *paddle){
-    return paddle->base_velocity;
+Vector paddle_get_axis(Paddle *paddle){
+    return paddle->axis;
 }
 
 Vector paddle_get_positive_boundary(Paddle *paddle){

@@ -29,6 +29,7 @@ typedef struct ai_param{
   List *bodies;
   double check_time;
   double time_since_check;
+  Vector axis;
   FreeFunc freef;
 }AiParam;
 
@@ -181,21 +182,22 @@ void create_physics_collision(Scene *scene, double elasticity, Body *body1, Body
     create_collision(scene, body1, body2, (CollisionHandler)physics_collision, elas, free);
 }
 
-void create_ai(Scene *scene, Body *smart, Body *target, AiDifficulty diff){
+void create_ai(Scene *scene, Paddle *paddle, Body *target, AiDifficulty diff){
   AiParam *new_ai = malloc(sizeof(AiParam));
   double ai_time;
+  Body *smart = paddle_get_body(paddle);
 
   switch (diff) {
    case EASY:
-    ai_time = 0.05;
+    ai_time = 0.1;
     break;
 
    case MEDIUM:
-    ai_time = 0.01;
+    ai_time = 0.05;
     break;
 
    case HARD:
-    ai_time = 0.005;
+    ai_time = 0.01;
     break;
   }
 
@@ -205,6 +207,7 @@ void create_ai(Scene *scene, Body *smart, Body *target, AiDifficulty diff){
   new_ai->bodies = ai_bodies;
   new_ai->check_time = ai_time;
   new_ai->time_since_check = 0;
+  new_ai->axis = paddle_get_axis(paddle);
   scene_add_bodies_force_creator(scene, (ForceCreator) pong_ai, new_ai, (FreeFunc)free, ai_bodies);
 }
 
@@ -213,8 +216,9 @@ void pong_ai(void *aux){
   List *ai_bodies = ai->bodies;
   Body *paddle = (Body *)list_get(ai_bodies, 0);
   Body *ball = (Body *)list_get(ai_bodies, 1);
+  Vector axis = ai->axis;
   if(ai->time_since_check > ai->check_time){
-    set_paddle_vel(paddle, ball);
+    set_paddle_vel(paddle, ball, axis);
     ai->time_since_check = 0;
     return;
   }

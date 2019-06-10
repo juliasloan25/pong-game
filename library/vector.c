@@ -64,3 +64,7 @@ double vec_magnitude(Vector v){
 bool vec_equal_v(Vector *v1, Vector *v2){
     return (v1->x == v2->x && v1->y == v2->y);
 }
+
+Vector vec_unit(Vector v){
+    return vec_multiply(1/vec_magnitude(v), v);
+}
