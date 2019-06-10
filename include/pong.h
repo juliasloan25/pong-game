@@ -2,8 +2,6 @@
 #define __PONG_H__
 #include <SDL2/SDL.h>
 #include<SDL2/SDL_mixer.h>
-#define WAV_PATH "THE_PRICE_IS_RIGHT__Theme_Song_Remix___-Remix_Maniacs-_AudioTrimmer.com_.mp3 "
-#define MUS_PATH "HR2_Friska.ogg"
 #include "sdl_wrapper.h"
 #include "body.h"
 #include "forces.h"
