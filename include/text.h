@@ -32,7 +32,7 @@ SDL_Rect *make_rect(int x_pos, int y_pos, int width, int height);
 * @param font_size the pixel height of the text
 * @param rect the positioning rectangle for the text
 */
-SDL_Surface *display_text(SDL_Renderer *renderer, char *text, TTF_Font *font,
+void display_text(SDL_Renderer *renderer, char *text, TTF_Font *font,
                     SDL_Rect *rect);
 
 /*
