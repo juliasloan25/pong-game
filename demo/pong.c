@@ -6,19 +6,31 @@ int main(int argc, char **argv){
     //initialize scene and window
     Scene *scene = scene_init();
     SDL_Renderer *renderer = window_init();
-    int font_size = 20;
-    TTF_Font *font = load_font(font_size);
-    SDL_Color black = {255, 255, 255, 0};
-
+    TTF_Font *font = load_font(FONT_SIZE);
 
     // TESTING TEXT
     SDL_Rect *rect = make_rect(WIDTH/2 - TEXT_WIDTH/2, HEIGHT/2 - TEXT_HEIGHT/2,
                                 TEXT_WIDTH, TEXT_HEIGHT);
-    test_display_text(renderer, "HELLO", font, rect, black);
+    test_display_text(renderer, "HELLO", font, rect, BLACK);
 
     SDL_Delay(2000);
     close_window(); //destroy window
+    scene = scene_init();
+    renderer = window_init();
+
+    // TESTING TEXT
+    start_screen(renderer, font);
+
     SDL_Delay(2000);
+    close_window(); //destroy window
+    scene = scene_init();
+    renderer = window_init();
+
+    // TESTING TEXT
+    end_screen(renderer, font);
+
+    SDL_Delay(2000);
+    close_window(); //destroy window
 
     free(rect);
     scene_free(scene);

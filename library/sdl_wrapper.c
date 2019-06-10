@@ -249,7 +249,7 @@ void sdl_on_key(KeyHandler handler) {
 }
 
 void close_window() {
-  SDL_DestroyWindow(window);
+    SDL_DestroyWindow(window);
 }
 /*
 double time_since_last_tick(void) {

@@ -47,8 +47,7 @@ void set_background(SDL_Renderer *renderer, TTF_Font *font);
 /*
 * Initializes the start screen with buttons.
 * @param renderer the SDL renderer that will draw text
-* @param width the width of the window
-* @param height the height of the window
+* @font the font to draw text in
 * @return an integer representing which text was clicked
 */
 int start_screen(SDL_Renderer *renderer, TTF_Font *font);
@@ -56,11 +55,10 @@ int start_screen(SDL_Renderer *renderer, TTF_Font *font);
 /*
 * Initializes the end game screen with buttons.
 * @param renderer the SDL renderer that will draw text
-* @param width the width of the window
-* @param height the height of the window
+* @font the font to draw text in
 * @return an integer representing which text was clicked
 */
-int end_screen(SDL_Renderer *renderer, int width, int height, TTF_Font *font);
+int end_screen(SDL_Renderer *renderer, TTF_Font *font);
 
 /*
 * Handles buttons and returns an integer corresponding to the number of the

@@ -4,7 +4,6 @@ TTF_Font *load_font(int font_size) {
     char *font_path = SDL_GetBasePath();
     const char *font_str = "ostrich-regular.ttf";
     snprintf(font_path, 100, "%s", font_str);
-    printf("path: %s\n", font_path);
 
     TTF_Font *font = TTF_OpenFont(font_path, font_size);
     if (font == NULL) {
@@ -26,16 +25,11 @@ SDL_Rect *make_rect(int x_pos, int y_pos, int width, int height) {
     return rect;
 }
 
-SDL_Surface *display_text(SDL_Renderer *renderer, char *text, TTF_Font *font,
+void display_text(SDL_Renderer *renderer, char *text, TTF_Font *font,
                             SDL_Rect *rect) {
     //get vector instead of x and y pos, then use sdl_wrapper scaling
     //or change scene so coordinates match up with sdl pixel coordinates
-    SDL_Color color = {0, 0, 0, 0}; //white
 
-    if (font == NULL) {
-        printf("font null");
-        exit(1);
-    }
     SDL_Surface *text_surface = TTF_RenderText_Solid(font, text, color);
     if (text_surface == NULL) {
         printf("TTF_Render: %s\n", TTF_GetError());
@@ -45,13 +39,12 @@ SDL_Surface *display_text(SDL_Renderer *renderer, char *text, TTF_Font *font,
     SDL_Texture *texture = SDL_CreateTextureFromSurface(renderer, text_surface);
 
     SDL_RenderCopy(renderer, texture, NULL, rect);
-    // SDL_RenderPresent(renderer);
     sdl_show(renderer);
-    //SDL_Delay(10000);
 
     free(rect);
     SDL_DestroyTexture(texture);
-    return text_surface;
+    SDL_FreeSurface(text_surface);
+    return;
 }
 
 void set_background(SDL_Renderer *renderer, TTF_Font *font) {
@@ -68,26 +61,11 @@ void set_background(SDL_Renderer *renderer, TTF_Font *font) {
 }
 
 int start_screen(SDL_Renderer *renderer, TTF_Font *font) {
-    set_background(renderer, font);
-    int font_size = 20;
-    SDL_Color black = {255, 255, 255};
-    SDL_Color white = {0, 0, 0};
-
-
-    // TESTING TEXT
-    /*SDL_Rect *rect = make_rect(WIDTH/2 - TEXT_WIDTH/2, HEIGHT/2 - TEXT_HEIGHT/2,
-                                TEXT_WIDTH, TEXT_HEIGHT);
-    SDL_Surface *surface = test_display_text(renderer, "HELLO", font, rect);
-    sdl_render_scene(scene, renderer, surface, NULL, rect, NULL);*/
-
-
-    //set background to black
-    //set_background(renderer, 0, 0, 0);
-
     char *title = "PONG";
     char *text1 = "Single player";
-    char *text2 = "Demo mode";
-    int num_buttons = 2;
+    char *text2 = "Two-player";
+    char *text3 = "Demo mode";
+    int num_buttons = 3;
 
     //set positioning rectangles
     /*SDL_Rect *rect_title = make_rect(TITLE_X, TITLE_Y, TITLE_WIDTH, TITLE_HEIGHT);
@@ -95,22 +73,24 @@ int start_screen(SDL_Renderer *renderer, TTF_Font *font) {
     SDL_Rect *rect2 = make_rect(TEXT_X, TEXT_Y_START + (2 * TEXT_HEIGHT),
                     TEXT_WIDTH, TEXT_HEIGHT);*/
 
-    printf("(%d, %d, %d, %d)", WIDTH/2 - TITLE_WIDTH, HEIGHT/2 - TITLE_HEIGHT, TITLE_WIDTH, TITLE_HEIGHT);
     SDL_Rect *rect_title = make_rect(WIDTH/2 - TITLE_WIDTH, HEIGHT/2 - TITLE_HEIGHT, TITLE_WIDTH, TITLE_HEIGHT);
     SDL_Rect *rect1 = make_rect(TEXT_X, TEXT_Y_START, TEXT_WIDTH, TEXT_HEIGHT);
-    SDL_Rect *rect2 = make_rect(TEXT_X, TEXT_Y_START + (2 * TEXT_HEIGHT),
+    SDL_Rect *rect2 = make_rect(TEXT_X, TEXT_Y_START + (TEXT_HEIGHT),
+                    TEXT_WIDTH, TEXT_HEIGHT);
+    SDL_Rect *rect3 = make_rect(TEXT_X, TEXT_Y_START + (2 * TEXT_HEIGHT),
                     TEXT_WIDTH, TEXT_HEIGHT);
 
     //display title to start screen
-    test_display_text(renderer, title, font, rect_title, white);
+    display_text(renderer, title, font, rect_title, WHITE);
     //display play modes
-    test_display_text(renderer, text1, font, rect1, white);
-    test_display_text(renderer, text2, font, rect2, white);
-    //sdl_render_scene(scene, renderer, surface, NULL, rect, NULL);
+    display_text(renderer, text1, font, rect1, WHITE);
+    display_text(renderer, text2, font, rect2, WHITE);
+    display_text(renderer, text2, font, rect2, WHITE);
 
     free(rect_title);
     free(rect1);
     free(rect2);
+    free(rect3);
     return 0;
 
     //1 if single player, 2 if demo mode, 0 if no press
@@ -118,7 +98,7 @@ int start_screen(SDL_Renderer *renderer, TTF_Font *font) {
 }
 
 //after calling this, call display_text on the scores to overlay them
-int end_screen(SDL_Renderer *renderer, int width, int height, TTF_Font *font) {
+int end_screen(SDL_Renderer *renderer, TTF_Font *font) {
     set_background(renderer, font);
     int font_size = 20;
     SDL_Color black = {255, 255, 255, 0};
