@@ -189,7 +189,7 @@ void create_ai(Scene *scene, Paddle *paddle, Body *target, AiDifficulty diff){
 
   switch (diff) {
    case EASY:
-    ai_time = 0.1;
+    ai_time = 0.3;
     break;
 
    case MEDIUM:

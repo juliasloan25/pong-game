@@ -5,6 +5,7 @@
 #include "body.h"
 #include "constants.h"
 #include <time.h>
+#include "paddle.h"
 
 typedef enum {
     EASY,
@@ -12,7 +13,7 @@ typedef enum {
     HARD,
 } AiDifficulty;
 
-void set_paddle_vel(Body *paddle, Body *ball, Vector axis);
+void set_paddle_vel(Paddle *paddle, Body *ball);
 
 double time_since_last_ai_tick(void);
 
