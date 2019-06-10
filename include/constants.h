@@ -32,6 +32,7 @@ extern const int TEXT_X;
 extern const int TEXT_Y_START;
 extern const int TEXT_WIDTH;
 extern const int TEXT_HEIGHT;
+extern const int SCORE_WIDTH;
 
 extern const int SCORE_Y;
 extern const int LEFT_SCORE_X;

@@ -8,7 +8,7 @@ int main(int argc, char **argv){
     SDL_Renderer *renderer = window_init();
     TTF_Font *font = load_font(FONT_SIZE);
 
-    /*int button_num = start_screen(renderer, font);
+    int button_num = start_screen(renderer, font);
     printf("%d\n", button_num);
     //if (button_num == 0) {
     //    SDL_Delay(2000);
@@ -18,15 +18,6 @@ int main(int argc, char **argv){
     close_window();
     scene = scene_init();
     renderer = window_init();
-
-    button_num = end_screen(renderer, font);
-    SDL_Delay(2000);
-
-    //reset window and scene
-    close_window();
-    scene = scene_init();
-    renderer = window_init();*/
-
 
     //creates two paddles and initializes them on either side of the screen
     BodyType *paddle_one_type = malloc(sizeof(BodyType));
@@ -60,12 +51,16 @@ int main(int argc, char **argv){
     //initialize scores and AI timer
     int left_score = 0,  //score of player with left paddle
         right_score = 0; //score of player with right paddle
+    char left_score_str[4];
+    char right_score_str[4];
+    snprintf(left_score_str, 10, "%d", left_score);
+    snprintf(right_score_str, 10, "%d", right_score);
     double ai_timer = 0;
 
 
-    SDL_Rect *rect_right = make_rect(RIGHT_SCORE_X, SCORE_Y, TEXT_WIDTH,
+    SDL_Rect *rect_right = make_rect(RIGHT_SCORE_X, SCORE_Y, SCORE_WIDTH,
                                 TEXT_HEIGHT);
-    SDL_Rect *rect_left = make_rect(LEFT_SCORE_X, SCORE_Y, TEXT_WIDTH,
+    SDL_Rect *rect_left = make_rect(LEFT_SCORE_X, SCORE_Y, SCORE_WIDTH,
                                 TEXT_HEIGHT);
 
     //display_text(renderer, " ", font, rect_right);
@@ -79,38 +74,43 @@ int main(int argc, char **argv){
 
         if(ball_hit_side == 'l'){ //add point to right player
             right_score++;
-            char right_score_str[4];
             right_score_str[0] = '\0';
             snprintf(right_score_str, 10, "%d", right_score);
+            printf("right score: %s\n", right_score_str);
 
-            rect_right = make_rect(RIGHT_SCORE_X, SCORE_Y, TEXT_WIDTH,
-                                        TEXT_HEIGHT);
+            //rect_right = make_rect(RIGHT_SCORE_X, SCORE_Y, TEXT_WIDTH,
+            //                            TEXT_HEIGHT);
 
+            reset(scene);
             //display the updated right score
             display_text(renderer, right_score_str, font,
                             rect_right, BLACK);
             sdl_render_scene(scene, renderer);
-            reset(scene);
         }
         else if (ball_hit_side == 'r') { //add point to left player
             left_score++;
-            char left_score_str[4];
             left_score_str[0] = '\0';
             snprintf(left_score_str, 10, "%d", left_score);
+            printf("left score: %s\n", left_score_str);
 
-            rect_left = make_rect(LEFT_SCORE_X, SCORE_Y, TEXT_WIDTH,
-                                        TEXT_HEIGHT);
+            //rect_left = make_rect(LEFT_SCORE_X, SCORE_Y, TEXT_WIDTH,
+            //                            TEXT_HEIGHT);
 
+            reset(scene);
             //display the updated right score
             display_text(renderer, left_score_str, font,
                             rect_left, BLACK);
             sdl_render_scene(scene, renderer);
-            reset(scene);
         }
         if(ai_timer > 0.01){
             ai_timer = 0;
             set_paddle_vel(paddle_two, ball, PADDLE_VEL);
         }
+
+        display_text(renderer, right_score_str, font,
+                        rect_right, BLACK);
+        display_text(renderer, left_score_str, font,
+                        rect_left, BLACK);
 
         //render and update scene at every tick
         scene_tick(scene, wait_time);
@@ -118,9 +118,19 @@ int main(int argc, char **argv){
 
         // end game if either score reaches 10
         if (right_score >= 10 || left_score >= 10 || scene_get_end(scene)){
-            break;
+            //reset window and scene
+            close_window();
+            scene = scene_init();
+            renderer = window_init();
+
+            button_num = end_screen(renderer, font);
+            if (button_num == 0) {
+              break;
+            }
         }
     }
+
+    //SDL_Delay(2000);
 
     //free all elements of scene and the renderer
     free(rect_left);

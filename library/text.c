@@ -128,24 +128,26 @@ int end_screen(SDL_Renderer *renderer, TTF_Font *font) {
 
 int handle_buttons(int num_buttons) {
     SDL_Event e;
-    for (int i = 1; i <= num_buttons; i++) {
-        while(SDL_PollEvent(&e)) {
-            SDL_MouseButtonEvent mbe = e.button;
-            switch(mbe.type) {
-                case SDL_QUIT:
-                    break;
-                case SDL_MOUSEBUTTONDOWN:
+    while(SDL_PollEvent(&e)) {
+      for (int i = 1; i <= num_buttons; i++) {
+          SDL_MouseButtonEvent mbe = e.button;
+          switch(mbe.type) {
+              case SDL_QUIT:
+                  break;
+              case SDL_MOUSEBUTTONDOWN:
                   switch(e.button.button){
-                    case SDL_BUTTON_LEFT:
-                      if ((mbe.x >= TEXT_X && mbe.x <= TEXT_X + TEXT_WIDTH) &&
-                          (mbe.y >= i * TEXT_Y_START && mbe.y < i * TEXT_Y_START + TEXT_HEIGHT)) {
-                              return i;
-                        }
-                        break;
-                    case SDL_BUTTON_RIGHT:
-                       continue;
+                      case SDL_BUTTON_LEFT:
+                          if ((mbe.x >= TEXT_X && mbe.x <= TEXT_X + TEXT_WIDTH) &&
+                              (mbe.y >= TEXT_Y_START + TEXT_HEIGHT * (i - 1) && mbe.y <
+                                  TEXT_Y_START + TEXT_HEIGHT * i)) {
+                                  return i;
+                          }
+                          else if (i == num_buttons){
+                              break;
+                          }
+                      case SDL_BUTTON_RIGHT:
+                          continue;
                       }
-                      break;
             }
         }
     }

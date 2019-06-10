@@ -20,10 +20,11 @@ const int TEXT_WIDTH = WIDTH / 4;
 const int TEXT_HEIGHT = HEIGHT / 8;
 const int TEXT_X = WIDTH / 2 - TEXT_WIDTH / 2;
 const int TEXT_Y_START = 250;
+const int SCORE_WIDTH = TEXT_WIDTH / 4;
 
-const int SCORE_Y = 20; //top side of scores
-const int LEFT_SCORE_X = WIDTH/2 - 2*TEXT_WIDTH; //left side of player 1 score
-const int RIGHT_SCORE_X = WIDTH/2 + 2*TEXT_WIDTH; //left side of player 2 score
+const int SCORE_Y = 5; //top side of scores
+const int LEFT_SCORE_X = TEXT_WIDTH / 2; //left side of player 1 score
+const int RIGHT_SCORE_X = WIDTH - TEXT_WIDTH; //left side of player 2 score
 
 const SDL_Color BLACK = {0, 0, 0, 255};
 const SDL_Color WHITE = {255, 255, 255, 255};
