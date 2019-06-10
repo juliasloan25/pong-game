@@ -12,9 +12,6 @@
 #include <stdbool.h>
 #include <math.h>
 
-
-#include "text_simple.h"
-
 /*
 * The possible types of bodies to make.
 */
@@ -48,7 +45,8 @@ Body *make_body(BodyType *type, Vector center);
 * @param held_time The amount of time the key is held down for
 * @param scene The scene that the key presses will impact
 */
-void on_key(char key, KeyEventType type, double held_time, Scene *scene);
+void on_key(char key, KeyEventType type, double held_time, Scene *scene,
+                                            int num_users, int num_players);
 
 /*
 * @brief Handles if ships move offscreen. If one of the paddles are offscreen,
@@ -64,7 +62,5 @@ char move_if_offscreen(Body *paddle_one, Body *paddle_two, Body *ball);
 */
 void reset(Scene *scene);
 
-Paddle **create_paddles(Scene *scene, int num_players, int num_users,
-                        AiDifficulty difficulty, Body *polygon);
 
 #endif // #ifndef __PONG_H__

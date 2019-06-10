@@ -6,6 +6,7 @@
 #include "collision.h"
 #include <math.h>
 #include <stdio.h>
+#include "ai.h"
 
 
 /**
@@ -19,6 +20,7 @@
 typedef void (*CollisionHandler)
     (Body *body1, Body *body2, Vector axis, void *aux);
 
+
 /**
  * Adds a Newtonian gravitational force between two bodies in a scene.
  * See https://en.wikipedia.org/wiki/Newton%27s_law_of_universal_gravitation#Vector_form.
@@ -30,7 +32,8 @@ typedef void (*CollisionHandler)
  * @param body1 the first body
  * @param body2 the second body
  */
-void create_newtonian_gravity(Scene *scene, double G, Body *body1, Body *body2);
+void create_newtonian_gravity(Scene *scene, double G, Body *body1, Body *body2,
+                                                    bool force_on_body2);
 
 /**
  * Adds a Hooke's-Law spring force between two bodies in a scene.
@@ -78,6 +81,9 @@ void create_collision(
     FreeFunc freer
 );
 
+void create_ai(Scene *scene, Body *smart, Body *target, AiDifficulty diff);
+
+void pong_ai(void *aux);
 
 /**
  * Adds a ForceCreator to a scene that destroys two bodies when they collide.

@@ -105,15 +105,16 @@ int start_screen(SDL_Renderer *renderer, TTF_Font *font) {
 //after calling this, call display_text on the scores to overlay them
 int end_screen(SDL_Renderer *renderer, TTF_Font *font) {
     char *text0 = "GAME OVER";
-    char *text1 = "Play again?"; //If selected, return to start screen
-    int num_buttons = 1;
+    //char *text1 = "Play again?"; //If selected, return to start screen
+    //int num_buttons = 1;
+    int num_buttons = 0;
 
     SDL_Rect *rect_title = make_rect(TITLE_X, TITLE_Y, TITLE_WIDTH, TITLE_HEIGHT);
-    SDL_Rect *rect1 = make_rect(TEXT_X, TEXT_Y_START, TEXT_WIDTH, TEXT_HEIGHT);
+    //SDL_Rect *rect1 = make_rect(TEXT_X, TEXT_Y_START, TEXT_WIDTH, TEXT_HEIGHT);
 
     //display text to screen
     display_text(renderer, text0, font, rect_title, WHITE);
-    display_text(renderer, text1, font, rect1, WHITE);
+    //display_text(renderer, text1, font, rect1, WHITE);
 
     int button_num = handle_buttons(num_buttons);
     while(button_num == 0) {
@@ -122,8 +123,8 @@ int end_screen(SDL_Renderer *renderer, TTF_Font *font) {
     }
 
     free(rect_title);
-    free(rect1);
-    return handle_buttons(num_buttons);
+    //free(rect1);
+    return button_num;
 }
 
 int difficulty_screen(SDL_Renderer *renderer, TTF_Font *font) {
@@ -170,23 +171,18 @@ int handle_buttons(int num_buttons) {
               case SDL_MOUSEBUTTONDOWN:
                   switch(e.button.button){
                       case SDL_BUTTON_LEFT:
-                      if(i<num_buttons){
+                      if(i <= num_buttons){
                           if ((mbe.x >= TEXT_X && mbe.x <= TEXT_X + TEXT_WIDTH) &&
                               (mbe.y >= TEXT_Y_START + TEXT_HEIGHT * (i - 1) && mbe.y <
                                   TEXT_Y_START + TEXT_HEIGHT * i)) {
-                                  return i;
-                            }
-                          }
-                          else if (i == num_buttons){
-                              return 1;
-                          }
+                          return i;
+                      }
                       case SDL_BUTTON_RIGHT:
                           continue;
                       }
-            }
+              }
         }
     }
-    //no button press - would this just be infinite loop?
-    //keep track of time and exit after certain amount?
+  }
     return 0;
 }

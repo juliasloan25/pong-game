@@ -1,8 +1,10 @@
 #include "forces.h"
+#include <time.h>
 
 typedef struct grav_param{
     double G;
     List *bodies;
+    bool force_on_body2;
 }GravParam;
 
 typedef struct spring_param{
@@ -23,7 +25,13 @@ typedef struct coll_param{
     bool collided_bef;
 }CollParam;
 
-
+typedef struct ai_param{
+  List *bodies;
+  double check_time;
+  double time_since_check;
+  Vector axis;
+  FreeFunc freef;
+}AiParam;
 
 /**
 * @brief ForceCreator function that adds a newtonian gravity force between two bodies
@@ -55,6 +63,8 @@ void drag(void *aux);
 */
 void collision(void *aux);
 
+void pong_ai(void *aux);
+
 /**
 * @brief Frees CollParam object
 *
@@ -74,7 +84,8 @@ void destructive_collision(Body *body1, Body *body2, Vector axis, void *aux);
 */
 void physics_collision(Body *body1, Body *body2, Vector axis, void *aux);
 
-void create_newtonian_gravity(Scene *scene, double G, Body *body1, Body *body2){
+void create_newtonian_gravity(Scene *scene, double G, Body *body1, Body *body2,
+                                    bool force_on_body2){
     GravParam* grav = malloc(sizeof(GravParam));
     grav->G = G;
     List *grav_bodies = list_init(2, (FreeFunc)free, NULL);
@@ -88,6 +99,8 @@ void create_newtonian_gravity(Scene *scene, double G, Body *body1, Body *body2){
     list_add(grav_bodies, (void *)body1_point);
     list_add(grav_bodies, (void *)body2_point);
     grav->bodies = grav_bodies;
+
+    grav->force_on_body2 = force_on_body2;
 
     scene_add_bodies_force_creator(scene, (ForceCreator)newtonian_gravity, grav,
                                             (FreeFunc)free, grav_bodies);
@@ -111,7 +124,7 @@ void create_spring(Scene *scene, double k, Body *body1, Body *anchor){
 
     scene_add_bodies_force_creator(scene, (ForceCreator)spring, new_spring,
                                             (FreeFunc)free, spring_bodies);
-}
+}/* expression */
 
 void create_drag(Scene *scene, double gamma, Body *body){
     DragParam* new_drag = malloc(sizeof(DragParam));
@@ -169,6 +182,46 @@ void create_physics_collision(Scene *scene, double elasticity, Body *body1, Body
     create_collision(scene, body1, body2, (CollisionHandler)physics_collision, elas, free);
 }
 
+void create_ai(Scene *scene, Body *smart, Body *target, AiDifficulty diff){
+    AiParam *new_ai = malloc(sizeof(AiParam));
+    double ai_time;
+
+    switch (diff) {
+       case EASY:
+          ai_time = 0.05;
+          break;
+
+       case MEDIUM:
+          ai_time = 0.01;
+          break;
+
+       case HARD:
+          ai_time = 0.005;
+          break;
+    }
+
+    List *ai_bodies = list_init(2, NULL, NULL);
+    list_add(ai_bodies, smart);
+    list_add(ai_bodies, target);
+    new_ai->bodies = ai_bodies;
+    new_ai->check_time = ai_time;
+    new_ai->time_since_check = 0;
+    scene_add_bodies_force_creator(scene, (ForceCreator) pong_ai, new_ai, (FreeFunc)free, ai_bodies);
+}
+
+void pong_ai(void *aux){
+    AiParam *ai = (AiParam *)aux;
+    List *ai_bodies = ai->bodies;
+    Body *paddle = (Body *)list_get(ai_bodies, 0);
+    Body *ball = (Body *)list_get(ai_bodies, 1);
+    if(ai->time_since_check > ai->check_time){
+        set_paddle_vel(paddle, ball);
+        ai->time_since_check = 0;
+        return;
+    }
+    ai->time_since_check += time_since_last_ai_tick();
+}
+
 
 void collision(void *aux){
     CollParam *coll = (CollParam *)aux;
@@ -200,7 +253,9 @@ void newtonian_gravity(void *aux){
         Vector force = vec_multiply(force_mag, unit_dist);
 
         body_add_force(Body1, force);
-        body_add_force(Body2, vec_negate(force));
+        if(grav->force_on_body2){
+            body_add_force(Body2, vec_negate(force));
+        }
     }
 }
 
@@ -272,6 +327,8 @@ void physics_collision(Body *body1, Body *body2, Vector axis, void *aux){
     list_free(shape1);
     list_free(shape2);
 }
+
+
 
 void free_coll_param(CollParam *coll){
     if(coll->aux != NULL && coll->freef != NULL){
