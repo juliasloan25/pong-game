@@ -8,6 +8,7 @@ const double ELASTICITY = 1; //elasticity of collisions
 const double PADDLE_VEL = 600.0; //velocity that the paddle can go
 const double MASS = 50.0; //mass of all objects
 const double BALL_VEL = 700.0; // initial velocity of ball
+const int FONT_SIZE = 20;
 
 const int WIDTH = 800; //screen width
 const int HEIGHT = 600; //screen height
@@ -20,9 +21,9 @@ const int TEXT_HEIGHT = HEIGHT / 8;
 const int TEXT_X = WIDTH / 2 - TEXT_WIDTH / 2;
 const int TEXT_Y_START = 250;
 
-const int SCORE_Y = HEIGHT - 10; //top side of scores
-const int LEFT_SCORE_X = (WIDTH / 2) - 2*TEXT_WIDTH; //left side of player 1 score
-const int RIGHT_SCORE_X = (WIDTH / 2) + 2*TEXT_WIDTH; //left side of player 2 score
+const int SCORE_Y = 20; //top side of scores
+const int LEFT_SCORE_X = WIDTH/2 - 2*TEXT_WIDTH; //left side of player 1 score
+const int RIGHT_SCORE_X = WIDTH/2 + 2*TEXT_WIDTH; //left side of player 2 score
 
 const SDL_Color BLACK = {0, 0, 0, 255};
 const SDL_Color WHITE = {255, 255, 255, 255};

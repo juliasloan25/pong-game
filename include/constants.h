@@ -21,6 +21,7 @@ extern const double ELASTICITY; //elasticity of collisions
 extern const double PADDLE_VEL; //velocity that the paddle can go
 extern const double MASS; //mass of all objects
 extern const double BALL_VEL; // initial velocity of ball
+extern const int FONT_SIZE;
 
 extern const int TITLE_X;
 extern const int TITLE_Y;

@@ -6,8 +6,7 @@ int main(int argc, char **argv){
     //initialize scene and window
     Scene *scene = scene_init();
     SDL_Renderer *renderer = window_init();
-    int font_size = 20;
-    TTF_Font *font = load_font(font_size);
+    TTF_Font *font = load_font(FONT_SIZE);
 
     /*int button_num = start_screen(renderer, font);
     printf("%d\n", button_num);
@@ -120,29 +119,22 @@ int main(int argc, char **argv){
         scene_tick(scene, wait_time);
         sdl_render_scene(scene, renderer);
 
-
-        //sdl_render_scene(scene, renderer, surface_left, surface_right,
-            //rect_left, rect_right);
-        //sdl_render_scene(scene, renderer);
-
         // end game if either score reaches 10
         if (right_score >= 10 || left_score >= 10 || scene_get_end(scene)){
             break;
         }
     }
 
-    close_window();
     //free all elements of scene and the renderer
     free(rect_left);
     free(rect_right);
-
-    //TESTING TEXT
-    //SDL_Delay(10000);
-    //SDL_FreeSurface(surface);
-    //free(rect);
+    body_free(paddle_one);
+    body_free(paddle_two);
+    body_free(ball);
     scene_free(scene);
     SDL_DestroyRenderer(renderer);
     TTF_CloseFont(font); //CHANGE IN NON-SIMPLE
+    close_window();
     TTF_Quit();
     SDL_Quit();
     return 1;
@@ -228,6 +220,7 @@ Body *make_body(BodyType *type, Vector center){
     body_set_centroid(body,center);
     body_set_velocity(body,velocity);
 
+    //free(type);
     return body;
 }
 

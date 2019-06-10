@@ -33,7 +33,6 @@ void set_background(SDL_Renderer *renderer, TTF_Font *font) {
     //sdl_render_scene(scene, renderer, background, NULL, bkgrd_rect, NULL);
     SDL_Delay(100);
     free(bkgrd_rect);
-
     //need to close window when done?
 }
 
@@ -105,7 +104,6 @@ int start_screen(SDL_Renderer *renderer, TTF_Font *font) {
 
 //after calling this, call display_text on the scores to overlay them
 int end_screen(SDL_Renderer *renderer, TTF_Font *font) {
-
     char *text0 = "GAME OVER";
     char *text1 = "Play again?"; //If selected, return to start screen
     int num_buttons = 1;
@@ -125,7 +123,6 @@ int end_screen(SDL_Renderer *renderer, TTF_Font *font) {
 
     free(rect_title);
     free(rect1);
-
     return handle_buttons(num_buttons);
 }
 
@@ -149,11 +146,9 @@ int handle_buttons(int num_buttons) {
                        continue;
                       }
                       break;
-
             }
         }
     }
-
     //no button press - would this just be infinite loop?
     //keep track of time and exit after certain amount?
     return 0;
