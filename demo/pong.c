@@ -5,7 +5,7 @@ const double HEIGHT = 800; //screen height
 const double BALL_RADIUS = 10.0; //radius of pong ball
 const double GRAV_RADIUS = 15.0;
 const double PADDLE_HEIGHT = 100.0; //width of the pong paddle
-const double PADDLE_WIDTH = 20.0; // height of the pong paddle
+const double PADDLE_WIDTH = 30.0; // height of the pong paddle
 const double BOUNCE_HEIGHT = 10.0;
 const double BOUNCE_WIDTH = 80.0;
 const double COLOR_INTERVAL = 2.0;
@@ -51,7 +51,7 @@ const Vector ball_center = {
     .x = WIDTH / 2.0,
     .y = HEIGHT/ 2.0
 }; //initial and reset center of the ball
-const double G = 7000.0; //gravity for obstacle
+const double G = 6500.0; //gravity for obstacle
 
 
 int main(int argc, char **argv){
