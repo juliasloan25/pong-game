@@ -8,11 +8,11 @@
 #include "body.h"
 #include "forces.h"
 #include "scene.h"
+#include "paddle.h"
 #include "collision.h"
 #include "ai.h"
 #include <stdbool.h>
 #include <math.h>
-
 
 /*
 * The possible types of bodies to make.
@@ -33,8 +33,6 @@ typedef enum {
 */
 void window_init();
 
-void mouse_motion( Scene *scene, Body *body, int y_position);
-
 /*
 * @brief Creates and returns a body object based off its BodyType
 *
@@ -44,7 +42,7 @@ void mouse_motion( Scene *scene, Body *body, int y_position);
 */
 Body *make_body(BodyType *type, Vector center);
 
-Body ** create_paddles(Scene *scene, int num_players, int num_users, AiDifficulty difficulty);
+Paddle **create_paddles(Scene *scene, int num_players, int num_users, AiDifficulty difficulty);
 
 /*
 * @brief Handles key events. Left and right arrows move the shooter and the
@@ -72,7 +70,7 @@ int move_if_offscreen(Body *paddle_one, Body *paddle_two, Body *ball);
 */
 void reset(Scene *scene);
 
-void reset_obstacles(Body *bounce, Body *grav);
+void reset_obstacles(Body *bounce, Body *grav, Body *ball);
 
 RGBColor get_color(int shape_index);
 

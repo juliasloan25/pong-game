@@ -1,6 +1,4 @@
 #include "pong.h"
-#include <SDL2/SDL.h>
-
 
 const double WIDTH = 800; //screen width
 const double HEIGHT = 800; //screen height
@@ -53,7 +51,7 @@ const Vector ball_center = {
     .x = WIDTH / 2.0,
     .y = HEIGHT/ 2.0
 }; //initial and reset center of the ball
-const double G = 8000.0; //gravity for obstacle
+const double G = 7000.0; //gravity for obstacle
 
 
 int main(int argc, char **argv){
@@ -92,15 +90,15 @@ int main(int argc, char **argv){
     double rotation_angle = 0;
     if(num_players <= 4){
         *(polygon_type) = SQUARE;
-        rotation_angle = M_PI / 4;
+        rotation_angle = 3 * M_PI / 4;
     }
     else if(num_players == 6){
         *(polygon_type) = HEXAGON;
-        rotation_angle = M_PI / 6;
+        rotation_angle = 5 * M_PI / 6;
     }
     else{
         *(polygon_type) = OCTOGON;
-        rotation_angle = M_PI / 8;
+        rotation_angle = 7 * M_PI / 8;
     }
     Body *polygon = make_body(polygon_type, (Vector) {WIDTH/2, HEIGHT/2});
     body_set_rotation(polygon, rotation_angle); //to place polygon upright
@@ -113,7 +111,7 @@ int main(int argc, char **argv){
     scene_add_body(scene, ball);
 
     //create paddles
-    Body **paddles = create_paddles(scene, num_players, num_users, difficulty);
+    Paddle **paddles = create_paddles(scene, num_players, num_users, difficulty);
 
     //create obstacles
     BodyType *bounce_type = malloc(sizeof(BodyType));
@@ -126,16 +124,11 @@ int main(int argc, char **argv){
     Body *grav = make_body(grav_type, VEC_ZERO);
     scene_add_body(scene, grav);
 
-    reset_obstacles(bounce, grav);
+    reset_obstacles(bounce, grav, ball);
 
     //create forces between obstacles and ball
     create_physics_collision(scene, ELASTICITY, bounce, ball);
     create_newtonian_gravity(scene, G, ball, grav, false);
-
-     /*if(MOUSE_MOVED){
-        Body * paddle_one  = scene_get_body(scene,0);
-        body_set_centroid(paddle_one, (Vector){paddle_one_center.x, return_mouse_y_position(scene)});
-      }*/
 
     window_init();
     sdl_on_key(on_key);
@@ -159,10 +152,11 @@ int main(int argc, char **argv){
         if(ball_hit_side != -1){
             scores[ball_hit_side]++;
             reset(scene);
+            reset_obstacles(bounce, grav, ball);
         }
 
         if(obstacle_timer >= OBSTACLE_INTERVAL){
-            reset_obstacles(bounce, grav);
+            reset_obstacles(bounce, grav, ball);
             obstacle_timer = 0;
         }
 
@@ -317,8 +311,8 @@ Body *make_body(BodyType *type, Vector center){
     return body;
 }
 
-Body ** create_paddles(Scene *scene, int num_players, int num_users, AiDifficulty difficulty){
-    Body **paddles = malloc(sizeof(Body *) * num_players);
+Paddle **create_paddles(Scene *scene, int num_players, int num_users, AiDifficulty difficulty){
+    Paddle **paddles = malloc(sizeof(Paddle *) * num_players);
     Body *ball = scene_get_body(scene, 1);
     for(int i = 0; i < num_players; i++){
         BodyType *paddle_type = malloc(sizeof(BodyType));
@@ -341,7 +335,7 @@ Body ** create_paddles(Scene *scene, int num_players, int num_users, AiDifficult
         if(i >= num_users){
             create_ai(scene, paddle, ball, difficulty);
         }
-        paddles[0] = paddle;
+        paddles[i] = paddle_init(paddle, paddle_center, VEC_ZERO, VEC_ZERO, VEC_ZERO);
     }
     return paddles;
 }
@@ -511,7 +505,7 @@ void reset(Scene *scene){
     body_set_velocity(ball, (Vector){BALL_VEL, 0});
 }
 
-void reset_obstacles(Body *bounce, Body *grav){
+void reset_obstacles(Body *bounce, Body *grav, Body *ball){
     Vector bounce_center = {
         .x = rand() / (RAND_MAX / (WIDTH / 2.0 + 1) + 1) + WIDTH / 4.0,
         .y = rand() / (RAND_MAX / (HEIGHT / 2.0 + 1) + 1) + HEIGHT / 4.0
@@ -528,9 +522,10 @@ void reset_obstacles(Body *bounce, Body *grav){
     double angle = degree * (M_PI/ 180.0);
     body_set_rotation(bounce, angle);
 
-    CollisionInfo coll = find_collision(body_get_shape(bounce), body_get_shape(grav));
-    if(coll.collided){
-        reset_obstacles(bounce, grav);
+    CollisionInfo coll1 = find_collision(body_get_shape(bounce), body_get_shape(grav));
+    CollisionInfo coll2 = find_collision(body_get_shape(bounce), body_get_shape(ball));
+    if(coll1.collided || coll2.collided){
+        reset_obstacles(bounce, grav, ball);
     }
 }
 
@@ -540,8 +535,8 @@ RGBColor get_color(int shape_index){
 
     //Use sin functions with a shift to rotate through colors of the rainbow
     RGBColor color;
-    color.r = fabs(sin(frequency * shape_index));
-    color.g = fabs(sin(frequency * shape_index + (M_PI / 3.0)));
+    color.r = fabs(sin(frequency * shape_index + (M_PI / 3.0)));
+    color.g = fabs(sin(frequency * shape_index));
     color.b = fabs(sin(frequency * shape_index + (2.0 * M_PI / 3.0)));
 
     return color;
