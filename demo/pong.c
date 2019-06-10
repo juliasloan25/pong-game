@@ -366,14 +366,17 @@ Paddle **create_paddles(Scene *scene, int num_players, int num_users, AiDifficul
             body_set_rotation(paddle, angle * i);
             scene_add_body(scene, paddle);
             create_physics_collision(scene, ELASTICITY, paddle, ball);
-            /*if(i >= num_users){
-                create_ai(scene, paddle, ball, difficulty);
-            }*/
+            Paddle *paddle_obj;
             if(num_players == 2){
-                paddles[i / 2] = paddle_init(paddle, paddle_center, axis, point1, point2);
+                paddle_obj = paddle_init(paddle, paddle_center, axis, point1, point2);
+                paddles[i / 2] = paddle_obj;
             }
             else{
-                paddles[i] = paddle_init(paddle, paddle_center, axis, point1, point2);
+                paddle_obj = paddle_init(paddle, paddle_center, axis, point1, point2);
+                paddles[i] = paddle_obj;
+            }
+            if(!((i == 0 && num_users >= 1) || (i == polygon_size / 2 && num_users == 2))){
+                create_ai(scene, paddle_obj, ball, difficulty);
             }
         }
     }
