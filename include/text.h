@@ -32,8 +32,8 @@ SDL_Rect *make_rect(int x_pos, int y_pos, int width, int height);
 * @param font_size the pixel height of the text
 * @param rect the positioning rectangle for the text
 */
-SDL_Surface *display_text(SDL_Renderer *renderer, char *text, TTF_Font *font,
-                    SDL_Rect *rect);
+void display_text(SDL_Renderer *renderer, char *text, TTF_Font *font,
+                    SDL_Rect *rect, SDL_Color color);
 
 /*
 * Sets the entire background of the window to the given color.
@@ -47,8 +47,7 @@ void set_background(SDL_Renderer *renderer, TTF_Font *font);
 /*
 * Initializes the start screen with buttons.
 * @param renderer the SDL renderer that will draw text
-* @param width the width of the window
-* @param height the height of the window
+* @param font the font to display text in
 * @return an integer representing which text was clicked
 */
 int start_screen(SDL_Renderer *renderer, TTF_Font *font);
@@ -56,11 +55,10 @@ int start_screen(SDL_Renderer *renderer, TTF_Font *font);
 /*
 * Initializes the end game screen with buttons.
 * @param renderer the SDL renderer that will draw text
-* @param width the width of the window
-* @param height the height of the window
+* @param font the font to display text in
 * @return an integer representing which text was clicked
 */
-int end_screen(SDL_Renderer *renderer, int width, int height, TTF_Font *font);
+int end_screen(SDL_Renderer *renderer, TTF_Font *font);
 
 /*
 * Handles buttons and returns an integer corresponding to the number of the

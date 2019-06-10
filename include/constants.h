@@ -36,6 +36,8 @@ extern const int SCORE_Y;
 extern const int LEFT_SCORE_X;
 extern const int RIGHT_SCORE_X;
 
+extern const SDL_Color BLACK; //used for text display
+extern const SDL_Color WHITE; //used for text display
 extern const RGBColor PADDLE_COLOR;
 extern const RGBColor BALL_COLOR;
 extern const Vector paddle_one_center;

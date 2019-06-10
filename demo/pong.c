@@ -11,6 +11,23 @@ int main(int argc, char **argv){
 
     //set_background(renderer, font);
     int button_num = start_screen(renderer, font);
+    if (button_num == 0) {
+    SDL_Delay(2000);
+    }
+
+
+    //reset window and scene
+    close_window();
+    scene = scene_init();
+    renderer = window_init();
+
+    button_num = end_screen(renderer, font);
+    SDL_Delay(2000);
+
+    //reset window and scene
+    close_window();
+    scene = scene_init();
+    renderer = window_init();
 
     // TESTING TEXT
     SDL_Rect *rect = make_rect(WIDTH/2 - TEXT_WIDTH/2, HEIGHT/2 - TEXT_HEIGHT/2,

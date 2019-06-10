@@ -167,4 +167,10 @@ void sdl_on_key(KeyHandler handler);
  */
 double time_since_last_tick(void);
 
+/*
+* Destroys the current window.
+*/
+void close_window();
+
+
 #endif // #ifndef __SDL_WRAPPER_H__
