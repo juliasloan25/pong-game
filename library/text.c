@@ -126,6 +126,39 @@ int end_screen(SDL_Renderer *renderer, TTF_Font *font) {
     return handle_buttons(num_buttons);
 }
 
+int difficulty_screen(SDL_Renderer *renderer, TTF_Font *font) {
+    char *text0 = "CHOOSE A DIFFICULTY";
+    char *text1 = "EASY";
+    char *text2 = "MEDIUM";
+    char *text3 = "HARD";
+    int num_buttons = 3;
+
+    SDL_Rect *rect_title = make_rect(TITLE_X, TITLE_Y, TITLE_WIDTH, TITLE_HEIGHT);
+    SDL_Rect *rect1 = make_rect(TEXT_X, TEXT_Y_START, TEXT_WIDTH, TEXT_HEIGHT);
+    SDL_Rect *rect2 = make_rect(TEXT_X, TEXT_Y_START + (TEXT_HEIGHT),
+                    TEXT_WIDTH, TEXT_HEIGHT);
+    SDL_Rect *rect3 = make_rect(TEXT_X, TEXT_Y_START + (2 * TEXT_HEIGHT),
+                    TEXT_WIDTH, TEXT_HEIGHT);
+
+    //display text to screen
+    display_text(renderer, text0, font, rect_title, WHITE);
+    display_text(renderer, text1, font, rect1, WHITE);
+    display_text(renderer, text2, font, rect2, WHITE);
+    display_text(renderer, text3, font, rect3, WHITE);
+
+    int button_num = handle_buttons(num_buttons);
+    while(button_num == 0) {
+        SDL_Delay(500);
+        button_num = handle_buttons(num_buttons);
+    }
+
+    free(rect_title);
+    free(rect1);
+    free(rect2);
+    free(rect3);
+    return handle_buttons(num_buttons);
+}
+
 int handle_buttons(int num_buttons) {
     SDL_Event e;
     while(SDL_PollEvent(&e)) {
@@ -137,13 +170,15 @@ int handle_buttons(int num_buttons) {
               case SDL_MOUSEBUTTONDOWN:
                   switch(e.button.button){
                       case SDL_BUTTON_LEFT:
+                      if(i<num_buttons){
                           if ((mbe.x >= TEXT_X && mbe.x <= TEXT_X + TEXT_WIDTH) &&
                               (mbe.y >= TEXT_Y_START + TEXT_HEIGHT * (i - 1) && mbe.y <
                                   TEXT_Y_START + TEXT_HEIGHT * i)) {
                                   return i;
+                            }
                           }
                           else if (i == num_buttons){
-                              break;
+                              return 1;
                           }
                       case SDL_BUTTON_RIGHT:
                           continue;
