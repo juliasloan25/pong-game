@@ -25,13 +25,7 @@ SDL_Rect *make_rect(int x_pos, int y_pos, int width, int height) {
     return rect;
 }
 
-<<<<<<< HEAD
-void display_text(SDL_Renderer *renderer, char *text, TTF_Font *font,
-                            SDL_Rect *rect) {
-    //get vector instead of x and y pos, then use sdl_wrapper scaling
-    //or change scene so coordinates match up with sdl pixel coordinates
 
-=======
 void set_background(SDL_Renderer *renderer, TTF_Font *font) {
     SDL_Rect *bkgrd_rect = make_rect(0, 0, WIDTH, HEIGHT);
     //SDL_Surface *background = test_display_text(renderer, " ", font, bkgrd_rect);
@@ -54,7 +48,6 @@ void display_text(SDL_Renderer *renderer, char *text, TTF_Font *font,
         exit(1);
     }
 
->>>>>>> 4066fe875c0f9138f75777db4ca12a263341c7f1
     SDL_Surface *text_surface = TTF_RenderText_Solid(font, text, color);
     if (text_surface == NULL) {
         printf("TTF_Render: %s\n", TTF_GetError());
@@ -66,41 +59,19 @@ void display_text(SDL_Renderer *renderer, char *text, TTF_Font *font,
 
     SDL_RenderCopy(renderer, texture, NULL, rect);
     sdl_show(renderer);
-<<<<<<< HEAD
-=======
-    sdl_render_text(renderer, text_surface, rect);
->>>>>>> 4066fe875c0f9138f75777db4ca12a263341c7f1
+
+    //sdl_render_text(renderer, text_surface, rect);
 
     //free(rect); //CHANGE IN NON-SIMPLE
     SDL_DestroyTexture(texture);
     SDL_FreeSurface(text_surface);
-<<<<<<< HEAD
     return;
-}
-
-void set_background(SDL_Renderer *renderer, TTF_Font *font) {
-    SDL_Color black = {255, 255, 255, 0};
-    SDL_Rect *bkgrd_rect = make_rect(0, 0, WIDTH, HEIGHT);
-    //SDL_Surface *background = test_display_text(renderer, " ", font, bkgrd_rect);
-    test_display_text(renderer, " ", font, bkgrd_rect);
-
-    //sdl_render_scene(scene, renderer, background, NULL, bkgrd_rect, NULL);
-    SDL_Delay(100);
-    free(bkgrd_rect);
-
-    //need to close window when done?
-=======
->>>>>>> 4066fe875c0f9138f75777db4ca12a263341c7f1
 }
 
 int start_screen(SDL_Renderer *renderer, TTF_Font *font) {
     char *title = "PONG";
     char *text1 = "Single player";
-<<<<<<< HEAD
-    char *text2 = "Two-player";
-=======
     char *text2 = "Two player";
->>>>>>> 4066fe875c0f9138f75777db4ca12a263341c7f1
     char *text3 = "Demo mode";
     int num_buttons = 3;
 
@@ -117,54 +88,26 @@ int start_screen(SDL_Renderer *renderer, TTF_Font *font) {
     //display play modes
     display_text(renderer, text1, font, rect1, WHITE);
     display_text(renderer, text2, font, rect2, WHITE);
-<<<<<<< HEAD
-    display_text(renderer, text2, font, rect2, WHITE);
-=======
     display_text(renderer, text3, font, rect3, WHITE);
-    //sdl_render_scene(scene, renderer, surface, NULL, rect, NULL);
->>>>>>> 4066fe875c0f9138f75777db4ca12a263341c7f1
 
-    int button_num = handle_buttons(num_buttons);
+    /*int button_num = handle_buttons(num_buttons);
     while(button_num == 0) {
         SDL_Delay(500);
         button_num = handle_buttons(num_buttons);
-    }
+    }*/
 
     free(rect_title);
     free(rect1);
     free(rect2);
     free(rect3);
-<<<<<<< HEAD
     return 0;
 
     //1 if single player, 2 if demo mode, 0 if no press
     //return handle_buttons(num_buttons);
-=======
-
-    //1 if single player, 2 if two-player, 3 if demo mode, 0 if no press
-    return button_num;
->>>>>>> 4066fe875c0f9138f75777db4ca12a263341c7f1
 }
 
 //after calling this, call display_text on the scores to overlay them
 int end_screen(SDL_Renderer *renderer, TTF_Font *font) {
-<<<<<<< HEAD
-    set_background(renderer, font);
-    int font_size = 20;
-    SDL_Color black = {255, 255, 255, 0};
-    SDL_Color white = {0, 0, 0, 0};
-
-    // TESTING TEXT
-    SDL_Rect *rect = make_rect(WIDTH/2 - TEXT_WIDTH/2, HEIGHT/2 - TEXT_HEIGHT/2,
-                                TEXT_WIDTH, TEXT_HEIGHT);
-    SDL_Surface *surface = test_display_text(renderer, "HELLO", font, rect);
-    //sdl_render_scene(scene, renderer, surface, NULL, rect, NULL);
-
-    //set background to black
-    //set_background(renderer, 0, 0, 0);
-=======
->>>>>>> 4066fe875c0f9138f75777db4ca12a263341c7f1
-
     char *text0 = "GAME OVER";
     char *text1 = "Play again?"; //If selected, return to start screen
     int num_buttons = 1;
@@ -176,16 +119,17 @@ int end_screen(SDL_Renderer *renderer, TTF_Font *font) {
     display_text(renderer, text0, font, rect_title, WHITE);
     display_text(renderer, text1, font, rect1, WHITE);
 
-    int button_num = handle_buttons(num_buttons);
+    /*int button_num = handle_buttons(num_buttons);
     while(button_num == 0) {
         SDL_Delay(500);
         button_num = handle_buttons(num_buttons);
-    }
+    }*/
 
     free(rect_title);
     free(rect1);
 
-    return handle_buttons(num_buttons);
+    //return handle_buttons(num_buttons);
+    return 0;
 }
 
 int handle_buttons(int num_buttons) {

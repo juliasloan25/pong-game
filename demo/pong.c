@@ -9,16 +9,6 @@ int main(int argc, char **argv){
     TTF_Font *font = load_font(FONT_SIZE);
 
     // TESTING TEXT
-    SDL_Rect *rect = make_rect(WIDTH/2 - TEXT_WIDTH/2, HEIGHT/2 - TEXT_HEIGHT/2,
-                                TEXT_WIDTH, TEXT_HEIGHT);
-    test_display_text(renderer, "HELLO", font, rect, BLACK);
-
-    SDL_Delay(2000);
-    close_window(); //destroy window
-    scene = scene_init();
-    renderer = window_init();
-
-    // TESTING TEXT
     start_screen(renderer, font);
 
     SDL_Delay(2000);
@@ -32,7 +22,7 @@ int main(int argc, char **argv){
     SDL_Delay(2000);
     close_window(); //destroy window
 
-    free(rect);
+    //free(rect);
     scene_free(scene);
     SDL_DestroyRenderer(renderer);
     TTF_CloseFont(font); //CHANGE IN NON-EXAMPLE
@@ -256,4 +246,3 @@ void reset(Scene *scene){
     body_set_centroid(ball, ball_center);
     body_set_velocity(ball, (Vector){BALL_VEL, 0});
 }
-u
