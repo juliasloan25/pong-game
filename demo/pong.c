@@ -190,6 +190,9 @@ int main(int argc, char **argv){
     //free all elements of scene
     scene_free(scene);
     free(scores);
+    for(int i = 0; i < num_players; i++){
+      free(*(paddles+i));
+    }
     free(paddles);
     Mix_FreeMusic(bgs);
     //TTF_Quit();
@@ -380,7 +383,7 @@ Paddle **create_paddles(Scene *scene, int num_players, int num_users, AiDifficul
             }
         }
     }
-    free(polygon_shape);
+    list_free(polygon_shape);
     return paddles;
 }
 
@@ -478,9 +481,11 @@ int ball_hit_side(Body *ball, Body *polygon, int num_players){
         if(cross < 0){
             if(num_players == 2){
                 if(i == 0){
+                    list_free(polygon_shape);
                     return 0;
                 }
                 if(i == 2){
+                    list_free(polygon_shape);
                     return 1;
                 }
                 if(i == 1){
@@ -505,11 +510,12 @@ int ball_hit_side(Body *ball, Body *polygon, int num_players){
                 }
             }
             else{
+                list_free(polygon_shape);
                 return i;
             }
         }
     }
-    free(polygon_shape);
+    list_free(polygon_shape);
     return -1;
 }
 
