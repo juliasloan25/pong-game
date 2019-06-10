@@ -91,8 +91,8 @@ int start_screen(SDL_Renderer *renderer, TTF_Font *font) {
 
     int button_num = handle_buttons(num_buttons);
     while(button_num == 0) {
-      SDL_Delay(500);
-      button_num = handle_buttons(num_buttons);
+        SDL_Delay(500);
+        button_num = handle_buttons(num_buttons);
     }
 
     free(rect_title);
