@@ -12,11 +12,19 @@ const double MASS = 50.0; //mass of all objects
 const double BALL_VEL = 700.0; //initial velocity of ball
 const int FONT_SIZE = 20; //standard font size
 
+<<<<<<< HEAD
+=======
+const int WIDTH = 800; //screen width
+const int HEIGHT = 600; //screen height
+>>>>>>> 4066fe875c0f9138f75777db4ca12a263341c7f1
 const int TITLE_WIDTH = WIDTH / 2;
 const int TITLE_HEIGHT = HEIGHT / 4;
 const int TITLE_X = WIDTH / 2 - TITLE_WIDTH / 2;
 const int TITLE_Y = 40;
+<<<<<<< HEAD
 
+=======
+>>>>>>> 4066fe875c0f9138f75777db4ca12a263341c7f1
 const int TEXT_WIDTH = WIDTH / 4;
 const int TEXT_HEIGHT = HEIGHT / 8;
 const int TEXT_X = WIDTH / 2 - TEXT_WIDTH / 2;
@@ -26,8 +34,13 @@ const int SCORE_Y = HEIGHT - 10; //top side of scores
 const int LEFT_SCORE_X = (WIDTH / 2) - 2*TEXT_WIDTH; //left side of player 1 score
 const int RIGHT_SCORE_X = (WIDTH / 2) + 2*TEXT_WIDTH; //left side of player 2 score
 
+<<<<<<< HEAD
 const SDL_Color BLACK = {0, 0, 0, 255}; //used for text display
 const SDL_Color WHITE = {255, 255, 255, 255}; //used for text display
+=======
+const SDL_Color BLACK = {0, 0, 0, 255};
+const SDL_Color WHITE = {255, 255, 255, 255};
+>>>>>>> 4066fe875c0f9138f75777db4ca12a263341c7f1
 const RGBColor PADDLE_COLOR = {
     .r = 0,
     .g = 0,

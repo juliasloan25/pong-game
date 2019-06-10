@@ -8,9 +8,10 @@
 #include "collision.h"
 #include "text.h"
 #include "ai.h"
+#include "constants.h"
 #include <stdbool.h>
 #include <math.h>
-#include "constants.h"
+
 
 #include "text_simple.h"
 

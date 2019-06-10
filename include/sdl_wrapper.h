@@ -4,10 +4,12 @@
 #include <stdbool.h>
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_ttf.h>
+#include <time.h>
 #include "color.h"
 #include "list.h"
 #include "scene.h"
 #include "vector.h"
+#include "constants.h"
 
 // Values passed to a key handler when the given arrow key or space is pressed
 #define LEFT_ARROW 1
@@ -126,8 +128,7 @@ void sdl_show(SDL_Renderer *renderer);
  * @param rect1 the positioning rectangle for the first surface
  * @param rect2 the positioning rectangle for the second surface
  */
-void sdl_render_scene(Scene *scene, SDL_Renderer *renderer, SDL_Surface *surface1,
-                        SDL_Surface *surface2, SDL_Rect *rect1, SDL_Rect *rect2);
+void sdl_render_scene(Scene *scene, SDL_Renderer *renderer);
 
 void sdl_render_text(SDL_Renderer *renderer, SDL_Surface *surface, SDL_Rect *rect);
 

@@ -208,8 +208,7 @@ void sdl_show(SDL_Renderer *renderer) {
     SDL_RenderPresent(renderer);
 }
 
-void sdl_render_scene(Scene *scene, SDL_Renderer *renderer, SDL_Surface *surface1,
-                        SDL_Surface *surface2, SDL_Rect *rect1, SDL_Rect *rect2) {
+void sdl_render_scene(Scene *scene, SDL_Renderer *renderer) {
     sdl_clear(renderer);
     size_t body_count = scene_bodies(scene);
     for (size_t i = 0; i < body_count; i++) {
@@ -259,5 +258,4 @@ double time_since_last_tick(void) {
         : 0.0; // return 0 the first time this is called
     last_clock = now;
     return difference;
-}
-*/
+}*/
