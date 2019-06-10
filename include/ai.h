@@ -13,7 +13,7 @@ typedef enum {
     HARD,
 } AiDifficulty;
 
-void set_paddle_vel(Paddle *paddle, Body *ball);
+void set_paddle_vel(Body *paddle, Body *ball, Vector axis);
 
 double time_since_last_ai_tick(void);
 
