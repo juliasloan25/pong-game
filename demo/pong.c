@@ -124,7 +124,7 @@ int main(int argc, char **argv){
             renderer = window_init();
 
             button_num = end_screen(renderer, font);
-            if (button_num == 0) {
+            /*if (button_num == 0) {
                 break;
             }
             else {
@@ -139,7 +139,10 @@ int main(int argc, char **argv){
                 renderer = window_init();
 
                 button_num = start_screen(renderer, font);
-            }
+            }*/
+            SDL_Delay(2000);
+            close_window();
+            break;
         }
     }
 

@@ -116,15 +116,18 @@ int end_screen(SDL_Renderer *renderer, TTF_Font *font) {
     display_text(renderer, text0, font, rect_title, WHITE);
     //display_text(renderer, text1, font, rect1, WHITE);
 
-    int button_num = handle_buttons(num_buttons);
+    /*int button_num = handle_buttons(num_buttons);
     while(button_num == 0) {
         SDL_Delay(500);
         button_num = handle_buttons(num_buttons);
     }
 
     free(rect_title);
-    //free(rect1);
-    return button_num;
+    //  free(rect1);
+    return button_num;*/
+
+    //no buttons
+    return 0;
 }
 
 int difficulty_screen(SDL_Renderer *renderer, TTF_Font *font) {
