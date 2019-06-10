@@ -90,7 +90,7 @@ void mouse_motion(Body *body, int y_position, int num_users){
     }
 }
 
-bool sdl_is_done(Scene *scene, int num_users) {
+bool sdl_is_done(Scene *scene, int num_users, int num_players) {
     SDL_Event *event = malloc(sizeof(*event));
     assert(event);
     while (SDL_PollEvent(event)) {
@@ -117,7 +117,7 @@ bool sdl_is_done(Scene *scene, int num_users) {
                     event->type == SDL_KEYDOWN ? KEY_PRESSED : KEY_RELEASED;
                 double held_time =
                     (timestamp - key_start_timestamp) / MS_PER_S;
-                key_handler(key, type, held_time, scene, num_users);
+                key_handler(key, type, held_time, scene, num_users, num_players);
                 break;
         }
     }

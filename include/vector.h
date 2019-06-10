@@ -122,4 +122,6 @@ double vec_magnitude(Vector v);
 */
 bool vec_equal_v(Vector *v1, Vector *v2);
 
+Vector vec_unit(Vector v);
+
 #endif // #ifndef __VECTOR_H__

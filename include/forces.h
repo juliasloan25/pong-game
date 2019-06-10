@@ -7,6 +7,7 @@
 #include <math.h>
 #include <stdio.h>
 #include "ai.h"
+#include "paddle.h"
 
 
 /**
@@ -81,7 +82,7 @@ void create_collision(
     FreeFunc freer
 );
 
-void create_ai(Scene *scene, Body *smart, Body *target, AiDifficulty diff);
+void create_ai(Scene *scene, Paddle *smart, Body *target, AiDifficulty diff);
 
 
 /**

@@ -40,7 +40,7 @@ void window_init();
 */
 Body *make_body(BodyType *type, Vector center);
 
-Paddle **create_paddles(Scene *scene, int num_players, int num_users, AiDifficulty difficulty);
+Paddle **create_paddles(Scene *scene, int num_players, int num_users, AiDifficulty difficulty, Body *polygon);
 
 /*
 * @brief Handles key events. Left and right arrows move the shooter and the
@@ -52,7 +52,7 @@ Paddle **create_paddles(Scene *scene, int num_players, int num_users, AiDifficul
 * @param scene The scene that the key presses will impact
 */
 void on_key(char key, KeyEventType type, double held_time, Scene *scene,
-                                                        int num_users);
+                                                int num_users, int num_players);
 
 /*
 * @brief Handles if ships move offscreen. If one of the paddles are offscreen,
@@ -61,12 +61,14 @@ void on_key(char key, KeyEventType type, double held_time, Scene *scene,
 *
 * @return int Whether ball hit the side
 */
-int move_if_offscreen(Body *paddle_one, Body *paddle_two, Body *ball);
+int ball_hit_side(Body *ball, Body *polygon, int num_players);
+
+void paddle_hit_side(Paddle **paddles, int num_players);
 
 /*
 * @brief Resets the scene after point is made
 */
-void reset(Scene *scene);
+void reset(Scene *scene, Paddle **paddles, int num_players);
 
 void reset_obstacles(Body *bounce, Body *grav, Body *ball);
 
