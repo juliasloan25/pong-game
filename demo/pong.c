@@ -87,10 +87,9 @@ int main(int argc, char **argv){
                                         TEXT_HEIGHT);
 
             //display the updated right score
-            //display_text(renderer, right_score_str, font,
-            //                rect_right, BLACK);
-            //sdl_render_scene(scene, renderer, surface_left, surface_right, rect_left, rect_right);
-            SDL_Delay(1000);
+            display_text(renderer, right_score_str, font,
+                            rect_right, BLACK);
+            sdl_render_scene(scene, renderer);
             reset(scene);
         }
         else if (ball_hit_side == 'r') { //add point to left player
@@ -103,11 +102,9 @@ int main(int argc, char **argv){
                                         TEXT_HEIGHT);
 
             //display the updated right score
-          //  display_text(renderer, left_score_str, font,
-          //                  rect_left, BLACK);
-            //sdl_render_scene(scene, renderer, surface_left, surface_right,
-                //rect_left, rect_right);
-            SDL_Delay(1000);
+            display_text(renderer, left_score_str, font,
+                            rect_left, BLACK);
+            sdl_render_scene(scene, renderer);
             reset(scene);
         }
         if(ai_timer > 0.01){
@@ -128,9 +125,6 @@ int main(int argc, char **argv){
     //free all elements of scene and the renderer
     free(rect_left);
     free(rect_right);
-    body_free(paddle_one);
-    body_free(paddle_two);
-    body_free(ball);
     scene_free(scene);
     SDL_DestroyRenderer(renderer);
     TTF_CloseFont(font); //CHANGE IN NON-SIMPLE

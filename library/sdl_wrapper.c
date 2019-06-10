@@ -216,7 +216,7 @@ void sdl_render_scene(Scene *scene, SDL_Renderer *renderer) {
         List *shape = body_get_shape(body);
         sdl_draw_polygon(shape, body_get_color(body), renderer);
         list_free(shape);
-        body_free(body);
+        //body_free(body);
     }
     /*if (surface1) {
         printf("surface1\n");
