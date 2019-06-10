@@ -127,6 +127,7 @@ int end_screen(SDL_Renderer *renderer, TTF_Font *font) {
     return button_num;*/
 
     //no buttons
+    free(rect_title);
     return 0;
 }
 

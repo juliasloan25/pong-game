@@ -9,7 +9,8 @@ int main(int argc, char **argv){
     TTF_Font *font = load_font(FONT_SIZE);
 
     int button_num = start_screen(renderer, font);
-
+    scene_free(scene);
+    SDL_DestroyRenderer(renderer);
     //reset window and scene
     close_window();
     scene = scene_init();
@@ -119,6 +120,8 @@ int main(int argc, char **argv){
         // end game if either score reaches 10
         if (right_score >= 10 || left_score >= 10 || scene_get_end(scene)){
             //reset window and scene
+            scene_free(scene);
+            SDL_DestroyRenderer(renderer);
             close_window();
             scene = scene_init();
             renderer = window_init();
