@@ -4,7 +4,6 @@ TTF_Font *load_font(int font_size) {
     char *font_path = SDL_GetBasePath();
     const char *font_str = "ostrich-regular.ttf";
     snprintf(font_path, 100, "%s", font_str);
-    printf("path: %s\n", font_path);
 
     TTF_Font *font = TTF_OpenFont(font_path, font_size);
     if (font == NULL) {
@@ -118,6 +117,12 @@ int end_screen(SDL_Renderer *renderer, TTF_Font *font) {
     display_text(renderer, text0, font, rect_title, WHITE);
     display_text(renderer, text1, font, rect1, WHITE);
 
+    int button_num = handle_buttons(num_buttons);
+    while(button_num == 0) {
+        SDL_Delay(500);
+        button_num = handle_buttons(num_buttons);
+    }
+
     free(rect_title);
     free(rect1);
 
@@ -126,7 +131,6 @@ int end_screen(SDL_Renderer *renderer, TTF_Font *font) {
 
 int handle_buttons(int num_buttons) {
     SDL_Event e;
-
     for (int i = 1; i <= num_buttons; i++) {
         while(SDL_PollEvent(&e)) {
             SDL_MouseButtonEvent mbe = e.button;
@@ -134,12 +138,18 @@ int handle_buttons(int num_buttons) {
                 case SDL_QUIT:
                     break;
                 case SDL_MOUSEBUTTONDOWN:
-                    //int x = mbe.x;
-                    //int y = mbe.y;
-                    if ((mbe.x >= TEXT_X && mbe.x <= TEXT_X + TEXT_WIDTH) &&
-                        (mbe.y >= i * TEXT_Y_START && mbe.y < i * TEXT_Y_START + TEXT_HEIGHT)) {
-                            return i;
+                  switch(e.button.button){
+                    case SDL_BUTTON_LEFT:
+                      if ((mbe.x >= TEXT_X && mbe.x <= TEXT_X + TEXT_WIDTH) &&
+                          (mbe.y >= i * TEXT_Y_START && mbe.y < i * TEXT_Y_START + TEXT_HEIGHT)) {
+                              return i;
                         }
+                        break;
+                    case SDL_BUTTON_RIGHT:
+                       continue;
+                      }
+                      break;
+
             }
         }
     }

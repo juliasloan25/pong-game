@@ -9,12 +9,11 @@ int main(int argc, char **argv){
     int font_size = 20;
     TTF_Font *font = load_font(font_size);
 
-    //set_background(renderer, font);
-    int button_num = start_screen(renderer, font);
-    if (button_num == 0) {
-    SDL_Delay(2000);
-    }
-
+    /*int button_num = start_screen(renderer, font);
+    printf("%d\n", button_num);
+    //if (button_num == 0) {
+    //    SDL_Delay(2000);
+    //}
 
     //reset window and scene
     close_window();
@@ -27,18 +26,9 @@ int main(int argc, char **argv){
     //reset window and scene
     close_window();
     scene = scene_init();
-    renderer = window_init();
-
-    // TESTING TEXT
-    SDL_Rect *rect = make_rect(WIDTH/2 - TEXT_WIDTH/2, HEIGHT/2 - TEXT_HEIGHT/2,
-                                TEXT_WIDTH, TEXT_HEIGHT);
-    //test line
-    //test_display_text(renderer, "HELLO", font, rect);
-    //SDL_Surface *surface = test_display_text(renderer, "HELLO", font, rect);
-    //sdl_render_scene(scene, renderer, surface, NULL, rect, NULL);
+    renderer = window_init();*/
 
 
-    /*
     //creates two paddles and initializes them on either side of the screen
     BodyType *paddle_one_type = malloc(sizeof(BodyType));
     *(paddle_one_type) = PADDLE;
@@ -67,22 +57,20 @@ int main(int argc, char **argv){
       }
       */
 
-/*
+
     //initialize scores and AI timer
     int left_score = 0,  //score of player with left paddle
         right_score = 0; //score of player with right paddle
     double ai_timer = 0;
 
-    //TTF_Font *font = TTF_OpenFont("ostrich-regular.ttf", font_size);
 
     SDL_Rect *rect_right = make_rect(RIGHT_SCORE_X, SCORE_Y, TEXT_WIDTH,
                                 TEXT_HEIGHT);
     SDL_Rect *rect_left = make_rect(LEFT_SCORE_X, SCORE_Y, TEXT_WIDTH,
                                 TEXT_HEIGHT);
-    SDL_Surface *surface_right = malloc(sizeof(SDL_Surface));
-    SDL_Surface *surface_left = malloc(sizeof(SDL_Surface));
-    surface_right = display_text(renderer, " ", font, rect_right);
-    surface_left = display_text(renderer, " ", font, rect_left);
+
+    //display_text(renderer, " ", font, rect_right);
+    //display_text(renderer, " ", font, rect_left);
 
     while(!sdl_is_done(scene)) {
         double wait_time = time_since_last_tick();
@@ -100,9 +88,9 @@ int main(int argc, char **argv){
                                         TEXT_HEIGHT);
 
             //display the updated right score
-            surface_right = display_text(renderer, right_score_str, font,
-                            rect_right);
-            sdl_render_scene(scene, renderer, surface_left, surface_right, rect_left, rect_right);
+            //display_text(renderer, right_score_str, font,
+            //                rect_right, BLACK);
+            //sdl_render_scene(scene, renderer, surface_left, surface_right, rect_left, rect_right);
             SDL_Delay(1000);
             reset(scene);
         }
@@ -116,10 +104,10 @@ int main(int argc, char **argv){
                                         TEXT_HEIGHT);
 
             //display the updated right score
-            surface_left = display_text(renderer, left_score_str, font,
-                            rect_left);
-            sdl_render_scene(scene, renderer, surface_left, surface_right,
-                rect_left, rect_right);
+          //  display_text(renderer, left_score_str, font,
+          //                  rect_left, BLACK);
+            //sdl_render_scene(scene, renderer, surface_left, surface_right,
+                //rect_left, rect_right);
             SDL_Delay(1000);
             reset(scene);
         }
@@ -130,9 +118,11 @@ int main(int argc, char **argv){
 
         //render and update scene at every tick
         scene_tick(scene, wait_time);
+        sdl_render_scene(scene, renderer);
 
-        sdl_render_scene(scene, renderer, surface_left, surface_right,
-            rect_left, rect_right);
+
+        //sdl_render_scene(scene, renderer, surface_left, surface_right,
+            //rect_left, rect_right);
         //sdl_render_scene(scene, renderer);
 
         // end game if either score reaches 10
@@ -141,17 +131,15 @@ int main(int argc, char **argv){
         }
     }
 
+    close_window();
     //free all elements of scene and the renderer
-
-    SDL_FreeSurface(surface_right);
-    SDL_FreeSurface(surface_left);
     free(rect_left);
-    free(rect_right);*/
+    free(rect_right);
 
     //TESTING TEXT
-    SDL_Delay(10000);
+    //SDL_Delay(10000);
     //SDL_FreeSurface(surface);
-    free(rect);
+    //free(rect);
     scene_free(scene);
     SDL_DestroyRenderer(renderer);
     TTF_CloseFont(font); //CHANGE IN NON-SIMPLE
