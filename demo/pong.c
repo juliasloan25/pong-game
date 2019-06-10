@@ -376,7 +376,7 @@ Paddle **create_paddles(Scene *scene, int num_players, int num_users, AiDifficul
             }
             else{
                 paddle_obj = paddle_init(paddle, paddle_center, axis, point1, point2);
-                paddles[i] = paddle_obj;
+                paddles[i%num_players] = paddle_obj;
             }
             if(!((i == 0 && num_users >= 1) || (i == polygon_size / 2 && num_users == 2))){
                 create_ai(scene, paddle_obj, ball, difficulty);
