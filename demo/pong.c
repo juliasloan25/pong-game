@@ -153,7 +153,7 @@ int main(int argc, char **argv){
         int ball_hit = ball_hit_side(ball, polygon, num_players);
         if(ball_hit != -1){
             scores[ball_hit]++;
-            reset(scene, paddles, num_players, bounce);
+            reset(scene, paddles, num_players, bounce, grav);
         }
 
         paddle_hit_side(paddles, num_players);
@@ -539,7 +539,7 @@ void paddle_hit_side(Paddle **paddles, int num_players){
     }
 }
 
-void reset(Scene *scene, Paddle **paddles, int num_players){
+void reset(Scene *scene, Paddle **paddles, int num_players, Body *bounce, Body *grav){
     Body *ball = scene_get_body(scene, 1);
     body_set_centroid(ball, ball_center);
     body_set_velocity(ball, (Vector){BALL_VEL, 0});
