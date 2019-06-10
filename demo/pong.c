@@ -56,7 +56,9 @@ const double G = 7000.0; //gravity for obstacle
 
 int main(int argc, char **argv){
     SDL_Init(SDL_INIT_AUDIO);
-    Mix_Music *bgs = Mix_LoadMUS("price_is_right.mp3");
+    Mix_Music *bgs;
+    Mix_OpenAudio(22050,MIX_DEFAULT_FORMAT,2,4096);
+    bgs = Mix_LoadMUS("price_is_right.mp3");
     Mix_PlayMusic(bgs, -1);
     if(argc != 3 && argc != 4){
       //if(argc != 2 && argc != 3){
@@ -187,7 +189,8 @@ int main(int argc, char **argv){
     //free all elements of scene
     scene_free(scene);
     free(scores);
-    Mix_Quit();
+    free(paddles);
+    Mix_FreeMusic(bgs);
     //TTF_Quit();
     return 1;
 }
@@ -521,9 +524,14 @@ void reset_obstacles(Body *bounce, Body *grav, Body *ball){
     int degree = rand() / (RAND_MAX / (360 + 1) + 1);
     double angle = degree * (M_PI/ 180.0);
     body_set_rotation(bounce, angle);
-
-    CollisionInfo coll1 = find_collision(body_get_shape(bounce), body_get_shape(grav));
-    CollisionInfo coll2 = find_collision(body_get_shape(bounce), body_get_shape(ball));
+    List *bounce_shape = body_get_shape(bounce);
+    List *grav_shape =  body_get_shape(grav);
+    List *ball_shape =  body_get_shape(ball);
+    CollisionInfo coll1 = find_collision(bounce_shape, grav_shape);
+    CollisionInfo coll2 = find_collision(bounce_shape, ball_shape);
+    list_free(bounce_shape);
+    list_free(grav_shape);
+    list_free(ball_shape);
     if(coll1.collided || coll2.collided){
         reset_obstacles(bounce, grav, ball);
     }
