@@ -10,6 +10,8 @@ int main(int argc, char **argv){
 
     // TESTING TEXT
     start_screen(renderer, font);
+    scene_free(scene);
+    SDL_DestroyRenderer(renderer);
 
     SDL_Delay(2000);
     close_window(); //destroy window
