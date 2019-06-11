@@ -248,9 +248,9 @@ void sdl_on_key(KeyHandler handler) {
 }
 
 void close_window() {
-  SDL_DestroyWindow(window);
+    SDL_DestroyWindow(window);
 }
-
+/*
 double time_since_last_tick(void) {
     clock_t now = clock();
     double difference = last_clock
@@ -258,4 +258,4 @@ double time_since_last_tick(void) {
         : 0.0; // return 0 the first time this is called
     last_clock = now;
     return difference;
-}
+}*/

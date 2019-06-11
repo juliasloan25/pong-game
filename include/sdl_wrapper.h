@@ -174,8 +174,4 @@ double time_since_last_tick(void);
 */
 void close_window();
 
-void scene_set_end(Scene *scene);
-
-bool scene_get_end(Scene *scene);
-
 #endif // #ifndef __SDL_WRAPPER_H__

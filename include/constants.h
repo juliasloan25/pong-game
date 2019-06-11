@@ -6,6 +6,7 @@
 #include <stdlib.h>
 #include <SDL2/SDL.h>
 #include <SDL2/SDL2_gfxPrimitives.h>
+#include <SDL2/SDL_ttf.h>
 #include <time.h>
 #include "constants.h"
 #include "vector.h"

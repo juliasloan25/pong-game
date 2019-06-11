@@ -25,6 +25,7 @@ SDL_Rect *make_rect(int x_pos, int y_pos, int width, int height) {
     return rect;
 }
 
+
 void set_background(SDL_Renderer *renderer, TTF_Font *font) {
     SDL_Rect *bkgrd_rect = make_rect(0, 0, WIDTH, HEIGHT);
     //SDL_Surface *background = test_display_text(renderer, " ", font, bkgrd_rect);
@@ -57,11 +58,13 @@ void display_text(SDL_Renderer *renderer, char *text, TTF_Font *font,
 
     SDL_RenderCopy(renderer, texture, NULL, rect);
     sdl_show(renderer);
-    sdl_render_text(renderer, text_surface, rect);
+
+    //sdl_render_text(renderer, text_surface, rect);
 
     //free(rect); //CHANGE IN NON-SIMPLE
     SDL_DestroyTexture(texture);
     SDL_FreeSurface(text_surface);
+    return;
 }
 
 int start_screen(SDL_Renderer *renderer, TTF_Font *font) {
@@ -85,21 +88,21 @@ int start_screen(SDL_Renderer *renderer, TTF_Font *font) {
     display_text(renderer, text1, font, rect1, WHITE);
     display_text(renderer, text2, font, rect2, WHITE);
     display_text(renderer, text3, font, rect3, WHITE);
-    //sdl_render_scene(scene, renderer, surface, NULL, rect, NULL);
 
-    int button_num = handle_buttons(num_buttons);
+    /*int button_num = handle_buttons(num_buttons);
     while(button_num == 0) {
         SDL_Delay(500);
         button_num = handle_buttons(num_buttons);
-    }
+    }*/
 
     free(rect_title);
     free(rect1);
     free(rect2);
     free(rect3);
+    return 0;
 
-    //1 if single player, 2 if two-player, 3 if demo mode, 0 if no press
-    return button_num;
+    //1 if single player, 2 if demo mode, 0 if no press
+    //return handle_buttons(num_buttons);
 }
 
 //after calling this, call display_text on the scores to overlay them
@@ -151,11 +154,11 @@ int difficulty_screen(SDL_Renderer *renderer, TTF_Font *font) {
     display_text(renderer, text2, font, rect2, WHITE);
     display_text(renderer, text3, font, rect3, WHITE);
 
-    int button_num = handle_buttons(num_buttons);
+    /*int button_num = handle_buttons(num_buttons);
     while(button_num == 0) {
         SDL_Delay(500);
         button_num = handle_buttons(num_buttons);
-    }
+    }*/
 
     free(rect_title);
     free(rect1);
