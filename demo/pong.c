@@ -27,18 +27,18 @@ int main(int argc, char **argv){
     int num_users = start_screen(renderer, font);
     SDL_Delay(2000);
     //reset window and scene
-    scene_free(scene);
+    //scene_free(scene);
     SDL_DestroyRenderer(renderer);
     close_window();
-    scene = scene_init();
+    //scene = scene_init();
     renderer = window_init();
 
     int num_players = players_screen(renderer, font);
     //reset window and scene
-    scene_free(scene);
+    //scene_free(scene);
     SDL_DestroyRenderer(renderer);
     close_window();
-    scene = scene_init();
+    //scene = scene_init();
     renderer = window_init();
 
     //int num_ai = num_players - num_users;
@@ -176,10 +176,10 @@ int main(int argc, char **argv){
         //display_text(itoa(left_score), 30);
     }
     //reset window and scene
-    scene_free(scene);
+    //scene_free(scene);
     SDL_DestroyRenderer(renderer);
     close_window();
-    scene = scene_init();
+    //scene = scene_init();
     renderer = window_init();
     end_screen(renderer, font);
 
