@@ -69,8 +69,8 @@ void display_text(SDL_Renderer *renderer, char *text, TTF_Font *font,
 
 int start_screen(SDL_Renderer *renderer, TTF_Font *font) {
     char *title = "PONG";
-    char *text1 = "Single player";
-    char *text2 = "Two player";
+    char *text1 = "Single user";
+    char *text2 = "Two users";
     char *text3 = "Demo mode";
     int num_buttons = 3;
 
@@ -169,7 +169,7 @@ int difficulty_screen(SDL_Renderer *renderer, TTF_Font *font) {
 }
 
 int players_screen(SDL_Renderer *renderer, TTF_Font *font) {
-    char *text0 = "HOW MANY PLAYERS (WITH AIs)?";
+    char *text0 = "HOW MANY PLAYERS?";
     char *text1 = "2";
     char *text2 = "4";
     char *text3 = "6";
