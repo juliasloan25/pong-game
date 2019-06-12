@@ -35,8 +35,8 @@ int main(int argc, char **argv){
 
     int num_players = players_screen(renderer, font);
 
-    printf("%d\n", num_users);
-    printf("%d\n", num_players);
+    //printf("%d\n", num_users);
+    //printf("%d\n", num_players);
 
     //reset window and scene
     //scene_free(scene);
@@ -71,15 +71,15 @@ int main(int argc, char **argv){
        int ai_difficulty = difficulty_screen(renderer, font);
        if (ai_difficulty == 1) {
            difficulty = EASY;
-           printf("%s\n", "Easy");
+           //printf("%s\n", "Easy");
        }
        else if (ai_difficulty == 2) {
            difficulty = MEDIUM;
-           printf("%s\n", "Medium");
+           //printf("%s\n", "Medium");
        }
        else if (ai_difficulty == 3) {
            difficulty = HARD;
-           printf("%s\n", "Hard");
+           //printf("%s\n", "Hard");
        }
    }
 
