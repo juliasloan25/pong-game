@@ -1,6 +1,12 @@
 #ifndef __SDL_WRAPPER_H__
 #define __SDL_WRAPPER_H__
 
+#include <assert.h>
+#include <math.h>
+#include <stdlib.h>
+#include <SDL2/SDL.h>
+#include <SDL2/SDL2_gfxPrimitives.h>
+#include <time.h>
 #include <stdbool.h>
 #include "color.h"
 #include "list.h"
@@ -53,7 +59,7 @@ typedef void (*KeyHandler)(char key, KeyEventType type, double held_time,
  * @param min the x and y coordinates of the bottom left of the scene
  * @param max the x and y coordinates of the top right of the scene
  */
-void sdl_init(Vector min, Vector max);
+SDL_Renderer *sdl_init(Vector min, Vector max);
 
 /**
  * Processes all SDL events and returns whether the window has been closed.
@@ -124,6 +130,11 @@ void sdl_render_scene(Scene *scene, SDL_Renderer *renderer);
  * @param handler the function to call with each key press
  */
 void sdl_on_key(KeyHandler handler);
+
+/*
+* Close the current window.
+*/
+void close_window();
 
 /**
  * Gets the amount of time that has passed since the last time

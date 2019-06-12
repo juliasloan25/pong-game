@@ -102,7 +102,7 @@ int start_screen(SDL_Renderer *renderer, TTF_Font *font) {
     return 0;
 
     //1 if single player, 2 if demo mode, 0 if no press
-    //return handle_buttons(num_buttons);
+    return handle_buttons(num_buttons);
 }
 
 //after calling this, call display_text on the scores to overlay them
@@ -131,7 +131,7 @@ int end_screen(SDL_Renderer *renderer, TTF_Font *font) {
 
     //no buttons
     free(rect_title);
-    return 0;
+    return num_buttons;
 }
 
 int difficulty_screen(SDL_Renderer *renderer, TTF_Font *font) {
@@ -202,7 +202,7 @@ int players_screen(SDL_Renderer *renderer, TTF_Font *font) {
     free(rect2);
     free(rect3);
     free(rect4);
-    return handle_buttons(num_buttons);
+    return 2 * handle_buttons(num_buttons);
 }
 
 int handle_buttons(int num_buttons) {

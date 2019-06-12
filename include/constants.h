@@ -1,17 +1,31 @@
+#include <SDL2/SDL.h>
+#include <SDL2/SDL2_gfxPrimitives.h>
+#include <math.h>
+#include <time.h>
+#include "vector.h"
+#include "color.h"
+
+
 #ifndef __CONSTANTS_H__
 #define __CONSTANTS_H__
 
 extern const double WIDTH; //screen width
 extern const double HEIGHT; //screen height
 extern const double BALL_RADIUS; //radius of pong ball
+extern const double GRAV_RADIUS;
 extern const double PADDLE_HEIGHT; //width of the pong paddle
 extern const double PADDLE_WIDTH; // height of the pong paddle
 extern const double BALL_MASS; // mass of the pong ball;
+extern const double BOUNCE_HEIGHT;
+extern const double BOUNCE_WIDTH;
+extern const double COLOR_INTERVAL;
+extern const double OBSTACLE_INTERVAL;
 extern const double ELASTICITY; //elasticity of collisions
 extern const double PADDLE_VEL; //velocity that the paddle can go
 extern const double MASS; //mass of all objects
 extern const double BALL_VEL; // initial velocity of ball
 extern const int FONT_SIZE;
+extern const double G; //gravity for obstacle
 
 extern const int TITLE_X;
 extern const int TITLE_Y;
@@ -27,5 +41,17 @@ extern const int SCORE_WIDTH;
 extern const int SCORE_Y;
 extern const int LEFT_SCORE_X;
 extern const int RIGHT_SCORE_X;
+
+extern const SDL_Color BLACK;
+extern const SDL_Color WHITE;
+
+extern const Vector BALL_CENTER;
+extern const Vector PADDLE_ONE_CENTER;
+extern const Vector PADDLE_TWO_CENTER;
+extern const RGBColor PADDLE_AI_COLOR;
+extern const RGBColor PADDLE_USER_COLOR;
+extern const RGBColor BOUNCE_COLOR;
+extern const RGBColor GRAV_COLOR;
+extern const RGBColor POLYGON_COLOR;
 
 #endif //#__CONSTANTS_H__

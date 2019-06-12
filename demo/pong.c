@@ -1,59 +1,5 @@
 #include "pong.h"
 
-const double WIDTH = 800; //screen width
-const double HEIGHT = 800; //screen height
-const double BALL_RADIUS = 10.0; //radius of pong ball
-const double GRAV_RADIUS = 15.0;
-const double PADDLE_HEIGHT = 100.0; //width of the pong paddle
-const double PADDLE_WIDTH = 30.0; // height of the pong paddle
-const double BOUNCE_HEIGHT = 10.0;
-const double BOUNCE_WIDTH = 80.0;
-const double COLOR_INTERVAL = 2.0;
-const double OBSTACLE_INTERVAL = 7.0;
-const double ELASTICITY = 1; //elasticity of collisions
-const double PADDLE_VEL = 600.0; //velocity that the paddle can go
-const double MASS = 50.0; //mass of non-infinity mass objects
-const double BALL_VEL = 700.0; // initial velocity of ball
-const RGBColor PADDLE_AI_COLOR = {
-    .r = 0,
-    .g = 0,
-    .b = 0
-}; //black paddle color
-const RGBColor PADDLE_USER_COLOR = {
-    .r = 1,
-    .g = 0,
-    .b = 0
-}; //color of the pong ball
-const RGBColor BOUNCE_COLOR = {
-    .r = 0,
-    .g = 0,
-    .b = 1
-};
-const RGBColor GRAV_COLOR = {
-    .r = 0,
-    .g = 1,
-    .b = 0
-};
-const RGBColor POLYGON_COLOR = {
-    .r = .9,
-    .g = .9,
-    .b = .9
-};
-const Vector paddle_one_center = {
-    .x = PADDLE_WIDTH / 2.0,
-    .y = HEIGHT/2
-}; //initial and reset center of paddle one
-const Vector paddle_two_center = {
-    .x = WIDTH - (PADDLE_WIDTH / 2.0),
-    .y  = HEIGHT/2
-}; //initial and reset center of paddle two
-const Vector ball_center = {
-    .x = WIDTH / 2.0,
-    .y = HEIGHT/ 2.0
-}; //initial and reset center of the ball
-const double G = 6500.0; //gravity for obstacle
-
-
 int main(int argc, char **argv){
   //initialize scene and window
     Scene *scene = scene_init();
@@ -93,7 +39,7 @@ int main(int argc, char **argv){
     scene = scene_init();
     renderer = window_init();
 
-    int num_ai = num_players - num_users;
+    //int num_ai = num_players - num_users;
     AiDifficulty difficulty = MEDIUM;
 
     //using command line arguments for setup
@@ -113,11 +59,10 @@ int main(int argc, char **argv){
 
     if (num_users == 3) { // demo mode
        num_users = 0;
-       create_ai(scene, paddle_two, ball, MEDIUM);
-       create_ai(scene, paddle_one, ball, MEDIUM);
+       difficulty = MEDIUM;
    }
 
-   if (um_users == 1) { // single player
+   if (num_users == 1) { // single player
        int ai_difficulty = difficulty_screen(renderer, font);
        if (ai_difficulty == 1) {
            difficulty = EASY;
@@ -128,7 +73,6 @@ int main(int argc, char **argv){
        else if (ai_difficulty == 3) {
            difficulty = HARD;
        }
-       create_ai(scene, paddle_one, ball, difficulty);
    }
 
     BodyType *polygon_type = malloc(sizeof(BodyType));
@@ -152,7 +96,7 @@ int main(int argc, char **argv){
     //create ball
     BodyType *ball_type = malloc(sizeof(BodyType));
     *(ball_type) = BALL;
-    Body *ball = make_body(ball_type, ball_center);
+    Body *ball = make_body(ball_type, BALL_CENTER);
     scene_add_body(scene, ball);
 
     //create paddles
@@ -596,7 +540,7 @@ void paddle_hit_side(Paddle **paddles, int num_players){
 
 void reset(Scene *scene, Paddle **paddles, int num_players, Body *bounce, Body *grav){
     Body *ball = scene_get_body(scene, 1);
-    body_set_centroid(ball, ball_center);
+    body_set_centroid(ball, BALL_CENTER);
     body_set_velocity(ball, (Vector){BALL_VEL, 0});
     List *bounce_shape = body_get_shape(bounce);
     List *ball_shape =  body_get_shape(ball);

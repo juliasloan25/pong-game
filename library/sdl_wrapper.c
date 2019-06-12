@@ -1,9 +1,3 @@
-#include <assert.h>
-#include <math.h>
-#include <stdlib.h>
-#include <SDL2/SDL.h>
-#include <SDL2/SDL2_gfxPrimitives.h>
-#include <time.h>
 #include "sdl_wrapper.h"
 
 #define WINDOW_TITLE "CS 3"
@@ -181,19 +175,23 @@ void sdl_show(SDL_Renderer *renderer) {
 }
 
 void sdl_render_scene(Scene *scene, SDL_Renderer *renderer) {
-    sdl_clear();
+    sdl_clear(renderer);
     size_t body_count = scene_bodies(scene);
     for (size_t i = 0; i < body_count; i++) {
         Body *body = scene_get_body(scene, i);
         List *shape = body_get_shape(body);
-        sdl_draw_polygon(shape, body_get_color(body));
+        sdl_draw_polygon(shape, body_get_color(body), renderer);
         list_free(shape);
     }
-    sdl_show();
+    sdl_show(renderer);
 }
 
 void sdl_on_key(KeyHandler handler) {
     key_handler = handler;
+}
+
+void close_window() {
+    SDL_DestroyWindow(window);
 }
 
 double time_since_last_tick(void) {

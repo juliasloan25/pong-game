@@ -12,6 +12,7 @@
 #include "collision.h"
 #include "ai.h"
 #include "text.h"
+#include "constants.h"
 
 
 /*

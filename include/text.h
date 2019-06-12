@@ -69,6 +69,13 @@ int end_screen(SDL_Renderer *renderer, TTF_Font *font);
 int players_screen(SDL_Renderer *renderer, TTF_Font *font);
 
 /*
+* Displays the options for AI difficulty.
+* @param renderer the renderer to draw text with
+* @param font the font to draw text in
+*/
+int difficulty_screen(SDL_Renderer *renderer, TTF_Font *font);
+
+/*
 * Handles buttons and returns an integer corresponding to the number of the
 * button pressed, with 1 at the top and n at the bottom.
 * @param num_buttons the number of buttons currently on-screen
