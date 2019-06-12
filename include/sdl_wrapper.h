@@ -66,24 +66,26 @@ bool sdl_is_done(Scene *scene, int num_users, int num_players);
 
 /**
  * Clears the screen. Should be called before drawing polygons in each frame.
+ * @param renderer the renderer associated with the screen to clear
  */
-void sdl_clear(void);
+void sdl_clear(SDL_Renderer *renderer);
 
 /**
  * Draws a polygon from the given list of vertices and a color.
  *
  * @param points the list of vertices of the polygon
  * @param color the color used to fill in the polygon
+ * @param renderer the renderer to draw polygons with
  */
-void sdl_draw_polygon(List *points, RGBColor color);
+void sdl_draw_polygon(List *points, RGBColor color, SDL_Renderer *renderer);
 
 /**
  * Displays the rendered frame on the SDL window.
  * Must be called after drawing the polygons in order to show them.
+ *
+ * @param renderer the renderer to show
  */
-void sdl_show(void);
-
-
+void sdl_show(SDL_Renderer *renderer);
 
 /**
  * Draws all bodies in a scene.
@@ -91,8 +93,9 @@ void sdl_show(void);
  * so those functions should not be called directly.
  *
  * @param scene the scene to draw
+ * @param renderer the renderer associated with the scene
  */
-void sdl_render_scene(Scene *scene);
+void sdl_render_scene(Scene *scene, SDL_Renderer *renderer);
 
 /**
  * Registers a function to be called every time a key is pressed.

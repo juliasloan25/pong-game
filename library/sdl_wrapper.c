@@ -27,7 +27,7 @@ SDL_Window *window;
 /**
  * The renderer used to draw the scene.
  */
-SDL_Renderer *renderer;
+//SDL_Renderer *renderer;
 /**
  * The keypress handler, or NULL if none has been configured.
  */
@@ -64,8 +64,7 @@ char get_keycode(SDL_Keycode key) {
 }
 
 
-
-void sdl_init(Vector min, Vector max) {
+SDL_Renderer *sdl_init(Vector min, Vector max) {
     // Check parameters
     assert(min.x < max.x);
     assert(min.y < max.y);
@@ -81,7 +80,7 @@ void sdl_init(Vector min, Vector max) {
         WINDOW_HEIGHT,
         SDL_WINDOW_RESIZABLE
     );
-    renderer = SDL_CreateRenderer(window, -1, 0);
+    return SDL_CreateRenderer(window, -1, 0);
 }
 
 void mouse_motion(Body *body, int y_position, int num_users){
@@ -125,12 +124,12 @@ bool sdl_is_done(Scene *scene, int num_users, int num_players) {
     return false;
 }
 
-void sdl_clear(void) {
+void sdl_clear(SDL_Renderer *renderer) {
     SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
     SDL_RenderClear(renderer);
 }
 
-void sdl_draw_polygon(List *points, RGBColor color) {
+void sdl_draw_polygon(List *points, RGBColor color, SDL_Renderer *renderer) {
     // Check parameters
     size_t n = list_size(points);
     assert(n >= 3);
@@ -177,11 +176,11 @@ void sdl_draw_polygon(List *points, RGBColor color) {
     free(y_points);
 }
 
-void sdl_show(void) {
+void sdl_show(SDL_Renderer *renderer) {
     SDL_RenderPresent(renderer);
 }
 
-void sdl_render_scene(Scene *scene) {
+void sdl_render_scene(Scene *scene, SDL_Renderer *renderer) {
     sdl_clear();
     size_t body_count = scene_bodies(scene);
     for (size_t i = 0; i < body_count; i++) {
@@ -196,9 +195,6 @@ void sdl_render_scene(Scene *scene) {
 void sdl_on_key(KeyHandler handler) {
     key_handler = handler;
 }
-
-
-
 
 double time_since_last_tick(void) {
     clock_t now = clock();

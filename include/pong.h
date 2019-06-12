@@ -1,7 +1,9 @@
 #ifndef __PONG_H__
 #define __PONG_H__
 #include <SDL2/SDL.h>
-#include<SDL2/SDL_mixer.h>
+#include <SDL2/SDL_mixer.h>
+#include <stdbool.h>
+#include <math.h>
 #include "sdl_wrapper.h"
 #include "body.h"
 #include "forces.h"
@@ -9,8 +11,8 @@
 #include "paddle.h"
 #include "collision.h"
 #include "ai.h"
-#include <stdbool.h>
-#include <math.h>
+#include "text.h"
+
 
 /*
 * The possible types of bodies to make.
@@ -29,7 +31,7 @@ typedef enum {
 /*
 * @brief Initializes a window with the given height and width
 */
-void window_init();
+SDL_Renderer *window_init();
 
 /*
 * @brief Creates and returns a body object based off its BodyType

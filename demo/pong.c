@@ -65,20 +65,39 @@ int main(int argc, char **argv){
     Mix_OpenAudio(22050,MIX_DEFAULT_FORMAT,2,4096);
     bgs = Mix_LoadMUS("price_is_right.mp3");
     Mix_PlayMusic(bgs, -1);
-    if(argc != 3 && argc != 4){
+
+    //using command line arguments for setup
+    /*if(argc != 3 && argc != 4){
       //if(argc != 2 && argc != 3){
       //printf("usage: %s [1, 2, or 3 for single player, double player, and demo mode respectively] [1, 2, or 3 for easy, medium, or hard AI (single player only)]\n", argv[0]);
       printf("usage: %s [Total number of players (2, 4, 6, or 8)] [Number of users (1 or 2)] [Difficulty of AI (1, 2, or 3 for easy, medium, or hard) if applicable]\n", argv[0]);
       return 1;
     }
 
-
-    int num_players = players_screen(renderer, screen);
     int num_players = *argv[1] - '0';
-    int num_users = *argv[2] - '0';
+    int num_users = *argv[2] - '0';*/
+
+    int num_players = players_screen(renderer, font);
+    //reset window and scene
+    scene_free(scene);
+    SDL_DestroyRenderer(renderer);
+    close_window();
+    scene = scene_init();
+    renderer = window_init();
+
+    int num_users = start_screen(renderer, font);
+    //reset window and scene
+    scene_free(scene);
+    SDL_DestroyRenderer(renderer);
+    close_window();
+    scene = scene_init();
+    renderer = window_init();
+
     int num_ai = num_players - num_users;
     AiDifficulty difficulty = MEDIUM;
-    if(num_ai != 0){
+
+    //using command line arguments for setup
+    /*if(num_ai != 0){
         switch(*argv[2]){
             case '1':
                 difficulty = EASY;
@@ -90,10 +109,27 @@ int main(int argc, char **argv){
                 difficulty = HARD;
                 break;
         }
-    }
+    }*/
 
-    //initialize scene and window
-    Scene *scene = scene_init();
+    if (num_users == 3) { // demo mode
+       num_users = 0;
+       create_ai(scene, paddle_two, ball, MEDIUM);
+       create_ai(scene, paddle_one, ball, MEDIUM);
+   }
+
+   if (um_users == 1) { // single player
+       int ai_difficulty = difficulty_screen(renderer, font);
+       if (ai_difficulty == 1) {
+           difficulty = EASY;
+       }
+       else if (ai_difficulty == 2) {
+           difficulty = MEDIUM;
+       }
+       else if (ai_difficulty == 3) {
+           difficulty = HARD;
+       }
+       create_ai(scene, paddle_one, ball, difficulty);
+   }
 
     BodyType *polygon_type = malloc(sizeof(BodyType));
     double rotation_angle = 0;
@@ -139,7 +175,6 @@ int main(int argc, char **argv){
     create_physics_collision(scene, ELASTICITY, bounce, ball);
     create_newtonian_gravity(scene, G, ball, grav, false);
 
-    window_init();
     sdl_on_key(on_key);
 
     //initialize scores
@@ -178,7 +213,7 @@ int main(int argc, char **argv){
 
         //render and update scene at every tick
         scene_tick(scene, wait_time);
-        sdl_render_scene(scene);
+        sdl_render_scene(scene, renderer);
 
         // end game if either score reaches 10
         for(int j = 0; j < num_players; j++){
@@ -202,17 +237,21 @@ int main(int argc, char **argv){
     }
     free(paddles);
     Mix_FreeMusic(bgs);
-    //TTF_Quit();
+    SDL_DestroyRenderer(renderer);
+    TTF_CloseFont(font); //CHANGE IN NON-SIMPLE
+    close_window();
+    TTF_Quit();
+    SDL_Quit();
     return 1;
 }
 
-void window_init(){
+SDL_Renderer *window_init(){
     Vector vec_min = VEC_ZERO;
     Vector vec_max = {
         .x = WIDTH,
         .y = HEIGHT
     };
-    sdl_init(vec_min, vec_max);
+    return sdl_init(vec_min, vec_max);
 }
 
 Body *make_body(BodyType *type, Vector center){
