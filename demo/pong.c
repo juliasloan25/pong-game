@@ -27,18 +27,22 @@ int main(int argc, char **argv){
     int num_users = start_screen(renderer, font);
     SDL_Delay(2000);
     //reset window and scene
-    scene_free(scene);
+    //scene_free(scene);
     SDL_DestroyRenderer(renderer);
     close_window();
-    scene = scene_init();
+    //scene = scene_init();
     renderer = window_init();
 
     int num_players = players_screen(renderer, font);
+
+    printf("%d\n", num_users);
+    printf("%d\n", num_players);
+
     //reset window and scene
-    scene_free(scene);
+    //scene_free(scene);
     SDL_DestroyRenderer(renderer);
     close_window();
-    scene = scene_init();
+    //scene = scene_init();
     renderer = window_init();
 
     //int num_ai = num_players - num_users;
@@ -61,19 +65,21 @@ int main(int argc, char **argv){
 
     if (num_users == 3) { // demo mode
        num_users = 0;
-       difficulty = MEDIUM;
    }
 
-   if (num_users == 1) { // single player
+   if (num_players - num_users != 0) { // single player
        int ai_difficulty = difficulty_screen(renderer, font);
        if (ai_difficulty == 1) {
            difficulty = EASY;
+           printf("%s\n", "Easy");
        }
        else if (ai_difficulty == 2) {
            difficulty = MEDIUM;
+           printf("%s\n", "Medium");
        }
        else if (ai_difficulty == 3) {
            difficulty = HARD;
+           printf("%s\n", "Hard");
        }
    }
 
@@ -176,10 +182,10 @@ int main(int argc, char **argv){
         //display_text(itoa(left_score), 30);
     }
     //reset window and scene
-    scene_free(scene);
+    //scene_free(scene);
     SDL_DestroyRenderer(renderer);
     close_window();
-    scene = scene_init();
+    //scene = scene_init();
     renderer = window_init();
     end_screen(renderer, font);
 

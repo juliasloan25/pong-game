@@ -89,20 +89,21 @@ int start_screen(SDL_Renderer *renderer, TTF_Font *font) {
     display_text(renderer, text2, font, rect2, WHITE);
     display_text(renderer, text3, font, rect3, WHITE);
 
-    /*int button_num = handle_buttons(num_buttons);
+    int button_num = handle_buttons(num_buttons);
     while(button_num == 0) {
         SDL_Delay(500);
         button_num = handle_buttons(num_buttons);
-    }*/
+    }
+    printf("%d\n", button_num);
 
     free(rect_title);
     free(rect1);
     free(rect2);
     free(rect3);
-    return 0;
+    //return 0;
 
     //1 if single player, 2 if demo mode, 0 if no press
-    return handle_buttons(num_buttons);
+    return button_num;
 }
 
 //after calling this, call display_text on the scores to overlay them
@@ -168,7 +169,7 @@ int difficulty_screen(SDL_Renderer *renderer, TTF_Font *font) {
 }
 
 int players_screen(SDL_Renderer *renderer, TTF_Font *font) {
-    char *text0 = "HOW MANY PLAYERS?";
+    char *text0 = "HOW MANY PLAYERS (WITH AIs)?";
     char *text1 = "2";
     char *text2 = "4";
     char *text3 = "6";
