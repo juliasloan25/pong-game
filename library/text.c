@@ -108,19 +108,16 @@ int start_screen(SDL_Renderer *renderer, TTF_Font *font) {
 //after calling this, call display_text on the scores to overlay them
 int end_screen(SDL_Renderer *renderer, TTF_Font *font) {
     char *text0 = "GAME OVER";
-    char *text1 = "Close";
     int num_buttons = 1;
     //char *text1 = "Play again?"; //If selected, return to start screen
     //int num_buttons = 1;
     //int num_buttons = 0;
 
     SDL_Rect *rect_title = make_rect(TITLE_X, TITLE_Y, TITLE_WIDTH, TITLE_HEIGHT);
-    SDL_Rect *rect1 = make_rect(TEXT_X, TEXT_Y_START, TEXT_WIDTH, TEXT_HEIGHT);
     //SDL_Rect *rect1 = make_rect(TEXT_X, TEXT_Y_START, TEXT_WIDTH, TEXT_HEIGHT);
 
     //display text to screen
     display_text(renderer, text0, font, rect_title, WHITE);
-    display_text(renderer, text1, font, rect1, WHITE);
     //display_text(renderer, text1, font, rect1, WHITE);
     int button_num = handle_buttons(num_buttons);
     while(button_num == 0) {
@@ -179,7 +176,7 @@ int players_screen(SDL_Renderer *renderer, TTF_Font *font) {
     char *text4 = "8";
     int num_buttons = 4;
 
-    SDL_Rect *rect_title = make_rect(TITLE_X, TITLE_Y, TITLE_WIDTH, TITLE_HEIGHT - 60);
+    SDL_Rect *rect_title = make_rect(TITLE_X - TITLE_WIDTH/2, TITLE_Y, TITLE_WIDTH * 2, TITLE_HEIGHT - 60);
     SDL_Rect *rect1 = make_rect(TEXT_X + TEXT_WIDTH/4, TEXT_Y_START,
                                   TEXT_WIDTH/2, TEXT_HEIGHT);
     SDL_Rect *rect2 = make_rect(TEXT_X + TEXT_WIDTH/4, TEXT_Y_START + (TEXT_HEIGHT),
