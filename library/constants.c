@@ -19,13 +19,13 @@ const double G = 6500.0; //gravity for obstacle
 
 const int TITLE_WIDTH = WIDTH/2;
 const int TITLE_HEIGHT = HEIGHT/2;
-const int TITLE_X = TITLE_WIDTH/2;
+const int TITLE_X = WIDTH/2 - TITLE_WIDTH/2;
 const int TITLE_Y = 40;
 
 const int TEXT_WIDTH = WIDTH/4;
 const int TEXT_HEIGHT = HEIGHT/8;
-const int TEXT_X = TEXT_WIDTH;
-const int TEXT_Y_START = 250;
+const int TEXT_X = WIDTH/2 - TEXT_WIDTH/2;
+const int TEXT_Y_START = TITLE_HEIGHT + TITLE_Y*2;
 const int SCORE_WIDTH = TEXT_WIDTH/4;
 
 const int SCORE_Y = 5;

@@ -154,35 +154,36 @@ int difficulty_screen(SDL_Renderer *renderer, TTF_Font *font) {
     display_text(renderer, text2, font, rect2, WHITE);
     display_text(renderer, text3, font, rect3, WHITE);
 
-    /*int button_num = handle_buttons(num_buttons);
+    int button_num = handle_buttons(num_buttons);
     while(button_num == 0) {
         SDL_Delay(500);
         button_num = handle_buttons(num_buttons);
-    }*/
+    }
 
     free(rect_title);
     free(rect1);
     free(rect2);
     free(rect3);
-    return handle_buttons(num_buttons);
+    return button_num;
 }
 
 int players_screen(SDL_Renderer *renderer, TTF_Font *font) {
-    char *text0 = "CHOOSE THE NUMBER OF PLAYERS";
+    char *text0 = "HOW MANY PLAYERS?";
     char *text1 = "2";
     char *text2 = "4";
     char *text3 = "6";
     char *text4 = "8";
     int num_buttons = 4;
 
-    SDL_Rect *rect_title = make_rect(TITLE_X, TITLE_Y, TITLE_WIDTH, TITLE_HEIGHT);
-    SDL_Rect *rect1 = make_rect(TEXT_X, TEXT_Y_START, TEXT_WIDTH, TEXT_HEIGHT);
-    SDL_Rect *rect2 = make_rect(TEXT_X, TEXT_Y_START + (TEXT_HEIGHT),
-                    TEXT_WIDTH, TEXT_HEIGHT);
-    SDL_Rect *rect3 = make_rect(TEXT_X, TEXT_Y_START + (2 * TEXT_HEIGHT),
-                    TEXT_WIDTH, TEXT_HEIGHT);
-    SDL_Rect *rect4 = make_rect(TEXT_X, TEXT_Y_START + (3 * TEXT_HEIGHT),
-                    TEXT_WIDTH, TEXT_HEIGHT);
+    SDL_Rect *rect_title = make_rect(TITLE_X, TITLE_Y, TITLE_WIDTH, TITLE_HEIGHT - 60);
+    SDL_Rect *rect1 = make_rect(TEXT_X + TEXT_WIDTH/4, TEXT_Y_START,
+                                  TEXT_WIDTH/2, TEXT_HEIGHT);
+    SDL_Rect *rect2 = make_rect(TEXT_X + TEXT_WIDTH/4, TEXT_Y_START + (TEXT_HEIGHT),
+                    TEXT_WIDTH/2, TEXT_HEIGHT);
+    SDL_Rect *rect3 = make_rect(TEXT_X + TEXT_WIDTH/4, TEXT_Y_START +
+                                  (2 * TEXT_HEIGHT), TEXT_WIDTH/2, TEXT_HEIGHT);
+    SDL_Rect *rect4 = make_rect(TEXT_X + TEXT_WIDTH/4, TEXT_Y_START +
+                                  (3 * TEXT_HEIGHT), TEXT_WIDTH/2, TEXT_HEIGHT);
 
     //display text to screen
     display_text(renderer, text0, font, rect_title, WHITE);
@@ -191,18 +192,18 @@ int players_screen(SDL_Renderer *renderer, TTF_Font *font) {
     display_text(renderer, text3, font, rect3, WHITE);
     display_text(renderer, text4, font, rect4, WHITE);
 
-    /*int button_num = handle_buttons(num_buttons);
+    int button_num = handle_buttons(num_buttons);
     while(button_num == 0) {
         SDL_Delay(500);
         button_num = handle_buttons(num_buttons);
-    }*/
+    }
 
     free(rect_title);
     free(rect1);
     free(rect2);
     free(rect3);
     free(rect4);
-    return 2 * handle_buttons(num_buttons);
+    return button_num * 2;
 }
 
 int handle_buttons(int num_buttons) {

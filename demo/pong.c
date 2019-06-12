@@ -24,7 +24,8 @@ int main(int argc, char **argv){
     int num_players = *argv[1] - '0';
     int num_users = *argv[2] - '0';*/
 
-    int num_players = players_screen(renderer, font);
+    int num_users = start_screen(renderer, font);
+    SDL_Delay(2000);
     //reset window and scene
     scene_free(scene);
     SDL_DestroyRenderer(renderer);
@@ -32,7 +33,7 @@ int main(int argc, char **argv){
     scene = scene_init();
     renderer = window_init();
 
-    int num_users = start_screen(renderer, font);
+    int num_players = players_screen(renderer, font);
     //reset window and scene
     scene_free(scene);
     SDL_DestroyRenderer(renderer);
@@ -174,6 +175,15 @@ int main(int argc, char **argv){
         //display_text(itoa(right_score), 30);
         //display_text(itoa(left_score), 30);
     }
+    //reset window and scene
+    scene_free(scene);
+    SDL_DestroyRenderer(renderer);
+    close_window();
+    scene = scene_init();
+    renderer = window_init();
+    end_screen(renderer, font);
+
+
     //free all elements of scene
     scene_free(scene);
     free(scores);
