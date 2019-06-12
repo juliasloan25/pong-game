@@ -5,6 +5,7 @@
 #include "body.h"
 #include "constants.h"
 #include <time.h>
+#include "paddle.h"
 
 typedef enum {
     EASY,

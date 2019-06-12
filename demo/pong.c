@@ -5,7 +5,7 @@ const double HEIGHT = 800; //screen height
 const double BALL_RADIUS = 10.0; //radius of pong ball
 const double GRAV_RADIUS = 15.0;
 const double PADDLE_HEIGHT = 100.0; //width of the pong paddle
-const double PADDLE_WIDTH = 20.0; // height of the pong paddle
+const double PADDLE_WIDTH = 30.0; // height of the pong paddle
 const double BOUNCE_HEIGHT = 10.0;
 const double BOUNCE_WIDTH = 80.0;
 const double COLOR_INTERVAL = 2.0;
@@ -51,7 +51,7 @@ const Vector ball_center = {
     .x = WIDTH / 2.0,
     .y = HEIGHT/ 2.0
 }; //initial and reset center of the ball
-const double G = 7000.0; //gravity for obstacle
+const double G = 6500.0; //gravity for obstacle
 
 
 int main(int argc, char **argv){
@@ -197,6 +197,9 @@ int main(int argc, char **argv){
     //free all elements of scene
     scene_free(scene);
     free(scores);
+    for(int i = 0; i < num_players; i++){
+      free(*(paddles+i));
+    }
     free(paddles);
     Mix_FreeMusic(bgs);
     //TTF_Quit();
@@ -373,18 +376,21 @@ Paddle **create_paddles(Scene *scene, int num_players, int num_users, AiDifficul
             body_set_rotation(paddle, angle * i);
             scene_add_body(scene, paddle);
             create_physics_collision(scene, ELASTICITY, paddle, ball);
-            /*if(i >= num_users){
-                create_ai(scene, paddle, ball, difficulty);
-            }*/
+            Paddle *paddle_obj;
             if(num_players == 2){
-                paddles[i / 2] = paddle_init(paddle, paddle_center, axis, point1, point2);
+                paddle_obj = paddle_init(paddle, paddle_center, axis, point1, point2);
+                paddles[i / 2] = paddle_obj;
             }
             else{
-                paddles[i] = paddle_init(paddle, paddle_center, axis, point1, point2);
+                paddle_obj = paddle_init(paddle, paddle_center, axis, point1, point2);
+                paddles[i%num_players] = paddle_obj;
+            }
+            if(!((i == 0 && num_users >= 1) || (i == polygon_size / 2 && num_users == 2))){
+                create_ai(scene, paddle_obj, ball, difficulty);
             }
         }
     }
-    free(polygon_shape);
+    list_free(polygon_shape);
     return paddles;
 }
 
@@ -482,9 +488,11 @@ int ball_hit_side(Body *ball, Body *polygon, int num_players){
         if(cross < 0){
             if(num_players == 2){
                 if(i == 0){
+                    list_free(polygon_shape);
                     return 0;
                 }
                 if(i == 2){
+                    list_free(polygon_shape);
                     return 1;
                 }
                 if(i == 1){
@@ -509,11 +517,12 @@ int ball_hit_side(Body *ball, Body *polygon, int num_players){
                 }
             }
             else{
+                list_free(polygon_shape);
                 return i;
             }
         }
     }
-    free(polygon_shape);
+    list_free(polygon_shape);
     return -1;
 }
 
