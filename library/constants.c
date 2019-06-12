@@ -14,10 +14,10 @@ const double ELASTICITY = 1; //elasticity of collisions
 const double PADDLE_VEL = 600.0; //velocity that the paddle can go
 const double MASS = 50.0; //mass of non-infinity mass objects
 const double BALL_VEL = 700.0; // initial velocity of ball
-const int FONT_SIZE = 30;
+const int FONT_SIZE = 25;
 const double G = 6500.0; //gravity for obstacle
 
-const int TITLE_WIDTH = WIDTH/2;
+const int TITLE_WIDTH = WIDTH/3;
 const int TITLE_HEIGHT = HEIGHT/2;
 const int TITLE_X = WIDTH/2 - TITLE_WIDTH/2;
 const int TITLE_Y = 40;
