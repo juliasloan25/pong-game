@@ -55,6 +55,11 @@ const double G = 7000.0; //gravity for obstacle
 
 
 int main(int argc, char **argv){
+  //initialize scene and window
+    Scene *scene = scene_init();
+    SDL_Renderer *renderer = window_init();
+    TTF_Font *font = load_font(FONT_SIZE);
+
     SDL_Init(SDL_INIT_AUDIO);
     Mix_Music *bgs;
     Mix_OpenAudio(22050,MIX_DEFAULT_FORMAT,2,4096);
@@ -67,6 +72,8 @@ int main(int argc, char **argv){
       return 1;
     }
 
+
+    int num_players = players_screen(renderer, screen);
     int num_players = *argv[1] - '0';
     int num_users = *argv[2] - '0';
     int num_ai = num_players - num_users;
