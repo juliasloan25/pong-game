@@ -25,7 +25,7 @@ int main(int argc, char **argv){
     int num_users = *argv[2] - '0';*/
 
     int num_users = start_screen(renderer, font);
-    SDL_Delay(2000);
+
     //reset window and scene
     //scene_free(scene);
     SDL_DestroyRenderer(renderer);
@@ -188,7 +188,7 @@ int main(int argc, char **argv){
     scene_free(scene);
     free(scores);
     for(int i = 0; i < num_players; i++){
-      free(*(paddles+i));
+        free(*(paddles+i));
     }
     free(paddles);
     Mix_FreeMusic(bgs);

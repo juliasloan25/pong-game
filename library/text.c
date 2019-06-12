@@ -108,25 +108,25 @@ int start_screen(SDL_Renderer *renderer, TTF_Font *font) {
 //after calling this, call display_text on the scores to overlay them
 int end_screen(SDL_Renderer *renderer, TTF_Font *font) {
     char *text0 = "GAME OVER";
-    int num_buttons = 1;
-    char *text1 = "CLOSE";
+    int num_buttons = 0;
+    //char *text1 = "CLOSE";
     //int num_buttons = 1;
     //int num_buttons = 0;
 
     SDL_Rect *rect_title = make_rect(TITLE_X, TITLE_Y, TITLE_WIDTH, TITLE_HEIGHT);
-    SDL_Rect *rect1 = make_rect(TEXT_X, TEXT_Y_START, TEXT_WIDTH, TEXT_HEIGHT);
+    //SDL_Rect *rect1 = make_rect(TEXT_X, TEXT_Y_START, TEXT_WIDTH, TEXT_HEIGHT);
 
     //display text to screen
     display_text(renderer, text0, font, rect_title, WHITE);
-    display_text(renderer, text1, font, rect1, WHITE);
+    //display_text(renderer, text1, font, rect1, WHITE);
     int button_num = handle_buttons(num_buttons);
-    while(button_num == 0) {
+    /*while(button_num == 0) {
         SDL_Delay(500);
         button_num = handle_buttons(num_buttons);
-    }
-
+    }*/
+    SDL_Delay(4000);
     free(rect_title);
-    //  free(rect1);
+    //free(rect1);
     return button_num;
 
     //no buttons
@@ -209,6 +209,7 @@ int players_screen(SDL_Renderer *renderer, TTF_Font *font) {
 
 int handle_buttons(int num_buttons) {
     SDL_Event e;
+    if (num_buttons > 0) {
     while(SDL_PollEvent(&e)) {
       for (int i = 1; i <= num_buttons; i++) {
           SDL_MouseButtonEvent mbe = e.button;
@@ -227,9 +228,10 @@ int handle_buttons(int num_buttons) {
                       case SDL_BUTTON_RIGHT:
                           continue;
                       }
-              }
+                  }
+            }
         }
     }
-  }
+}
     return 0;
 }
