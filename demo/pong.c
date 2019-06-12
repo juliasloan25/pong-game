@@ -1,7 +1,8 @@
 #include "pong.h"
 
 int main(int argc, char **argv){
-  //initialize scene and window
+    //initialize scene and window
+    TTF_Init();
     Scene *scene = scene_init();
     SDL_Renderer *renderer = window_init();
     TTF_Font *font = load_font(FONT_SIZE);
