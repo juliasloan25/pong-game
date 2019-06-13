@@ -63,7 +63,6 @@ void display_text(SDL_Renderer *renderer, char *text, TTF_Font *font,
     SDL_RenderCopy(renderer, texture, NULL, rect);
     //SDL_RenderPresent(renderer);
     sdl_show(renderer);
-    SDL_Delay(1000);
     SDL_UnlockSurface(text_surface);
 
     //sdl_render_text(renderer, text_surface, rect);
