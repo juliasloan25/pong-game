@@ -51,6 +51,7 @@ void display_text(SDL_Renderer *renderer, char *text, TTF_Font *font,
     }
 
     SDL_Surface *text_surface = TTF_RenderText_Solid(font, text, WHITE);
+    SDL_LockSurface(text_surface);
     if (text_surface == NULL) {
         printf("TTF_Render: %s\n", TTF_GetError());
         exit(1);
@@ -63,6 +64,7 @@ void display_text(SDL_Renderer *renderer, char *text, TTF_Font *font,
     //SDL_RenderPresent(renderer);
     sdl_show(renderer);
     SDL_Delay(1000);
+    SDL_UnlockSurface(text_surface);
 
     //sdl_render_text(renderer, text_surface, rect);
 
