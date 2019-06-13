@@ -49,6 +49,7 @@ void display_text(SDL_Renderer *renderer, char *text, TTF_Font *font,
         printf("font null");
         exit(1);
     }
+    printf("%s\n", text);
 
     SDL_Surface *text_surface = TTF_RenderText_Solid(font, text, WHITE);
     SDL_LockSurface(text_surface);
@@ -63,13 +64,14 @@ void display_text(SDL_Renderer *renderer, char *text, TTF_Font *font,
     SDL_RenderCopy(renderer, texture, NULL, rect);
     //SDL_RenderPresent(renderer);
     sdl_show(renderer);
+    //SDL_Delay(1000);
     SDL_UnlockSurface(text_surface);
 
     //sdl_render_text(renderer, text_surface, rect);
 
     //free(rect); //CHANGE IN NON-SIMPLE
-    SDL_DestroyTexture(texture);
-    SDL_FreeSurface(text_surface);
+    //SDL_DestroyTexture(texture);
+    //SDL_FreeSurface(text_surface);
     return;
 }
 
@@ -82,9 +84,10 @@ int start_screen(SDL_Renderer *renderer, TTF_Font *font) {
 
     //set positioning rectangles
     SDL_Rect *rect_title = make_rect(TITLE_X, TITLE_Y, TITLE_WIDTH, TITLE_HEIGHT);
+    //SDL_Rect *rect_title = make_rect(0, 0, TITLE_WIDTH, TITLE_HEIGHT);
     SDL_Rect *rect1 = make_rect(TEXT_X, TEXT_Y_START, TEXT_WIDTH, TEXT_HEIGHT);
-    SDL_Rect *rect2 = make_rect(TEXT_X, TEXT_Y_START + (TEXT_HEIGHT),
-                    TEXT_WIDTH, TEXT_HEIGHT);
+    SDL_Rect *rect2 = make_rect(TEXT_X, TEXT_Y_START + (TEXT_HEIGHT), TEXT_WIDTH, TEXT_HEIGHT);
+    //SDL_Rect *rect2 = make_rect(0, 0, TEXT_WIDTH, TEXT_HEIGHT);
     SDL_Rect *rect3 = make_rect(TEXT_X, TEXT_Y_START + (2 * TEXT_HEIGHT),
                     TEXT_WIDTH, TEXT_HEIGHT);
 

@@ -1,7 +1,7 @@
 #include "constants.h"
 
 const double WIDTH = 800; //screen width
-const double HEIGHT = 600; //screen height
+const double HEIGHT = 800; //screen height
 const double BALL_RADIUS = 10.0; //radius of pong ball
 const double GRAV_RADIUS = 15.0;
 const double PADDLE_HEIGHT = 100.0; //width of the pong paddle
