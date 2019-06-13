@@ -2,10 +2,13 @@
 
 TTF_Font *load_font(int font_size) {
     char *font_path = SDL_GetBasePath();
-    const char *font_str = "ostrich-regular.ttf";
-    snprintf(font_path, 100, "%s", font_str);
+    char *font_str = "ostrich-regular.ttf";
+    int length = strlen(font_path) + strlen(font_str) + 2;
+    char path[length];
+    snprintf(path, length, "%s%s", font_path, font_str);
+    //snprintf(font_path, 100, "%s", font_str);
 
-    TTF_Font *font = TTF_OpenFont(font_path, font_size);
+    TTF_Font *font = TTF_OpenFont(path, font_size);
     if (font == NULL) {
         printf("TTF_OpenFont: %s\n", TTF_GetError());
         exit(1);
@@ -124,7 +127,7 @@ int end_screen(SDL_Renderer *renderer, TTF_Font *font) {
         SDL_Delay(500);
         button_num = handle_buttons(num_buttons);
     }*/
-    SDL_Delay(4000);
+    SDL_Delay(3000);
     free(rect_title);
     //free(rect1);
     return button_num;
@@ -142,7 +145,7 @@ int difficulty_screen(SDL_Renderer *renderer, TTF_Font *font) {
     char *text3 = "HARD";
     int num_buttons = 3;
 
-    SDL_Rect *rect_title = make_rect(TITLE_X, TITLE_Y, TITLE_WIDTH, TITLE_HEIGHT);
+    SDL_Rect *rect_title = make_rect(TITLE_X/2, TITLE_Y, TITLE_WIDTH*2, TITLE_HEIGHT);
     SDL_Rect *rect1 = make_rect(TEXT_X, TEXT_Y_START, TEXT_WIDTH, TEXT_HEIGHT);
     SDL_Rect *rect2 = make_rect(TEXT_X, TEXT_Y_START + (TEXT_HEIGHT),
                     TEXT_WIDTH, TEXT_HEIGHT);
