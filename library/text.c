@@ -32,7 +32,7 @@ SDL_Rect *make_rect(int x_pos, int y_pos, int width, int height) {
 void set_background(SDL_Renderer *renderer, TTF_Font *font) {
     SDL_Rect *bkgrd_rect = make_rect(0, 0, WIDTH, HEIGHT);
     //SDL_Surface *background = test_display_text(renderer, " ", font, bkgrd_rect);
-    display_text(renderer, " ", font, bkgrd_rect, BLACK);
+    display_text(renderer, " ", font, bkgrd_rect);
 
     //sdl_render_scene(scene, renderer, background, NULL, bkgrd_rect, NULL);
     SDL_Delay(100);
@@ -41,7 +41,7 @@ void set_background(SDL_Renderer *renderer, TTF_Font *font) {
 }
 
 void display_text(SDL_Renderer *renderer, char *text, TTF_Font *font,
-                            SDL_Rect *rect, SDL_Color color) {
+                            SDL_Rect *rect) {
     //get vector instead of x and y pos, then use sdl_wrapper scaling
     //or change scene so coordinates match up with sdl pixel coordinates
 
@@ -51,7 +51,7 @@ void display_text(SDL_Renderer *renderer, char *text, TTF_Font *font,
     }
     printf("%s\n", text);
 
-    SDL_Surface *text_surface = TTF_RenderText_Solid(font, text, color);
+    SDL_Surface *text_surface = TTF_RenderText_Solid(font, text, WHITE);
     if (text_surface == NULL) {
         printf("TTF_Render: %s\n", TTF_GetError());
         exit(1);
@@ -61,7 +61,9 @@ void display_text(SDL_Renderer *renderer, char *text, TTF_Font *font,
     SDL_Texture *texture = SDL_CreateTextureFromSurface(renderer, text_surface);
 
     SDL_RenderCopy(renderer, texture, NULL, rect);
+    //SDL_RenderPresent(renderer);
     sdl_show(renderer);
+    SDL_Delay(1000);
 
     //sdl_render_text(renderer, text_surface, rect);
 
@@ -88,11 +90,11 @@ int start_screen(SDL_Renderer *renderer, TTF_Font *font) {
                     TEXT_WIDTH, TEXT_HEIGHT);
 
     //display title to start screen
-    display_text(renderer, title, font, rect_title, WHITE);
+    display_text(renderer, title, font, rect_title);
     //display play modes
-    display_text(renderer, text1, font, rect1, WHITE);
-    display_text(renderer, text2, font, rect2, WHITE);
-    display_text(renderer, text3, font, rect3, WHITE);
+    display_text(renderer, text1, font, rect1);
+    display_text(renderer, text2, font, rect2);
+    display_text(renderer, text3, font, rect3);
 
     int button_num = handle_buttons(num_buttons);
     while(button_num == 0) {
@@ -122,8 +124,8 @@ int end_screen(SDL_Renderer *renderer, TTF_Font *font) {
     //SDL_Rect *rect1 = make_rect(TEXT_X, TEXT_Y_START, TEXT_WIDTH, TEXT_HEIGHT);
 
     //display text to screen
-    display_text(renderer, text0, font, rect_title, WHITE);
-    //display_text(renderer, text1, font, rect1, WHITE);
+    display_text(renderer, text0, font, rect_title);
+    //display_text(renderer, text1, font, rect1);
     int button_num = handle_buttons(num_buttons);
     /*while(button_num == 0) {
         SDL_Delay(500);
@@ -155,10 +157,10 @@ int difficulty_screen(SDL_Renderer *renderer, TTF_Font *font) {
                     TEXT_WIDTH, TEXT_HEIGHT);
 
     //display text to screen
-    display_text(renderer, text0, font, rect_title, WHITE);
-    display_text(renderer, text1, font, rect1, WHITE);
-    display_text(renderer, text2, font, rect2, WHITE);
-    display_text(renderer, text3, font, rect3, WHITE);
+    display_text(renderer, text0, font, rect_title);
+    display_text(renderer, text1, font, rect1);
+    display_text(renderer, text2, font, rect2);
+    display_text(renderer, text3, font, rect3);
 
     int button_num = handle_buttons(num_buttons);
     while(button_num == 0) {
@@ -192,11 +194,11 @@ int players_screen(SDL_Renderer *renderer, TTF_Font *font) {
                                   (3 * TEXT_HEIGHT), TEXT_WIDTH/2, TEXT_HEIGHT);
 
     //display text to screen
-    display_text(renderer, text0, font, rect_title, WHITE);
-    display_text(renderer, text1, font, rect1, WHITE);
-    display_text(renderer, text2, font, rect2, WHITE);
-    display_text(renderer, text3, font, rect3, WHITE);
-    display_text(renderer, text4, font, rect4, WHITE);
+    display_text(renderer, text0, font, rect_title);
+    display_text(renderer, text1, font, rect1);
+    display_text(renderer, text2, font, rect2);
+    display_text(renderer, text3, font, rect3);
+    display_text(renderer, text4, font, rect4);
 
     int button_num = handle_buttons(num_buttons);
     while(button_num == 0) {
