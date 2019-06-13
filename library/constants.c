@@ -1,7 +1,7 @@
 #include "constants.h"
 
 const double WIDTH = 800; //screen width
-const double HEIGHT = 600; //screen height
+const double HEIGHT = 800; //screen height
 const double BALL_RADIUS = 10.0; //radius of pong ball
 const double GRAV_RADIUS = 15.0;
 const double PADDLE_HEIGHT = 100.0; //width of the pong paddle
@@ -25,7 +25,7 @@ const int TITLE_Y = 40;
 const int TEXT_WIDTH = WIDTH/4;
 const int TEXT_HEIGHT = HEIGHT/8;
 const int TEXT_X = WIDTH/2 - TEXT_WIDTH/2;
-const int TEXT_Y_START = TITLE_HEIGHT + TITLE_Y*2;
+const int TEXT_Y_START = TITLE_HEIGHT;
 const int SCORE_WIDTH = TEXT_WIDTH/4;
 
 const int SCORE_Y = 5;

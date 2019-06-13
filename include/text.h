@@ -1,5 +1,6 @@
 #include <SDL2/SDL_ttf.h>
 #include <SDL2/SDL.h>
+#include "SDL.h"
 #include <stdlib.h>
 #include <string.h>
 #include <sdl_wrapper.h>
@@ -33,7 +34,7 @@ SDL_Rect *make_rect(int x_pos, int y_pos, int width, int height);
 * @param rect the positioning rectangle for the text
 */
 void display_text(SDL_Renderer *renderer, char *text, TTF_Font *font,
-                    SDL_Rect *rect, SDL_Color color);
+                    SDL_Rect *rect);
 
 /*
 * Sets the entire background of the window to the given color.
