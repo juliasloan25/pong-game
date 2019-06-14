@@ -54,7 +54,7 @@ Paddle **create_paddles(Scene *scene, int num_players, int num_users, AiDifficul
 
 
 
-void net_update();
+bool net_update(Scene *scene, Paddle **paddles, int num_players, Body *bounce, Body *grav);
 
 void send_vec(Vector vec);
 

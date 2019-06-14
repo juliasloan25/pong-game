@@ -4,7 +4,7 @@ int conn;
 Paddle *me;
 Paddle *them;
 bool networked = false;
-
+NetType net_type;
 int main(int argc, char **argv){
     Mix_Music *bgs;
     SDL_Init(SDL_INIT_AUDIO);
@@ -16,7 +16,6 @@ int main(int argc, char **argv){
     int num_players;
     int num_users = 2;
     AiDifficulty difficulty = MEDIUM;
-    NetType net_type;
     TTF_Init();
     Scene *scene = scene_init();
     SDL_Renderer *renderer = window_init();
@@ -67,6 +66,7 @@ int main(int argc, char **argv){
       scene_free(scene);
 
       scene = scene_init();
+
       if(!networked){
           //reset window and scene
           num_players = players_screen(renderer, font);
@@ -126,6 +126,7 @@ int main(int argc, char **argv){
         *(polygon_type) = OCTOGON;
         rotation_angle = 7 * M_PI / 8;
     }
+
     Body *polygon = make_body(polygon_type, (Vector) {WIDTH/2, HEIGHT/2});
     body_set_rotation(polygon, rotation_angle); //to place polygon upright
     scene_add_body(scene, polygon);
@@ -185,36 +186,45 @@ int main(int argc, char **argv){
     double obstacle_timer = 0;
     double color_index = 0;
     double color_timer = 0;
+
     while(!sdl_is_done(scene, num_users, num_players)) {
         double wait_time = time_since_last_tick();
         ai_timer += wait_time;
         obstacle_timer += wait_time;
         color_timer += wait_time;
         //checks if paddle or ball has hit walls
-        int ball_hit = ball_hit_side(ball, polygon, num_players);
-        if(ball_hit != -1){
-            scores[ball_hit]++;
-            reset(scene, paddles, num_players, bounce, grav);
-        }
 
-        paddle_hit_side(paddles, num_players);
-
-        if(obstacle_timer >= OBSTACLE_INTERVAL){
-            reset_obstacles(bounce, grav, ball);
-            obstacle_timer = 0;
+        if(networked){
+            if(net_type == SERVER){
+                nu_send_str(conn, "BA");
+                send_vec(body_get_velocity(ball));
+            }
+            if(!(net_update(scene, paddles, num_players, bounce, grav))){
+                    break;
+            }
         }
+        if(!networked || net_type == SERVER){
+            int ball_hit = ball_hit_side(ball, polygon, num_players);
+            if(ball_hit != -1){
+                scores[ball_hit]++;
+                reset(scene, paddles, num_players, bounce, grav);
+            }
 
-        if(color_timer >= COLOR_INTERVAL){
-            color_index++;
-            body_set_color(ball, get_color(color_index));
-            color_timer = 0;
-        }
+            paddle_hit_side(paddles, num_players);
+
+            if(obstacle_timer >= OBSTACLE_INTERVAL){
+                reset_obstacles(bounce, grav, ball);
+                obstacle_timer = 0;
+            }
+
+            if(color_timer >= COLOR_INTERVAL){
+                color_index++;
+                body_set_color(ball, get_color(color_index));
+                color_timer = 0;
+            }
 
         //render and update scene at every tick
-        if(networked){
-            net_update();
         }
-        printf("Before tick \n");
         scene_tick(scene, wait_time);
         sdl_render_scene(scene, renderer);
 
@@ -222,6 +232,9 @@ int main(int argc, char **argv){
         for(int j = 0; j < num_players; j++){
             if(scores[j] >= 10){
                 scene_set_end(scene);
+                if(net_type == SERVER){
+                    nu_send_str(conn, "END");
+                }
             }
         }
 
@@ -380,15 +393,41 @@ Body *make_body(BodyType *type, Vector center){
     return body;
 }
 
-void net_update(){
+bool net_update(Scene *scene, Paddle **paddles, int num_players, Body *bounce, Body *grav){
     char *remote = nu_try_read_str(conn);
     if(remote != NULL){
-        if(strcmp(remote, "P")){
+        if(strcmp(remote, "P") == 0){
             Vector new_paddle_vel = read_vec();
             Body *them_bod = paddle_get_body(them);
             body_set_velocity(them_bod, new_paddle_vel);
         }
+
+        if(strcmp(remote, "END") == 0){
+            return 0;
+        }
+        
+        if(net_type == CLIENT){
+            if(strcmp(remote, "RES") == 0){
+                reset(scene, paddles, num_players, bounce, grav);
+            }
+
+            if(strcmp(remote, "BO") == 0){
+                Vector bo_pos = read_vec();
+                double angle = atof(nu_read_str(conn));
+                body_set_centroid(bounce, bo_pos);
+                body_set_rotation(bounce, angle);
+            }
+            if(strcmp(remote, "G") == 0){
+                Vector g_pos = read_vec();
+                body_set_centroid(grav, g_pos);
+            }
+            if(strcmp(remote, "BA") == 0){
+                Vector ball_vel = read_vec();
+                body_set_velocity(scene_get_body(scene, 1), ball_vel);
+            }
+        }
     }
+    return 1;
 }
 
 Paddle **create_paddles(Scene *scene, int num_players, int num_users, AiDifficulty difficulty, Body *polygon){
@@ -465,8 +504,6 @@ void send_vec(Vector vec){
   char str_y[100];
   sprintf(str_x, "%f", vec.x);
   sprintf(str_y, "%f", vec.y);
-  printf("%s \n", str_x);
-  printf("%s \n", str_y);
   nu_send_str(conn, str_x);
   nu_send_str(conn, str_y);
 
@@ -475,11 +512,10 @@ void send_vec(Vector vec){
 Vector read_vec(){
     char* vec_x = nu_read_str(conn);
     char* vec_y = nu_read_str(conn);
-    printf("%s \n", vec_x);
-    printf("%s \n", vec_y);
     Vector new_vec = {.x = atof(vec_x), .y = atof(vec_y)};
     return new_vec;
 }
+
 
 void net_on_key(char key, KeyEventType type, double held_time, Scene *scene,
                                             int num_users, int num_players) {
@@ -531,6 +567,7 @@ void net_on_key(char key, KeyEventType type, double held_time, Scene *scene,
         }
     }
 }
+
 
 void on_key(char key, KeyEventType type, double held_time, Scene *scene,
                                             int num_users, int num_players) {
@@ -694,6 +731,9 @@ void paddle_hit_side(Paddle **paddles, int num_players){
 }
 
 void reset(Scene *scene, Paddle **paddles, int num_players, Body *bounce, Body *grav){
+    if(net_type == SERVER && networked){
+        nu_send_str(conn, "RES");
+    }
     Body *ball = scene_get_body(scene, 1);
     body_set_centroid(ball, BALL_CENTER);
     body_set_velocity(ball, (Vector){BALL_VEL, 0});
@@ -739,6 +779,18 @@ void reset_obstacles(Body *bounce, Body *grav, Body *ball){
     list_free(ball_shape);
     if(coll1.collided || coll2.collided){
         reset_obstacles(bounce, grav, ball);
+    }
+    else{
+        if(net_type == SERVER && networked){
+            nu_send_str(conn, "BO");
+            send_vec(bounce_center);
+            char str_ang[50];
+            sprintf(str_ang,"%f",angle);
+            nu_send_str(conn, str_ang);
+
+            nu_send_str(conn, "G");
+            send_vec(grav_center);
+        }
     }
 }
 

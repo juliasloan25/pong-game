@@ -92,7 +92,7 @@ bool sdl_is_done(Scene *scene, int num_users, int num_players) {
                 free(event);
                 return true;
             case SDL_MOUSEMOTION:
-              mouse_motion(scene_get_body(scene, 2), event->motion.y, num_users);
+              //mouse_motion(scene_get_body(scene, 2), event->motion.y, num_users);
                 break;
             case SDL_KEYDOWN:
             case SDL_KEYUP:
