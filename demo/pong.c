@@ -16,12 +16,6 @@ int main(int argc, char **argv){
     SDL_Renderer *renderer = window_init();
     TTF_Font *font = load_font(FONT_SIZE);
 
-    SDL_Init(SDL_INIT_AUDIO);
-    Mix_Music *bgs;
-    Mix_OpenAudio(22050,MIX_DEFAULT_FORMAT,2,4096);
-    bgs = Mix_LoadMUS("price_is_right.mp3");
-    Mix_PlayMusic(bgs, -1);
-
     //using command line arguments for setup
     /*if(argc != 3 && argc != 4){
       //if(argc != 2 && argc != 3){
@@ -33,10 +27,15 @@ int main(int argc, char **argv){
     int num_players = *argv[1] - '0';
     int num_users = *argv[2] - '0';*/
 
+    Mix_Music *bgs;
     if (strcmp(argv[1], "server") == 0) {
         printf("Waiting for a client to connect...\n");
         conn = nu_wait_client(atoi(argv[2]));
         printf("Client connected!\n");
+        SDL_Init(SDL_INIT_AUDIO);
+        Mix_OpenAudio(22050,MIX_DEFAULT_FORMAT,2,4096);
+        bgs = Mix_LoadMUS("price_is_right.mp3");
+        Mix_PlayMusic(bgs, -1);
         num_players = 2;
         net_type = SERVER;
         networked = true;
@@ -57,6 +56,11 @@ int main(int argc, char **argv){
 
 
     if(!networked){
+        SDL_Init(SDL_INIT_AUDIO);
+        Mix_Music *bgs;
+        Mix_OpenAudio(22050,MIX_DEFAULT_FORMAT,2,4096);
+        bgs = Mix_LoadMUS("price_is_right.mp3");
+        Mix_PlayMusic(bgs, -1);
         num_users = start_screen(renderer, font);
 
         //reset window and scene
@@ -247,6 +251,7 @@ int main(int argc, char **argv){
         nu_close_connection(conn);
     }
     free(paddles);
+
     Mix_FreeMusic(bgs);
     SDL_DestroyRenderer(renderer);
     TTF_CloseFont(font); //CHANGE IN NON-SIMPLE
@@ -468,8 +473,8 @@ void send_vec(Vector vec){
 }
 
 Vector read_vec(){
-    char* vec_x = nu_try_read_str(conn);
-    char* vec_y = nu_try_read_str(conn);
+    char* vec_x = nu_read_str(conn);
+    char* vec_y = nu_read_str(conn);
     printf("%s \n", vec_x);
     printf("%s \n", vec_y);
     Vector new_vec = {.x = atof(vec_x), .y = atof(vec_y)};
