@@ -135,7 +135,6 @@ int end_screen(SDL_Renderer *renderer, TTF_Font *font) {
     }*/
     SDL_Delay(3000);
     free(rect_title);
-    free(rect1);
     //  free(rect1);
     return button_num;
 

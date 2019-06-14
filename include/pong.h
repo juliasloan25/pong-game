@@ -12,12 +12,19 @@
 #include "collision.h"
 #include "ai.h"
 #include "text.h"
+#include "network_util.h"
 #include "constants.h"
 
 
 /*
 * The possible types of bodies to make.
 */
+
+typedef enum{
+  SERVER,
+  CLIENT
+}NetType;
+
 typedef enum {
     PADDLE_USER,
     PADDLE_AI,
@@ -44,6 +51,17 @@ SDL_Renderer *window_init();
 Body *make_body(BodyType *type, Vector center);
 
 Paddle **create_paddles(Scene *scene, int num_players, int num_users, AiDifficulty difficulty, Body *polygon);
+
+
+
+void net_update();
+
+void send_vec(Vector vec);
+
+Vector read_vec();
+
+void net_on_key(char key, KeyEventType type, double held_time, Scene *scene,
+                                            int num_users, int num_players);
 
 /*
 * @brief Handles key events. Left and right arrows move the shooter and the

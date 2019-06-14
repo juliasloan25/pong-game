@@ -1,7 +1,16 @@
   #include "pong.h"
 
+int conn;
+Paddle *me;
+Paddle *them;
+bool networked = false;
+
 int main(int argc, char **argv){
     //initialize scene and window
+    int num_players;
+    int num_users = 2;
+    AiDifficulty difficulty = MEDIUM;
+    NetType net_type;
     TTF_Init();
     Scene *scene = scene_init();
     SDL_Renderer *renderer = window_init();
@@ -24,57 +33,84 @@ int main(int argc, char **argv){
     int num_players = *argv[1] - '0';
     int num_users = *argv[2] - '0';*/
 
-    int num_users = start_screen(renderer, font);
+    if (strcmp(argv[1], "server") == 0) {
+        printf("Waiting for a client to connect...\n");
+        conn = nu_wait_client(atoi(argv[2]));
+        printf("Client connected!\n");
+        num_players = 2;
+        net_type = SERVER;
+        networked = true;
+    }
 
-    //reset window and scene
-    //scene_free(scene);
-    SDL_DestroyRenderer(renderer);
-    close_window();
-    //scene = scene_init();
-    renderer = window_init();
+    else if(strcmp(argv[1], "client") == 0){
+        conn = nu_connect_server(argv[2], atoi(argv[3]));
+        printf("Connected to server!\n");
+        net_type = CLIENT;
+        num_players = 2;
+        networked = true;
+    }
 
-    int num_players = players_screen(renderer, font);
-    //reset window and scene
-    //scene_free(scene);
-    SDL_DestroyRenderer(renderer);
-    close_window();
-    //scene = scene_init();
-    renderer = window_init();
+    if (conn < 0) {
+        fprintf(stderr, "Connection Failed\n");
+        exit(1);
+    }
 
-    //int num_ai = num_players - num_users;
-    AiDifficulty difficulty = MEDIUM;
 
-    //using command line arguments for setup
-    /*if(num_ai != 0){
-        switch(*argv[2]){
-            case '1':
-                difficulty = EASY;
-                break;
-            case '2':
-                difficulty = MEDIUM;
-                break;
-            case '3':
-                difficulty = HARD;
-                break;
-        }
-    }*/
+    if(!networked){
+        num_users = start_screen(renderer, font);
 
-    if (num_users == 3) { // demo mode
-       num_users = 0;
-       difficulty = MEDIUM;
-   }
+        //reset window and scene
+        //scene_free(scene);
+        SDL_DestroyRenderer(renderer);
+        close_window();
+        //scene = scene_init();
+        renderer = window_init();
 
-   if (num_users == 1) { // single player
-       int ai_difficulty = difficulty_screen(renderer, font);
-       if (ai_difficulty == 1) {
-           difficulty = EASY;
-       }
-       else if (ai_difficulty == 2) {
+        num_players = players_screen(renderer, font);
+
+        //reset window and scene
+        //scene_free(scene);
+        SDL_DestroyRenderer(renderer);
+        close_window();
+        //scene = scene_init();
+        renderer = window_init();
+
+        //int num_ai = num_players - num_users;
+        AiDifficulty difficulty = MEDIUM;
+
+        //using command line arguments for setup
+        /*if(num_ai != 0){
+            switch(*argv[2]){
+                case '1':
+                    difficulty = EASY;
+                    break;
+                case '2':
+                    difficulty = MEDIUM;
+                    break;
+                case '3':
+                    difficulty = HARD;
+                    break;
+            }
+        }*/
+
+        if (num_users == 3) { // demo mode
+           num_users = 0;
            difficulty = MEDIUM;
        }
-       else if (ai_difficulty == 3) {
-           difficulty = HARD;
+
+       if (num_users == 1) { // single player
+           int ai_difficulty = difficulty_screen(renderer, font);
+           if (ai_difficulty == 1) {
+               difficulty = EASY;
+           }
+           else if (ai_difficulty == 2) {
+               difficulty = MEDIUM;
+           }
+           else if (ai_difficulty == 3) {
+               difficulty = HARD;
+           }
        }
+
    }
 
     BodyType *polygon_type = malloc(sizeof(BodyType));
@@ -104,7 +140,16 @@ int main(int argc, char **argv){
     //create paddles
     Paddle **paddles = create_paddles(scene, num_players, num_users, difficulty, polygon);
 
+    if(net_type == SERVER){
+        me = *(paddles);
+        them = *(paddles + 1);
+    }
+    else if(net_type == CLIENT){
+        me = *(paddles + 1);
+        them = *(paddles);
+    }
     //create obstacles
+
     BodyType *bounce_type = malloc(sizeof(BodyType));
     *(bounce_type) = BOUNCE;
     Body *bounce = make_body(bounce_type, VEC_ZERO);
@@ -120,8 +165,13 @@ int main(int argc, char **argv){
     //create forces between obstacles and ball
     create_physics_collision(scene, ELASTICITY, bounce, ball);
     create_newtonian_gravity(scene, G, ball, grav, false);
+    if(!networked){
+        sdl_on_key(on_key);
+    }
+    else{
+        sdl_on_key(net_on_key);
+    }
 
-    sdl_on_key(on_key);
 
     //initialize scores
     int *scores = malloc(sizeof(int) * num_players);
@@ -158,6 +208,9 @@ int main(int argc, char **argv){
         }
 
         //render and update scene at every tick
+        if(networked){
+            net_update();
+        }
         scene_tick(scene, wait_time);
         sdl_render_scene(scene, renderer);
 
@@ -189,6 +242,9 @@ int main(int argc, char **argv){
     free(scores);
     for(int i = 0; i < num_players; i++){
         free(*(paddles+i));
+    }
+    if(networked){
+        nu_close_connection(conn);
     }
     free(paddles);
     Mix_FreeMusic(bgs);
@@ -319,6 +375,17 @@ Body *make_body(BodyType *type, Vector center){
     return body;
 }
 
+void net_update(){
+    char *remote = nu_try_read_str(conn);
+    if(remote != NULL){
+        if(strcmp(remote, "P")){
+            Vector new_paddle_vel = read_vec();
+            Body *them_bod = paddle_get_body(them);
+            body_set_velocity(them_bod, new_paddle_vel);
+        }
+    }
+}
+
 Paddle **create_paddles(Scene *scene, int num_players, int num_users, AiDifficulty difficulty, Body *polygon){
     Paddle **paddles = malloc(sizeof(Paddle *) * num_players);
     Body *ball = scene_get_body(scene, 1);
@@ -386,6 +453,78 @@ Paddle **create_paddles(Scene *scene, int num_players, int num_users, AiDifficul
     }
     list_free(polygon_shape);
     return paddles;
+}
+
+void send_vec(Vector vec){
+  char str_x[100];
+  char str_y[100];
+  sprintf(str_x, "%f", vec.x);
+  sprintf(str_y, "%f", vec.y);
+  printf("%s \n", str_x);
+  printf("%s \n", str_y);
+  nu_send_str(conn, str_x);
+  nu_send_str(conn, str_y);
+
+}
+
+Vector read_vec(){
+    char* vec_x = nu_try_read_str(conn);
+    char* vec_y = nu_try_read_str(conn);
+    printf("%s \n", vec_x);
+    printf("%s \n", vec_y);
+    Vector new_vec = {.x = atof(vec_x), .y = atof(vec_y)};
+    return new_vec;
+}
+
+void net_on_key(char key, KeyEventType type, double held_time, Scene *scene,
+                                            int num_users, int num_players) {
+    Body *paddle_one = paddle_get_body(me);
+
+    //velocity to use if an arrow key was pressed
+    Vector new_vel = {
+        .x = 0,
+        .y = PADDLE_VEL
+    };
+
+    if (type == KEY_PRESSED) {
+        switch(key) {
+            case W:
+                //makes paddle go up if up arrow is pressed
+                body_set_velocity(paddle_one, new_vel);
+                nu_send_str(conn, "P");
+                send_vec(new_vel);
+                break;
+
+            case S:
+                //makes paddle go down if down arrow is pressed
+                new_vel.y = -1.0 * new_vel.y;
+                body_set_velocity(paddle_one, new_vel);
+                nu_send_str(conn, "P");
+                send_vec(new_vel);
+                break;
+
+            case ESCAPE:
+                //ends the scene
+                nu_send_str(conn, "END");
+                scene_set_end(scene);
+        }
+    }
+    else{
+        //sets velocity of shooter back to zero after arrow key is released
+        switch (key) {
+            case W:
+                body_set_velocity(paddle_one, VEC_ZERO);
+                nu_send_str(conn, "P");
+                send_vec(VEC_ZERO);
+                break;
+
+            case S:
+                body_set_velocity(paddle_one, VEC_ZERO);
+                nu_send_str(conn, "P");
+                send_vec(VEC_ZERO);
+                break;
+        }
+    }
 }
 
 void on_key(char key, KeyEventType type, double held_time, Scene *scene,
@@ -558,10 +697,11 @@ void reset(Scene *scene, Paddle **paddles, int num_players, Body *bounce, Body *
     CollisionInfo coll = find_collision(bounce_shape, ball_shape);
     list_free(bounce_shape);
     list_free(ball_shape);
-    if(coll.collided){
-        reset_obstacles(bounce, grav, ball);
+    if(bounce != NULL && grav != NULL){
+        if(coll.collided){
+            reset_obstacles(bounce, grav, ball);
+        }
     }
-
     for(int i = 0; i < num_players; i++){
         Paddle *paddle = paddles[i];
         body_set_centroid(paddle_get_body(paddle), paddle_get_initial_center(paddle));
