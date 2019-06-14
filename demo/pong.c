@@ -6,6 +6,12 @@ Paddle *them;
 bool networked = false;
 
 int main(int argc, char **argv){
+    Mix_Music *bgs;
+    SDL_Init(SDL_INIT_AUDIO);
+    Mix_OpenAudio(22050,MIX_DEFAULT_FORMAT,2,4096);
+    bgs = Mix_LoadMUS("price_is_right.mp3");
+    Mix_PlayMusic(bgs, -1);
+
     //initialize scene and window
     int num_players;
     int num_users = 2;
@@ -27,41 +33,31 @@ int main(int argc, char **argv){
     int num_players = *argv[1] - '0';
     int num_users = *argv[2] - '0';*/
 
-    Mix_Music *bgs;
     if (strcmp(argv[1], "server") == 0) {
         printf("Waiting for a client to connect...\n");
         conn = nu_wait_client(atoi(argv[2]));
         printf("Client connected!\n");
-        SDL_Init(SDL_INIT_AUDIO);
-        Mix_OpenAudio(22050,MIX_DEFAULT_FORMAT,2,4096);
-        bgs = Mix_LoadMUS("price_is_right.mp3");
-        Mix_PlayMusic(bgs, -1);
         num_players = 2;
         net_type = SERVER;
         networked = true;
     }
 
-        else if(strcmp(argv[1], "client") == 0){
-            conn = nu_connect_server(argv[2], atoi(argv[3]));
-            printf("Connected to server!\n");
-            net_type = CLIENT;
-            num_players = 2;
-            networked = true;
-        }
-
-        if (conn < 0) {
-            fprintf(stderr, "Connection Failed\n");
-            exit(1);
-        }
+    else if(strcmp(argv[1], "client") == 0){
+        conn = nu_connect_server(argv[2], atoi(argv[3]));
+        printf("Connected to server!\n");
+        net_type = CLIENT;
         num_players = 2;
+        networked = true;
     }
 
+    if (conn < 0) {
+        fprintf(stderr, "Connection Failed\n");
+        exit(1);
+    }
+
+
+
     if(!networked){
-        SDL_Init(SDL_INIT_AUDIO);
-        Mix_Music *bgs;
-        Mix_OpenAudio(22050,MIX_DEFAULT_FORMAT,2,4096);
-        bgs = Mix_LoadMUS("price_is_right.mp3");
-        Mix_PlayMusic(bgs, -1);
         num_users = start_screen(renderer, font);
 
         //reset window and scene
@@ -181,6 +177,7 @@ int main(int argc, char **argv){
     for(int i = 0; i < num_players; i++){
         scores[i] = 0;
     }
+    
     double ai_timer = 0;
     double obstacle_timer = 0;
     double color_index = 0;
@@ -380,7 +377,7 @@ Body *make_body(BodyType *type, Vector center){
 }
 
 void net_update(){
-    char *remote = nu_try_read_str(conn);
+    char *remote = nu_read_str(conn);
     if(remote != NULL){
         if(strcmp(remote, "P")){
             Vector new_paddle_vel = read_vec();
