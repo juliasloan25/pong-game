@@ -35,6 +35,15 @@ int main(int argc, char **argv){
     num_users = start_screen(renderer, font);
 
     if (num_users == 4) { //networking mode
+        if (argc < 3 || argc > 4 || (strcmp(argv[1], "server") != 0 && strcmp(argv[1], "client") != 0)) {
+            fprintf(stderr, "Usage.  There are two modes: server and client.\n");
+            fprintf(stderr, "Server Mode:\n");
+            fprintf(stderr, "  %s server <server port>\n", argv[0]);
+            fprintf(stderr, "Client Mode:\n");
+            fprintf(stderr, "  %s client <server ip> <server port>\n", argv[0]);
+            fprintf(stderr, "Then click NETWORKING on the start page\n");
+            exit(1);
+        }
         if (strcmp(argv[1], "server") == 0) {
             printf("Waiting for a client to connect...\n");
             conn = nu_wait_client(atoi(argv[2]));
@@ -405,7 +414,7 @@ bool net_update(Scene *scene, Paddle **paddles, int num_players, Body *bounce, B
         if(strcmp(remote, "END") == 0){
             return 0;
         }
-        
+
         if(net_type == CLIENT){
             if(strcmp(remote, "RES") == 0){
                 reset(scene, paddles, num_players, bounce, grav);
