@@ -412,7 +412,7 @@ bool net_update(Scene *scene, Paddle **paddles, int num_players, Body *bounce, B
         }
 
         if(strcmp(remote, "END") == 0){
-            return 0;
+            return false;
         }
 
         if(net_type == CLIENT){
@@ -436,7 +436,7 @@ bool net_update(Scene *scene, Paddle **paddles, int num_players, Body *bounce, B
             }
         }
     }
-    return 1;
+    return true;
 }
 
 Paddle **create_paddles(Scene *scene, int num_players, int num_users, AiDifficulty difficulty, Body *polygon){
