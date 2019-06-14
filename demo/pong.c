@@ -64,7 +64,9 @@ int main(int argc, char **argv){
       SDL_DestroyRenderer(renderer);
       close_window();
       renderer = window_init();
+      scene_free(scene);
 
+      scene = scene_init();
       if(!networked){
           //reset window and scene
           num_players = players_screen(renderer, font);
@@ -212,6 +214,7 @@ int main(int argc, char **argv){
         if(networked){
             net_update();
         }
+        printf("Before tick \n");
         scene_tick(scene, wait_time);
         sdl_render_scene(scene, renderer);
 
@@ -378,7 +381,7 @@ Body *make_body(BodyType *type, Vector center){
 }
 
 void net_update(){
-    char *remote = nu_read_str(conn);
+    char *remote = nu_try_read_str(conn);
     if(remote != NULL){
         if(strcmp(remote, "P")){
             Vector new_paddle_vel = read_vec();
