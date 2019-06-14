@@ -40,7 +40,6 @@ int main(int argc, char **argv){
             printf("Waiting for a client to connect...\n");
             conn = nu_wait_client(atoi(argv[2]));
             printf("Client connected!\n");
-            num_players = 2;
             net_type = SERVER;
             networked = true;
         }
@@ -49,7 +48,6 @@ int main(int argc, char **argv){
             conn = nu_connect_server(argv[2], atoi(argv[3]));
             printf("Connected to server!\n");
             net_type = CLIENT;
-            num_players = 2;
             networked = true;
         }
 
@@ -57,27 +55,27 @@ int main(int argc, char **argv){
             fprintf(stderr, "Connection Failed\n");
             exit(1);
         }
+        num_users = 2;
+        num_players = 2;
       }
 
 
 
-    if(!networked){
-        //reset window and scene
-        SDL_DestroyRenderer(renderer);
-        close_window();
-        renderer = window_init();
+      SDL_DestroyRenderer(renderer);
+      close_window();
+      renderer = window_init();
 
-        num_players = players_screen(renderer, font);
+      if(!networked){
+          //reset window and scene
+          num_players = players_screen(renderer, font);
 
-        //reset window and scene
-        SDL_DestroyRenderer(renderer);
-        close_window();
-        renderer = window_init();
+          //reset window and scene
+          renderer = window_init();
 
-        //int num_ai = num_players - num_users;
-        AiDifficulty difficulty = MEDIUM;
+          //int num_ai = num_players - num_users;
+          AiDifficulty difficulty = MEDIUM;
 
-        //using command line arguments for setup
+          //using command line arguments for setup
         /*if(num_ai != 0){
             switch(*argv[2]){
                 case '1':
@@ -92,25 +90,25 @@ int main(int argc, char **argv){
             }
         }*/
 
-        if (num_users == 3) { // demo mode
-           num_users = 0;
-           difficulty = MEDIUM;
-       }
+          if (num_users == 3) { // demo mode
+             num_users = 0;
+             difficulty = MEDIUM;
+          }
 
-       if (num_users == 1) { // single player
-           int ai_difficulty = difficulty_screen(renderer, font);
-           if (ai_difficulty == 1) {
-               difficulty = EASY;
-           }
-           else if (ai_difficulty == 2) {
-               difficulty = MEDIUM;
-           }
-           else if (ai_difficulty == 3) {
-               difficulty = HARD;
-           }
-       }
+         if (num_users == 1) { // single player
+             int ai_difficulty = difficulty_screen(renderer, font);
+             if (ai_difficulty == 1) {
+                 difficulty = EASY;
+             }
+             else if (ai_difficulty == 2) {
+                 difficulty = MEDIUM;
+             }
+             else if (ai_difficulty == 3) {
+                 difficulty = HARD;
+             }
+         }
 
-   }
+     }
 
     BodyType *polygon_type = malloc(sizeof(BodyType));
     double rotation_angle = 0;
@@ -166,6 +164,7 @@ int main(int argc, char **argv){
     //create forces between obstacles and ball
     create_physics_collision(scene, ELASTICITY, bounce, ball);
     create_newtonian_gravity(scene, G, ball, grav, false);
+
     if(!networked){
         sdl_on_key(on_key);
     }
