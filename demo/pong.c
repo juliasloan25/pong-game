@@ -41,19 +41,20 @@ int main(int argc, char **argv){
         networked = true;
     }
 
-    else if(strcmp(argv[1], "client") == 0){
-        conn = nu_connect_server(argv[2], atoi(argv[3]));
-        printf("Connected to server!\n");
-        net_type = CLIENT;
+        else if(strcmp(argv[1], "client") == 0){
+            conn = nu_connect_server(argv[2], atoi(argv[3]));
+            printf("Connected to server!\n");
+            net_type = CLIENT;
+            num_players = 2;
+            networked = true;
+        }
+
+        if (conn < 0) {
+            fprintf(stderr, "Connection Failed\n");
+            exit(1);
+        }
         num_players = 2;
-        networked = true;
     }
-
-    if (conn < 0) {
-        fprintf(stderr, "Connection Failed\n");
-        exit(1);
-    }
-
 
     if(!networked){
         SDL_Init(SDL_INIT_AUDIO);
@@ -64,19 +65,15 @@ int main(int argc, char **argv){
         num_users = start_screen(renderer, font);
 
         //reset window and scene
-        //scene_free(scene);
         SDL_DestroyRenderer(renderer);
         close_window();
-        //scene = scene_init();
         renderer = window_init();
 
         num_players = players_screen(renderer, font);
 
         //reset window and scene
-        //scene_free(scene);
         SDL_DestroyRenderer(renderer);
         close_window();
-        //scene = scene_init();
         renderer = window_init();
 
         //int num_ai = num_players - num_users;
@@ -144,16 +141,18 @@ int main(int argc, char **argv){
     //create paddles
     Paddle **paddles = create_paddles(scene, num_players, num_users, difficulty, polygon);
 
-    if(net_type == SERVER){
-        me = *(paddles);
-        them = *(paddles + 1);
+    if (networked) {
+        if(net_type == SERVER){
+            me = *(paddles);
+            them = *(paddles + 1);
+        }
+        else if(net_type == CLIENT){
+            me = *(paddles + 1);
+            them = *(paddles);
+        }
     }
-    else if(net_type == CLIENT){
-        me = *(paddles + 1);
-        them = *(paddles);
-    }
-    //create obstacles
 
+    //create obstacles
     BodyType *bounce_type = malloc(sizeof(BodyType));
     *(bounce_type) = BOUNCE;
     Body *bounce = make_body(bounce_type, VEC_ZERO);

@@ -49,7 +49,7 @@ void display_text(SDL_Renderer *renderer, char *text, TTF_Font *font,
         printf("font null");
         exit(1);
     }
-    printf("%s\n", text);
+    //printf("%s\n", text);
 
     SDL_Surface *text_surface = TTF_RenderText_Solid(font, text, WHITE);
     SDL_LockSurface(text_surface);
@@ -80,7 +80,8 @@ int start_screen(SDL_Renderer *renderer, TTF_Font *font) {
     char *text1 = "Single user";
     char *text2 = "Two users";
     char *text3 = "Demo mode";
-    int num_buttons = 3;
+    char *text4 = "Networking";
+    int num_buttons = 4;
 
     //set positioning rectangles
     SDL_Rect *rect_title = make_rect(TITLE_X, TITLE_Y, TITLE_WIDTH, TITLE_HEIGHT);
@@ -90,6 +91,8 @@ int start_screen(SDL_Renderer *renderer, TTF_Font *font) {
     //SDL_Rect *rect2 = make_rect(0, 0, TEXT_WIDTH, TEXT_HEIGHT);
     SDL_Rect *rect3 = make_rect(TEXT_X, TEXT_Y_START + (2 * TEXT_HEIGHT),
                     TEXT_WIDTH, TEXT_HEIGHT);
+    SDL_Rect *rect4 = make_rect(TEXT_X, TEXT_Y_START + (3 * TEXT_HEIGHT),
+                    TEXT_WIDTH, TEXT_HEIGHT);
 
     //display title to start screen
     display_text(renderer, title, font, rect_title);
@@ -97,6 +100,7 @@ int start_screen(SDL_Renderer *renderer, TTF_Font *font) {
     display_text(renderer, text1, font, rect1);
     display_text(renderer, text2, font, rect2);
     display_text(renderer, text3, font, rect3);
+    display_text(renderer, text4, font, rect4);
 
     int button_num = handle_buttons(num_buttons);
     while(button_num == 0) {
@@ -108,6 +112,7 @@ int start_screen(SDL_Renderer *renderer, TTF_Font *font) {
     free(rect1);
     free(rect2);
     free(rect3);
+    free(rect4);
     //return 0;
 
     //1 if single player, 2 if demo mode, 0 if no press
@@ -238,9 +243,9 @@ int handle_buttons(int num_buttons) {
                           continue;
                       }
                   }
+              }
             }
         }
     }
-}
     return 0;
 }
