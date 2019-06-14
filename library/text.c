@@ -49,7 +49,7 @@ void display_text(SDL_Renderer *renderer, char *text, TTF_Font *font,
         printf("font null");
         exit(1);
     }
-    printf("%s\n", text);
+    //printf("%s\n", text);
 
     SDL_Surface *text_surface = TTF_RenderText_Solid(font, text, WHITE);
     SDL_LockSurface(text_surface);
