@@ -123,26 +123,15 @@ int end_screen(SDL_Renderer *renderer, TTF_Font *font) {
     //int num_buttons = 0;
 
     SDL_Rect *rect_title = make_rect(TITLE_X, TITLE_Y, TITLE_WIDTH, TITLE_HEIGHT);
-    //SDL_Rect *rect1 = make_rect(TEXT_X, TEXT_Y_START, TEXT_WIDTH, TEXT_HEIGHT);
 
     //display text to screen
     display_text(renderer, text0, font, rect_title);
     //display_text(renderer, text1, font, rect1);
     int button_num = handle_buttons(num_buttons);
-    /*while(button_num == 0) {
-        SDL_Delay(500);
-        button_num = handle_buttons(num_buttons);
-    }*/
+
     SDL_Delay(3000);
     free(rect_title);
-    free(rect1);
-    //  free(rect1);
     return button_num;
-
-    //no buttons
-    /*printf("%s\n", );
-    free(rect_title);
-    return num_buttons;*/
 }
 
 int difficulty_screen(SDL_Renderer *renderer, TTF_Font *font) {
